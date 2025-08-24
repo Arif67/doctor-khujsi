@@ -199,6 +199,47 @@
             font-size: 1.8rem;
         }
     }
+    @media (max-width: 900px) {
+        .main-wrap {
+            padding: 18px 2vw;
+        }
+        .booking-container {
+            flex-direction: column;
+            gap: 28px;
+            align-items: center;
+        }
+        .booking-image {
+            width: 70vw;
+            max-width: 340px;
+            height: auto;
+        }
+        .booking-content {
+            min-width: 0;
+            width: 100%;
+            padding: 0 2vw;
+        }
+    }
+    @media (max-width: 600px) {
+        .main-wrap {
+            padding: 6px 1vw;
+        }
+        .booking-image {
+            width: 98vw;
+            max-width: 200px;
+            height: auto;
+        }
+        .booking-content {
+            padding: 0 1vw;
+        }
+        .booking-content form input,
+        .booking-content form select,
+        .booking-content form textarea {
+            font-size: 0.98em;
+        }
+        .booking-content form button {
+            width: 100%;
+        }
+    }
 </style>
 @endsection
 

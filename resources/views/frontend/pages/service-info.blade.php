@@ -1,3 +1,21 @@
+<!-- Responsive Navigation Bar Start -->
+<nav class="navbar">
+    <div class="container nav-container">
+        <div class="logo">Hospital Logo</div>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span class="fa fa-bars"></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/specialists">Specialists</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+<!-- Responsive Navigation Bar End -->
+
 @extends('frontend.layout.masterlayout')
 
 @section('title', 'Service History - Hospital Management')
@@ -99,7 +117,7 @@
         .main-nav .nav-links a {
             text-decoration: none;
             color: var(--text-color);
-            font-weight: 500;
+            font-weight: 400;
             transition: color 0.3s ease;
         }
 
@@ -107,7 +125,7 @@
             color: #22b8cf;
             border-radius: 6px;
             padding: 6px 18px;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         .main-nav .nav-links a:hover {
@@ -115,6 +133,40 @@
         }
         .main-nav .nav-links a.active {
             color: var(--primary-color);
+        } /* Mobile menu styles */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+                width: 100%;
+                background: #fff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px 0;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                display: block;
+            }
+
+            /* Hamburger animation */
+            .nav-toggle .bar {
+                transition: all 0.3s ease;
+            }
+
+            .nav-toggle.open .bar:nth-child(1) {
+                transform: translateY(11px) rotate(45deg);
+            }
+
+            .nav-toggle.open .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.open .bar:nth-child(3) {
+                transform: translateY(-11px) rotate(-45deg);
+            }
         }
 
         .icon-container {
@@ -130,6 +182,9 @@
             margin-left: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+        .main-nav .nav-links a.active {
+            color: var(--primary-color);
         }
 
         .icon-container:hover {
@@ -765,6 +820,75 @@
                 padding-right: 4px;
             }
         }
+        /* Responsive Navigation (from about.blade.php) */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .nav-toggle .bar {
+            width: 28px;
+            height: 3px;
+            background: #222;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        @media (max-width: 900px) {
+            .main-nav .container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0;
+                position: relative;
+                width: 100%;
+            }
+            .main-nav .container > .logo,
+            .main-nav .container > .nav-toggle,
+            .main-nav .container > .icon-container,
+            .main-nav .container > .call-button {
+                margin: 0 4px;
+            }
+            .nav-toggle {
+                display: flex;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #fff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                padding: 8px 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 10px 0;
+                text-align: left;
+                width: 100%;
+                padding-left: 24px;
+            }
+            .icon-container,
+            .call-button {
+                display: flex;
+                align-items: center;
+            }
+            .call-button {
+                font-size: 1em;
+            }
+        }
 </style>
 @endsection
 
@@ -778,26 +902,52 @@
         </div>
     </header>
     <nav class="main-nav">
-        <div class="container">
-            <div class="logo">
-                <div class="logo-circle"></div><span>LOGO</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="{{route('home')}}">Home</a></li>
-                <li><a href="{{route('about')}}">About Us</a></li>
-                <li><a href="{{route('services')}}">Services</a></li>
-                <li><a href="{{route('specialists')}}">Specialists</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="{{route('blog')}}">Blog</a></li>
-                <li><a href="{{route('contact')}}">Contact</a></li>
-            </ul>
-            <a href="{{ route('profile') }}"><i class="fas fa-user"></i></a>
-            <div class="call-button">
-                <span>+88018574-45897</span>
-                <i class="fa-solid fa-phone"></i>
-            </div>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-circle"></div>
+            <span>LOGO</span>
         </div>
-    </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="{{route('home')}}">Home</a></li>
+            <li><a href="{{route('about')}}">About Us</a></li>
+            <li><a href="{{route('services')}}" class="active">Services</a></li>
+            <li><a href="{{route('specialists')}}">Specialists</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="{{route('blog')}}">Blog</a></li>
+            <li><a href="{{route('contact')}}">Contact</a></li>
+        </ul>
+        <a href="{{ route('profile') }}" class="icon-container" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-user"></i>
+        </a>
+        <div class="call-button">
+            <span>+88018574-45897</span>
+            <i class="fa-solid fa-phone"></i>
+        </div>
+    </div>
+</nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', function() {
+            // Toggle the menu visibility
+            const isVisible = navLinks.style.display === 'block';
+            navLinks.style.display = isVisible ? 'none' : 'block';
+
+            // Toggle hamburger animation
+            this.classList.toggle('open');
+
+            // Update accessibility attribute
+            this.setAttribute('aria-expanded', !isVisible);
+        });
+    });
+</script>
     <div class="service-main">
         <aside class="service-sidebar">
             <h4>Our Services</h4>

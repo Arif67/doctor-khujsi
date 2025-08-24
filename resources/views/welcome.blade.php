@@ -1,5 +1,6 @@
 @extends('frontend.layout.masterlayout')
 
+@section('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
 @section('title', 'Chiropractic Care')
 
 @section('styles')

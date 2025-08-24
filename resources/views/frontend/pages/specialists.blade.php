@@ -1,9 +1,9 @@
 <x-app-layout>
-<title>Our Specialists - Hospital Management</title>
+    <title>Our Specialists - Hospital Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-       /* Global Styles */
-       :root {
+        /* Global Styles */
+        :root {
             --primary-color: #00bcd4;
             --secondary-color: #6c757d;
             --light-bg: #f8f9fa;
@@ -64,7 +64,8 @@
 
         .top-header .container {
             display: flex;
-            justify-content: flex-start; /* Align items to the left */
+            justify-content: flex-start;
+            /* Align items to the left */
             align-items: center;
         }
 
@@ -101,6 +102,120 @@
             align-items: center;
         }
 
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .nav-toggle .bar {
+            width: 28px;
+            height: 3px;
+            background: #222;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* Mobile menu styles */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+                width: 100%;
+                background: #fff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px 0;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                display: block;
+            }
+
+            /* Hamburger animation */
+            .nav-toggle .bar {
+                transition: all 0.3s ease;
+            }
+
+            .nav-toggle.open .bar:nth-child(1) {
+                transform: translateY(11px) rotate(45deg);
+            }
+
+            .nav-toggle.open .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.open .bar:nth-child(3) {
+                transform: translateY(-11px) rotate(-45deg);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .main-nav .container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0;
+                position: relative;
+                width: 100%;
+            }
+
+            .main-nav .container>.logo,
+            .main-nav .container>.nav-toggle,
+            .main-nav .container>.icon-container,
+            .main-nav .container>.call-button {
+                margin: 0 4px;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #fff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                padding: 8px 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+                text-align: left;
+                width: 100%;
+                padding-left: 24px;
+            }
+
+            .icon-container,
+            .call-button {
+                display: flex;
+                align-items: center;
+            }
+
+            .call-button {
+                font-size: 1em;
+            }
+        }
+
         .main-nav .logo {
             display: flex;
             align-items: center;
@@ -122,6 +237,84 @@
 
         .main-nav .nav-links {
             display: flex;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .nav-toggle .bar {
+            width: 28px;
+            height: 3px;
+            background: #222;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 900px) {
+            .main-nav .container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0;
+                position: relative;
+                width: 100%;
+            }
+
+            .main-nav .container>.logo,
+            .main-nav .container>.nav-toggle,
+            .main-nav .container>.icon-container,
+            .main-nav .container>.call-button {
+                margin: 0 4px;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #fff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                padding: 8px 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+                text-align: left;
+                width: 100%;
+                padding-left: 24px;
+            }
+
+            .icon-container,
+            .call-button {
+                display: flex;
+                align-items: center;
+            }
+
+            .call-button {
+                font-size: 1em;
+            }
         }
 
         .main-nav .nav-links li {
@@ -792,9 +985,69 @@
                 gap: 8px;
             }
         }
+
+        @media (max-width: 900px) {
+            .team-section {
+                padding: 40px 0 24px 0;
+            }
+
+            .team-grid-custom {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+            }
+
+            .team-card {
+                max-width: 98vw;
+                min-width: 0;
+            }
+
+            .team-photo-bg {
+                min-height: 220px;
+                height: 220px;
+            }
+
+            .team-photo-bg img {
+                width: 110px;
+                height: 160px;
+            }
+
+            .team-title {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .team-section {
+                padding: 18px 0 8px 0;
+            }
+
+            .team-grid-custom {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .team-card {
+                max-width: 100vw;
+                padding: 0 0 12px 0;
+            }
+
+            .team-photo-bg {
+                min-height: 120px;
+                height: 120px;
+            }
+
+            .team-photo-bg img {
+                width: 70px;
+                height: 100px;
+            }
+
+            .team-title {
+                font-size: 1em;
+            }
+        }
     </style>
-</style>
-</head>
+    </style>
+    </head>
 
 
     <header class="top-header">
@@ -813,6 +1066,11 @@
                 <div class="logo-circle"></div>
                 <span>LOGO</span>
             </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('about') }}">About Us</a></li>
@@ -831,6 +1089,24 @@
             </div>
         </div>
     </nav>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', function() {
+            // Toggle the menu visibility
+            const isVisible = navLinks.style.display === 'block';
+            navLinks.style.display = isVisible ? 'none' : 'block';
+
+            // Toggle hamburger animation
+            this.classList.toggle('open');
+
+            // Update accessibility attribute
+            this.setAttribute('aria-expanded', !isVisible);
+        });
+    });
+</script>
 
     <section class="services-section">
         <div class="services-container rtl-section">
@@ -885,7 +1161,9 @@
                         <img src="https://img.freepik.com/free-photo/nurse-with-stethoscope-white-medical-uniform-white-protective-sterile-mask_179666-205.jpg?t=st=1717959581~exp=1717963181~hmac=976a532d8fc64986f6c29f5c8c8f71972111de503411342eaffa23645e02218d&w=1800"
                             alt="Dr. Emily Brown">
                     </div>
-                    <a href="{{ route('doctor-profile', ['id' => 1]) }}"><div class="team-name">Dr. Emily Brown</div></a>
+                    <a href="{{ route('doctor-profile', ['id' => 1]) }}">
+                        <div class="team-name">Dr. Emily Brown</div>
+                    </a>
                     <div class="team-role">senior physiotherapist</div>
                 </div>
                 <div class="team-card">
@@ -1040,8 +1318,36 @@
         </div>
     </footer>
 
-                </div>
-            </div>
-        </div>
     </div>
+    </div>
+    </div>
+    </div>
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+    @endpush
+    <script>
+        console.log('script loaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            var navToggle = document.querySelector('.nav-toggle');
+            var navLinks = document.querySelector('.nav-links');
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', function() {
+                    console.log('hamburger clicked');
+                    navLinks.classList.toggle('active');
+                });
+            } else {
+                console.log('navToggle or navLinks not found');
+            }
+        });
+    </script>
 </x-app-layout>

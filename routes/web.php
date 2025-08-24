@@ -4,6 +4,8 @@ use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminController;
 
 // Frontend Controller Routes
 Route::controller(FrontendController::class)->group(function () {
@@ -42,8 +44,10 @@ Route::controller(FrontendController::class)->group(function () {
     
     // Blog info page
     Route::get('/blog/{slug}', 'blogInfo')->name('bloginfo');
-    
-}); 
+});
+
+// Admin Dashboard Route
+Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 // Profile Routes (Authenticated)
 Route::middleware('auth')->controller(ProfileController::class)->group(function () {
