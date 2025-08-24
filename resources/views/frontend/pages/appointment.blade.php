@@ -19,6 +19,43 @@
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
+    /* Responsive styles for appointment page */
+    @media (max-width: 900px) {
+        .appointment-container {
+            padding: 32px 4vw;
+            max-width: 98vw;
+        }
+        .appointment-form {
+            padding: 18px;
+        }
+        .appointment-title {
+            font-size: 1.4em;
+            margin-bottom: 24px;
+        }
+    }
+    @media (max-width: 600px) {
+        .appointment-container {
+            padding: 16px 1vw;
+        }
+        .appointment-form {
+            padding: 8px;
+            border-radius: 7px;
+        }
+        .appointment-title {
+            font-size: 1.08em;
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            font-size: 0.97em;
+        }
+        .form-control, .btn {
+            font-size: 0.98em;
+            padding: 8px 7px;
+        }
+        .btn {
+            width: 100%;
+        }
+    }
 </style>
 @endsection
 

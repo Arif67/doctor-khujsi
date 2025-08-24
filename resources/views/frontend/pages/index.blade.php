@@ -4,6 +4,81 @@
 
 @section('styles')
 <style>
+    .main-nav .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .nav-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .nav-toggle .bar {
+        width: 28px;
+        height: 3px;
+        background: #222;
+        margin: 4px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+    @media (max-width: 900px) {
+        .main-nav .container {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0;
+            position: relative;
+            width: 100%;
+        }
+        .main-nav .container > .logo,
+        .main-nav .container > .nav-toggle,
+        .main-nav .container > .icon-container,
+        .main-nav .container > .call-button {
+            margin: 0 4px;
+        }
+        .nav-toggle {
+            display: flex;
+        }
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 8px 0;
+        }
+        .nav-links.active {
+            display: flex;
+        }
+        .nav-links li {
+            margin: 10px 0;
+            text-align: left;
+            width: 100%;
+            padding-left: 24px;
+        }
+        .icon-container,
+        .call-button {
+            display: flex;
+            align-items: center;
+        }
+        .call-button {
+            font-size: 1em;
+        }
+    }
+</style>
+<style>
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -206,10 +281,61 @@
             text-align: center;
         }
     }
+    @media (max-width: 900px) {
+        .container {
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 2vw;
+        }
+        .content-left, .content-right {
+            max-width: 95vw;
+            padding: 0;
+            text-align: center;
+        }
+        .heading-blue {
+            font-size: 2.1em;
+        }
+        .heading-dark {
+            font-size: 1.8em;
+        }
+        .buttons {
+            flex-direction: column;
+            gap: 14px;
+        }
+    }
+    @media (max-width: 600px) {
+        .container {
+            padding: 6px 1vw;
+        }
+        .heading-blue {
+            font-size: 1.3em;
+        }
+        .heading-dark {
+            font-size: 1.1em;
+        }
+        .description {
+            font-size: 1em;
+        }
+        .content-right img {
+            width: 98vw;
+            max-width: 200px;
+        }
+    }
 </style>
 @endsection
 
 @section('content')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if(navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+    }
+});
+</script>
 <div class="container">
     <div class="content-left">
         <h1 class="heading-blue">Chiropractic</h1>

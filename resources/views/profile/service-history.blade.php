@@ -56,6 +56,46 @@
         }
         .sidebar {
             width: 220px;
+            min-width: 180px;
+            transition: all 0.3s;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                padding-top: 0;
+            }
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 0;
+                border-right: none;
+                border-bottom: 1px solid #ececec;
+                justify-content: flex-start;
+                align-items: center;
+                overflow-x: auto;
+            }
+            .sidebar nav {
+                flex-direction: row;
+                gap: 2px;
+                width: 100%;
+                padding: 0 4px;
+                overflow-x: auto;
+            }
+            .sidebar nav a {
+                font-size: 14px;
+                padding: 8px 6px;
+                min-width: 80px;
+                text-align: center;
+            }
+        }
+        @media (max-width: 600px) {
+            .sidebar nav a {
+                font-size: 13px;
+                padding: 7px 3px;
+            }
+        }
             background: #fff;
             border-right: 1px solid #ececec;
             padding: 30px 0;

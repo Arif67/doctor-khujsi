@@ -3,534 +3,752 @@
 @section('styles')
 
 <style>
-        :root {
-            --primary-color: #00bcd4;
-            --secondary-color: #6c757d;
-            --light-bg: #f8f9fa;
-            --text-color: #333;
-            --heading-color: #2c3e50;
-            --white: #ffffff;
+    :root {
+        --primary-color: #00bcd4;
+        --secondary-color: #6c757d;
+        --light-bg: #f8f9fa;
+        --text-color: #333;
+        --heading-color: #2c3e50;
+        --white: #ffffff;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background: #f8fcfd;
+        color: #222;
+        box-sizing: border-box;
+        line-height: 1.6;
+    }
+
+    body {
+        min-width: 320px;
+        font-size: 16px;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    img {
+        max-width: 100%;
+        display: block;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Header Styles */
+    .top-header {
+        background-color: var(--primary-color);
+        color: var(--white);
+        padding: 10px 0;
+        font-size: 0.9em;
+    }
+
+    .top-header .container {
+        display: flex;
+        /* ADDED FLEX */
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .top-header .contact-info span {
+        margin-right: 20px;
+    }
+
+    .top-header .contact-info i {
+        margin-right: 5px;
+    }
+
+    @media (max-width: 480px) {
+        .top-header .container {
+            flex-direction: column;
+            text-align: center;
         }
 
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: #f8fcfd;
-            color: #222;
-            box-sizing: border-box;
-            line-height: 1.6;
+        .top-header p {
+            margin-bottom: 5px;
+        }
+    }
+
+    /* Main Navigation */
+    .main-nav {
+        background-color: var(--white);
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .main-nav .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .main-nav .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .main-nav .logo-circle {
+        width: 40px;
+        height: 40px;
+        background-color: #1b3728;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .main-nav .logo span {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: var(--heading-color);
+    }
+
+    .main-nav .nav-links {
+        display: flex;
+    }
+
+    .nav-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .nav-toggle .bar {
+        width: 28px;
+        height: 3px;
+        background: #222;
+        margin: 4px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+
+    /* Mobile menu styles */
+    @media (max-width: 900px) {
+        .nav-links {
+            display: none;
+            width: 100%;
+            background: #fff;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            padding: 20px 0;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
-        body {
-            min-width: 320px;
-            font-size: 16px;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        img {
-            max-width: 100%;
+        .nav-links.active {
             display: block;
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        .top-header {
-            background-color: var(--primary-color);
-            color: var(--white);
-            padding: 10px 0;
-            font-size: 0.9em;
-        }
-
-        .top-header .container {
-            display: flex;
-            /* ADDED FLEX */
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-header .contact-info span {
-            margin-right: 20px;
-        }
-
-        .top-header .contact-info i {
-            margin-right: 5px;
-        }
-
-        @media (max-width: 480px) {
-            .top-header .container {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .top-header p {
-                margin-bottom: 5px;
-            }
-        }
-
-        /* Main Navigation */
-        .main-nav {
-            background-color: var(--white);
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .main-nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .main-nav .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .main-nav .logo-circle {
-            width: 40px;
-            height: 40px;
-            background-color: #1b3728;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .main-nav .logo span {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--heading-color);
-        }
-
-        .main-nav .nav-links {
-            display: flex;
-        }
-
-        .main-nav .nav-links li {
-            margin-left: 30px;
-        }
-
-        .main-nav .nav-links a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .main-nav .nav-links a.active {
-            color: #22b8cf;
-            border-radius: 6px;
-            padding: 6px 18px;
-            font-weight: 600;
-        }
-
-        .main-nav .nav-links a:hover {
-            color: var(--primary-color);
-        }
-        .main-nav .nav-links a.active {
-            color: var(--primary-color);
-        }
-
-        .icon-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            color: var(--primary-color);
-            font-size: 18px;
-            margin-left: 20px;
-            cursor: pointer;
+        /* Hamburger animation */
+        .nav-toggle .bar {
             transition: all 0.3s ease;
         }
 
-        .icon-container:hover {
-            background-color: var(--primary-color);
-            color: var(--white);
+        .nav-toggle.open .bar:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+
+        .nav-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.open .bar:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+    }
+
+    @media (max-width: 900px) {
+        .main-nav .container {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0;
+            position: relative;
+            width: 100%;
+        }
+
+        .main-nav .container>.logo,
+        .main-nav .container>.nav-toggle,
+        .main-nav .container>.icon-container,
+        .main-nav .container>.call-button {
+            margin: 0 4px;
+        }
+
+        .nav-toggle {
+            display: flex;
+        }
+
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 8px 0;
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 10px 0;
+            text-align: left;
+            width: 100%;
+            padding-left: 24px;
+        }
+
+        .icon-container,
+        .call-button {
+            display: flex;
+            align-items: center;
         }
 
         .call-button {
-            background-color: #22B8CF;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            text-decoration: none;
-            margin-left: 20px;
-            /* Added spacing from icon if needed */
+            font-size: 1em;
         }
+    }
 
-        .call-button:hover {
-            background-color: #199CB0;
-        }
+    .main-nav .nav-links li {
+        margin-left: 30px;
+    }
 
-        .call-button i {
-            font-size: 16px;
-        }
-        .bloginfo-section {
-            max-width: 900px;
-            margin: 44px auto 0 auto;
-            padding: 0 32px;
-        }
-        .bloginfo-title {
-            font-size: 28px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 10px;
-            margin-top: 32px;
-        }
-        .bloginfo-subtitle {
-            text-align: center;
-            color: #444;
-            font-size: 14px;
-            margin-bottom: 32px;
-        }
-        .bloginfo-hero-img {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-        .bloginfo-hero-img img {
-            width: 100%;
-            max-width: 600px;
-            border-radius: 16px;
-            object-fit: cover;
-        }
-        .bloginfo-text {
-            color: #444;
-            font-size: 13px;
-            margin-bottom: 24px;
-            text-align: center;
-        }
-        .bloginfo-section h3 {
-            font-size: 17px;
-            font-weight: 600;
-            margin: 32px 0 8px 0;
-            color: #222;
-        }
-        .bloginfo-section .bloginfo-answer {
-            color: #444;
-            font-size: 13px;
-            margin-bottom: 24px;
-        }
-        .bloginfo-img-row {
-            display: flex;
-            gap: 18px;
-            margin: 32px 0 16px 0;
-            justify-content: center;
-        }
-        .bloginfo-img-row img {
-            width: 210px;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #fff;
-        }
-         /* Footer Styles */
-        .site-footer {
-            background-color: #55B7C2;
-            color: #fff;
-            padding: 40px 0;
-        }
+    .main-nav .nav-links a {
+        text-decoration: none;
+        color: var(--text-color);
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
 
-        .site-footer .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            padding: 0 20px;
-        }
+    .main-nav .nav-links a.active {
+        color: #22b8cf;
+        border-radius: 6px;
+        padding: 6px 18px;
+        font-weight: 600;
+    }
 
-        .footer-column {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 20px;
-            padding-right: 20px;
-        }
+    .main-nav .nav-links a:hover {
+        color: var(--primary-color);
+    }
 
-        .footer-column:last-child {
-            padding-right: 0;
-        }
+    .main-nav .nav-links a.active {
+        color: var(--primary-color);
+    }
 
-        .logo-column {
-            display: flex;
+    .icon-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--primary-color);
+        border-radius: 50%;
+        color: var(--primary-color);
+        font-size: 18px;
+        margin-left: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .icon-container:hover {
+        background-color: var(--primary-color);
+        color: var(--white);
+    }
+
+    .call-button {
+        background-color: #22B8CF;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        text-decoration: none;
+        margin-left: 20px;
+        /* Added spacing from icon if needed */
+    }
+
+    .call-button:hover {
+        background-color: #199CB0;
+    }
+
+    .call-button i {
+        font-size: 16px;
+    }
+
+    .bloginfo-section {
+        max-width: 900px;
+        margin: 44px auto 0 auto;
+        padding: 0 32px;
+    }
+
+    .bloginfo-title {
+        font-size: 28px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 32px;
+    }
+
+    .bloginfo-subtitle {
+        text-align: center;
+        color: #444;
+        font-size: 14px;
+        margin-bottom: 32px;
+    }
+
+    .bloginfo-hero-img {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 24px;
+    }
+
+    .bloginfo-hero-img img {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 16px;
+        object-fit: cover;
+    }
+
+    .bloginfo-text {
+        color: #444;
+        font-size: 13px;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .bloginfo-section h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin: 32px 0 8px 0;
+        color: #222;
+    }
+
+    .bloginfo-section .bloginfo-answer {
+        color: #444;
+        font-size: 13px;
+        margin-bottom: 24px;
+    }
+
+    .bloginfo-img-row {
+        display: flex;
+        gap: 18px;
+        margin: 32px 0 16px 0;
+        justify-content: center;
+    }
+
+    .bloginfo-img-row img {
+        width: 210px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #fff;
+    }
+
+    /* Footer Styles */
+    .site-footer {
+        background-color: #55B7C2;
+        color: #fff;
+        padding: 40px 0;
+    }
+
+    .site-footer .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 0 20px;
+    }
+
+    .footer-column {
+        flex: 1;
+        min-width: 250px;
+        margin-bottom: 20px;
+        padding-right: 20px;
+    }
+
+    .footer-column:last-child {
+        padding-right: 0;
+    }
+
+    .logo-column {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .logo-placeholder {
+        width: 60px;
+        height: 60px;
+        background-color: #a0dbe0;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    .logo-text {
+        font-size: 24px;
+        margin: 0 0 10px 0;
+        font-weight: normal;
+    }
+
+    .footer-column p {
+        margin: 0 0 5px 0;
+        font-size: 14px;
+    }
+
+    .footer-link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+        color: #e0f7fa;
+    }
+
+    .footer-column h4 {
+        font-size: 18px;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-weight: normal;
+    }
+
+    .footer-column ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-column ul li {
+        margin-bottom: 10px;
+    }
+
+    .newsletter-form {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .newsletter-form input[type="email"] {
+        flex-grow: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        margin-right: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #333;
+    }
+
+    .newsletter-form input[type="email"]::placeholder {
+        color: #888;
+    }
+
+    .newsletter-form button {
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #55B7C2;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .newsletter-form button:hover {
+        background-color: #e0f7fa;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background-color: #fff;
+        color: #55B7C2;
+        border-radius: 50%;
+        font-size: 18px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        background-color: #e0f7fa;
+        color: #4CAF50;
+    }
+
+    @media (max-width: 1000px) {
+        .footer-inner {
             flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
+            gap: 32px;
         }
 
-        .logo-placeholder {
-            width: 60px;
-            height: 60px;
-            background-color: #a0dbe0;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            margin: 0 0 10px 0;
-            font-weight: normal;
-        }
-
-        .footer-column p {
-            margin: 0 0 5px 0;
-            font-size: 14px;
-        }
-
-        .footer-link {
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: #e0f7fa;
-        }
-
-        .footer-column h4 {
-            font-size: 18px;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-weight: normal;
-        }
-
-        .footer-column ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 10px;
-        }
-
-        .newsletter-form {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .newsletter-form input[type="email"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #333;
-        }
-
-        .newsletter-form input[type="email"]::placeholder {
-            color: #888;
-        }
-
-        .newsletter-form button {
-            padding: 10px 20px;
-            background-color: #fff;
-            color: #55B7C2;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .newsletter-form button:hover {
-            background-color: #e0f7fa;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-icon {
-            display: inline-flex;
-            justify-content: center;
+        .bloginfo-img-row {
+            flex-direction: column;
             align-items: center;
-            width: 40px;
-            height: 40px;
-            background-color: #fff;
-            color: #55B7C2;
-            border-radius: 50%;
-            font-size: 18px;
-            text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .social-icon:hover {
-            background-color: #e0f7fa;
-            color: #4CAF50;
+        .bloginfo-img-row img {
+            width: 100%;
+            max-width: 330px;
+            height: auto;
         }
-        @media (max-width: 1000px) {
-            .footer-inner {
-                flex-direction: column;
-                gap: 32px;
-            }
-            .bloginfo-img-row {
-                flex-direction: column;
-                align-items: center;
-            }
-            .bloginfo-img-row img {
-                width: 100%;
-                max-width: 330px;
-                height: auto;
-            }
+    }
+
+    @media (max-width: 700px) {
+
+        .main-nav .container,
+        .footer-inner {
+            padding-left: 10px;
+            padding-right: 10px;
         }
-        @media (max-width: 700px) {
-            .main-nav .container, .footer-inner {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            .bloginfo-section {
-                padding: 0 10px;
-            }
+
+        .bloginfo-section {
+            padding: 0 10px;
         }
-    </style>
+    }
+
+    @media (max-width: 900px) {
+        .container {
+            padding: 0 8px;
+        }
+
+        .bloginfo-title {
+            font-size: 1.4em;
+        }
+
+        .bloginfo-section {
+            padding: 24px 0;
+        }
+
+        .bloginfo-hero-img img {
+            width: 80vw;
+            max-width: 320px;
+            height: auto;
+        }
+
+        .bloginfo-img-row {
+            gap: 14px;
+        }
+
+        .bloginfo-img-row img {
+            max-width: 30vw;
+            height: auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 0 2vw;
+        }
+
+        .bloginfo-title {
+            font-size: 1.08em;
+        }
+
+        .bloginfo-section {
+            padding: 10px 0;
+        }
+
+        .bloginfo-hero-img img {
+            width: 98vw;
+            max-width: 220px;
+        }
+
+        .bloginfo-img-row {
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .bloginfo-img-row img {
+            max-width: 98vw;
+            width: 98vw;
+        }
+    }
+</style>
 
 @endsection
 
 @section('content')
 
 <header class="top-header">
-        <div class="container">
-            <div class="contact-info">
-                <span><i class="fas fa-phone"></i> +88018674-45897</span>
-                <span><i class="fas fa-envelope"></i> example@gmail.com</span>
-                <span><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh</span>
-            </div>
+    <div class="container">
+        <div class="contact-info">
+            <span><i class="fas fa-phone"></i> +88018674-45897</span>
+            <span><i class="fas fa-envelope"></i> example@gmail.com</span>
+            <span><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh</span>
         </div>
-    </header>
-    <nav class="main-nav">
-        <div class="container">
-            <div class="logo"><div class="logo-circle"></div><span>LOGO</span></div>
-            <ul class="nav-links">
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('about') }}">About Us</a></li>
-                <li><a href="{{ route('services') }}">Services</a></li>
-                <li><a href="{{ route('specialists') }}">Specialists</a></li>
-                <li><a href="{{ route('shop') }}">Shop</a></li>
-                <li><a class="active" href="{{ route('blog') }}">Blog</a></li>
-                <li><a href="{{ route('contact') }}">Contact</a></li>
+    </div>
+</header>
+<nav class="main-nav">
+    <div class="container">
+        <div class="logo">
+            <div class="logo-circle"></div>
+            <span>LOGO</span>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('about') }}">About Us</a></li>
+            <li><a href="{{ route('services') }}">Services</a></li>
+            <li><a href="{{ route('specialists') }}">Specialists</a></li>
+            <li><a href="{{ route('shop') }}">Shop</a></li>
+            <li><a class="active" href="{{ route('blog') }}">Blog</a></li>
+            <li><a href="{{ route('contact') }}">Contact</a></li>
+        </ul>
+        <a href="{{ route('profile') }}" class="icon-container" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-user"></i>
+        </a>
+        <div class="call-button">
+            <span>+88018574-45897</span>
+            <i class="fa-solid fa-phone"></i>
+        </div>
+    </div>
+</nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', function() {
+            // Toggle the menu visibility
+            const isVisible = navLinks.style.display === 'block';
+            navLinks.style.display = isVisible ? 'none' : 'block';
+
+            // Toggle hamburger animation
+            this.classList.toggle('open');
+
+            // Update accessibility attribute
+            this.setAttribute('aria-expanded', !isVisible);
+        });
+    });
+</script>
+
+<main>
+    <section class="bloginfo-section">
+        <div class="bloginfo-title">10 essential benefits of regular physiotherapy</div>
+        <div class="bloginfo-subtitle">When a serious injury, illness, or accident occurs a hospital stay is likely required and often involves acute or intensive medical care.</div>
+        <div class="bloginfo-hero-img">
+            <img src="https://i.postimg.cc/RCHJmZLM/image.png" alt="Hero">
+        </div>
+        <div class="bloginfo-text">
+            The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
+        </div>
+        <h3>Can I tour the facility before my loved one is transferred there?</h3>
+        <div class="bloginfo-answer">
+            The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
+        </div>
+        <h3>Can I tour the facility before my loved one is transferred there?</h3>
+        <div class="bloginfo-answer">
+            The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
+        </div>
+        <div class="bloginfo-img-row">
+            <img src="https://i.postimg.cc/RCHJmZLM/image.png" alt="img1">
+            <img src="https://i.postimg.cc/Dfrf5Jcb/image.png" alt="img2">
+            <img src="https://i.postimg.cc/9Q4v8sjN/image.png" alt="img3">
+        </div>
+        <h3>Is this stay covered by my insurance plan?</h3>
+        <div class="bloginfo-answer">
+            The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
+        </div>
+    </section>
+</main>
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-column logo-column">
+            <div class="logo-placeholder"></div>
+            <h3 class="logo-text">Logo</h3>
+            <p>511 SW 10th Ave 1206, Portland, OR,<br>United States</p>
+            <p><a href="#" class="footer-link">View Directions</a></p>
+            <p><a href="tel:+8801857445897" class="footer-link">+88018574-45897</a></p>
+            <p><a href="mailto:example@gmail.com" class="footer-link">example@gmail.com</a></p>
+        </div>
+
+        <div class="footer-column">
+            <h4>View Directions</h4>
+            <ul>
+                <li><a href="#" class="footer-link">About Us</a></li>
+                <li><a href="#" class="footer-link">Services</a></li>
+                <li><a href="#" class="footer-link">Our Team</a></li>
+                <li><a href="#" class="footer-link">Shop</a></li>
+                <li><a href="#" class="footer-link">Contacts</a></li>
             </ul>
-            <a href="{{ route('profile') }}" class="icon-container" style="text-decoration: none; color: inherit;">
-                <i class="fas fa-user"></i>
-            </a>
-            <div class="call-button">
-                <span>+88018574-45897</span>
-                <i class="fa-solid fa-phone"></i>
+        </div>
+
+        <div class="footer-column">
+            <h4>Our Services</h4>
+            <ul>
+                <li><a href="#" class="footer-link">Cupping Therapy</a></li>
+                <li><a href="#" class="footer-link">Manual Therapy</a></li>
+                <li><a href="#" class="footer-link">Ultrasound Therapy</a></li>
+                <li><a href="#" class="footer-link">Cupping Therapy</a></li>
+                <li><a href="#" class="footer-link">Cupping Therapy</a></li>
+                <li><a href="#" class="footer-link">Cupping Therapy</a></li>
+                <li><a href="#" class="footer-link">Cupping Therapy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column subscribe-column">
+            <h4>Subscribe to Our Newsletter</h4>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email..." aria-label="Your email">
+                <button type="submit">Subscribe</button>
+            </form>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
-    </nav>
-    <main>
-        <section class="bloginfo-section">
-            <div class="bloginfo-title">10 essential benefits of regular physiotherapy</div>
-            <div class="bloginfo-subtitle">When a serious injury, illness, or accident occurs a hospital stay is likely required and often involves acute or intensive medical care.</div>
-            <div class="bloginfo-hero-img">
-                <img src="https://i.postimg.cc/RCHJmZLM/image.png" alt="Hero">
-            </div>
-            <div class="bloginfo-text">
-                The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
-            </div>
-            <h3>Can I tour the facility before my loved one is transferred there?</h3>
-            <div class="bloginfo-answer">
-                The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
-            </div>
-            <h3>Can I tour the facility before my loved one is transferred there?</h3>
-            <div class="bloginfo-answer">
-                The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
-            </div>
-            <div class="bloginfo-img-row">
-                <img src="https://i.postimg.cc/RCHJmZLM/image.png" alt="img1">
-                <img src="https://i.postimg.cc/Dfrf5Jcb/image.png" alt="img2">
-                <img src="https://i.postimg.cc/9Q4v8sjN/image.png" alt="img3">
-            </div>
-            <h3>Is this stay covered by my insurance plan?</h3>
-            <div class="bloginfo-answer">
-                The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
-            </div>
-        </section>
-    </main>
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-column logo-column">
-                <div class="logo-placeholder"></div>
-                <h3 class="logo-text">Logo</h3>
-                <p>511 SW 10th Ave 1206, Portland, OR,<br>United States</p>
-                <p><a href="#" class="footer-link">View Directions</a></p>
-                <p><a href="tel:+8801857445897" class="footer-link">+88018574-45897</a></p>
-                <p><a href="mailto:example@gmail.com" class="footer-link">example@gmail.com</a></p>
-            </div>
-
-            <div class="footer-column">
-                <h4>View Directions</h4>
-                <ul>
-                    <li><a href="#" class="footer-link">About Us</a></li>
-                    <li><a href="#" class="footer-link">Services</a></li>
-                    <li><a href="#" class="footer-link">Our Team</a></li>
-                    <li><a href="#" class="footer-link">Shop</a></li>
-                    <li><a href="#" class="footer-link">Contacts</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Our Services</h4>
-                <ul>
-                    <li><a href="#" class="footer-link">Cupping Therapy</a></li>
-                    <li><a href="#" class="footer-link">Manual Therapy</a></li>
-                    <li><a href="#" class="footer-link">Ultrasound Therapy</a></li>
-                    <li><a href="#" class="footer-link">Cupping Therapy</a></li>
-                    <li><a href="#" class="footer-link">Cupping Therapy</a></li>
-                    <li><a href="#" class="footer-link">Cupping Therapy</a></li>
-                    <li><a href="#" class="footer-link">Cupping Therapy</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column subscribe-column">
-                <h4>Subscribe to Our Newsletter</h4>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Your email..." aria-label="Your email">
-                    <button type="submit">Subscribe</button>
-                </form>
-                <div class="social-icons">
-                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    </div>
+</footer>
 
 @endsection
-
