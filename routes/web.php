@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AppSettings;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -46,23 +51,45 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/blog/{slug}', 'blogInfo')->name('bloginfo');
 });
 
-// Admin Dashboard Route
-Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-// Profile Routes (Authenticated)
-Route::middleware('auth')->controller(ProfileController::class)->group(function () {
-    // Main profile route - using edit as the main profile page
-    Route::get('/profile', 'edit')->name('profile');
-    
-    // Profile update and delete routes
-    Route::patch('/profile', 'update')->name('profile.update');
-    Route::delete('/profile', 'destroy')->name('profile.destroy');
-    
-    // Profile sections
-    Route::get('/profile/appointments', 'appointments')->name('profile.appointments');
-    Route::get('/profile/favorite', 'favorite')->name('profile.favorite');
-    Route::get('/profile/service-history', 'serviceHistory')->name('profile.service-history');
-});
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::resource('roles', RoleController::class);
+        Route::resource('permissions', PermissionController::class);
+        Route::resource('users', UserController::class);
+
+        Route::get('/users/{id}/profile', [UserController::class, 'profile'])->name('users.profile');
+        Route::put('/users/{id}/profile_update', [UserController::class, 'profileUpdate'])->name('users.profile.update');
+        
+        Route::prefix('app/pages')
+        ->name('app.')
+        ->group(function(){
+            Route::get('/',[AppSettings::class,'PagesIndex'])->name('pages.index');
+            Route::get('/home',[AppSettings::class,'PagesHome'])->name('pages.home');
+        });
+        Route::resource('services', ServiceController::class);
+   
+    });
+
+
+    // Admin Dashboard Route
+
+    // Profile Routes (Authenticated)
+    Route::middleware('auth')->controller(ProfileController::class)->group(function () {
+        // Main profile route - using edit as the main profile page
+        Route::get('/profile', 'edit')->name('profile');
+        
+        // Profile update and delete routes
+        Route::patch('/profile', 'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
+        
+        // Profile sections
+        Route::get('/profile/appointments', 'appointments')->name('profile.appointments');
+        Route::get('/profile/favorite', 'favorite')->name('profile.favorite');
+        Route::get('/profile/service-history', 'serviceHistory')->name('profile.service-history');
+    });
 
 // Logout route
 Route::post('/logout', function () {

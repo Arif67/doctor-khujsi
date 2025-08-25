@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+table tbody td.dt-empty {
+    text-align: center;
+    padding: 10px 0px;
+}
+.col-start-2.justify-self-end div.dt-paging nav[aria-label="pagination"]{
+    text-align-last: end;
+}
+
+div.dt-container.dt-tailwindcss.dt-empty-footer .dt-search{
+    text-align-last: end;
+}
+
+div.dt-container.dt-tailwindcss.dt-empty-footer div.dt-length select {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+div.dt-container.dt-tailwindcss.dt-empty-footer 
+    .grid.grid-cols-2.gap-4.mb-4:last-of-type {
+    align-items: center;
+}
