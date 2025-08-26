@@ -46,6 +46,37 @@
                         Dashboard
                     </span>
                 </div>
+                <div x-data="{ open: false }" class="relative">
+                    <!-- Parent Item -->
+                    <button 
+                        @click="open = !open"
+                        class="flex items-center justify-between w-full px-6 py-3 text-[13px] text-[#A3AED0] hover:bg-gray-200 transition-all duration-300"
+                        :class="{'bg-indigo-600 text-white': open}">
+                        
+                        <span class="ml-4 font-medium">Blog</span>
+
+                        <!-- Arrow -->
+                        <i class="fas fa-chevron-down transform transition-transform duration-300"
+                            :class="{'rotate-180': open}"></i>
+                    </button>
+
+                    <!-- Sub Menu (smooth open/close) -->
+                    <div 
+                        x-show="open" 
+                        x-collapse.duration.300ms
+                        x-transition.opacity
+                        class="bg-gray-50 overflow-hidden">
+                        
+                        <a href="{{ route('admin.dashboard') }}" 
+                        class="block px-12 py-2 text-sm text-[#A3AED0] hover:text-indigo-600 hover:bg-gray-100">
+                            Categories
+                        </a>
+                        <a href="{{ route('admin.dashboard') }}" 
+                        class="block px-12 py-2 text-sm text-[#A3AED0] hover:text-indigo-600 hover:bg-gray-100">
+                            All Blogs
+                        </a>
+                    </div>
+                </div>
                 <div 
                     :class="[
                         'pl-6 bg-[#A3AED0] py-1 my-2 text-white font-normal text-[13px] transition-opacity duration-300',
@@ -85,7 +116,7 @@
                 >
                     Role Permissions
                 </div>            
-                 <div class="relative group">
+                <div class="relative group">
                     <a href="{{ route('admin.roles.index') }}"
                         class="flex items-center px-6 py-3 transition-all text-[13px] duration-300"
                         :class="{
@@ -133,6 +164,7 @@
                         Permissions
                     </span>
                 </div>
+
                 <div 
                     :class="[
                         'pl-6 bg-[#A3AED0] py-1 my-2 text-white font-normal text-[13px] transition-opacity duration-300',
@@ -189,6 +221,30 @@
                         Services
                     </span>
                 </div>
+                <div class="relative group">
+                    <a href="{{ route('admin.attentions.index') }}"
+                        class="flex text-[13px] items-center px-6 py-3 transition-all duration-300"
+                        :class="{
+                            'justify-center': sidebarCollapsed,
+                            'bg-indigo-600 text-white': '{{ Route::is('admin.attentions.*') }}',
+                            'text-[#A3AED0] hover:bg-gray-200': '{{ !Route::is('admin.attentions.*') }}'
+                        }">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+
+                        <!-- Animated text -->
+                        <span 
+                            class="ml-4 font-medium origin-left transition-all duration-300"
+                            :class="sidebarCollapsed ? 'opacity-0 scale-90 hidden' : 'opacity-100 scale-100 inline-block'">
+                            Attentions
+                        </span>
+                    </a>
+                    <span x-show="sidebarCollapsed" 
+                       class="absolute left-full top-1/2 -translate-y-1/2 ml-2
+                        bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0
+                        group-hover:opacity-100 transition duration-200 whitespace-nowrap">
+                        Attentions
+                    </span>
+                </div>
             </nav>
         </div>
 
@@ -217,3 +273,4 @@
 
  <!-- Mobile overlay -->
 <div x-show="sidebarOpen" class="fixed inset-0 bg-black opacity-50 z-40 lg:hidden" @click="sidebarOpen = false"></div>
+
