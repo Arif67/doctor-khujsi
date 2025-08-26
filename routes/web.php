@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AppSettings;
+use App\Http\Controllers\Admin\AttentionController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -70,6 +71,7 @@ Route::prefix('admin')
             Route::get('/home',[AppSettings::class,'PagesHome'])->name('pages.home');
         });
         Route::resource('services', ServiceController::class);
+        Route::resource('attentions', AttentionController::class);
    
     });
 
