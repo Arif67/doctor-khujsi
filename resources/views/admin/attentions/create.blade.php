@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="p-6 bg-white rounded shadow">
-    <h1 class="text-xl font-bold mb-4"></h1>
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold text-gray-800">Add New Attention</h2>
         <a 
@@ -28,7 +27,7 @@
             </div>
        </div>
        <div>
-        <div class="">
+        <div>
                 <button type="submit" 
                     class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
                 <i class="fas fa-save mr-2"></i> Save
