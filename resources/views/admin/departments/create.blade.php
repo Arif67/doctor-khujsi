@@ -1,0 +1,21 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-800">Create Department</h2>
+        <a 
+            href="{{ route('admin.departments.index') }}" 
+            class="flex flex-row gap-2 items-center px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition"
+        >
+            All Department
+        </a>
+    </div>
+    <hr class="mb-5">
+    <div class="">
+        <form action="{{ route('admin.departments.store') }}" method="POST">
+            @include('admin.departments._form')
+        </form>
+    </div>
+</div>
+@endsection

@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\AppSettings;
 use App\Http\Controllers\Admin\AttentionController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -76,6 +78,8 @@ Route::prefix('admin')
         Route::resource('attentions', AttentionController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('blogs', BlogController::class);
+        Route::resource('departments', DepartmentController::class);
+         Route::resource('doctors', DoctorController::class);
     });
 
 
