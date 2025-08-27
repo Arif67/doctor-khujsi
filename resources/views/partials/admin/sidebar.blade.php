@@ -46,37 +46,6 @@
                         Dashboard
                     </span>
                 </div>
-                <div x-data="{ open: false }" class="relative">
-                    <!-- Parent Item -->
-                    <button 
-                        @click="open = !open"
-                        class="flex items-center justify-between w-full px-6 py-3 text-[13px] text-[#A3AED0] hover:bg-gray-200 transition-all duration-300"
-                        :class="{'bg-indigo-600 text-white': open}">
-                        
-                        <span class="ml-4 font-medium">Blog</span>
-
-                        <!-- Arrow -->
-                        <i class="fas fa-chevron-down transform transition-transform duration-300"
-                            :class="{'rotate-180': open}"></i>
-                    </button>
-
-                    <!-- Sub Menu (smooth open/close) -->
-                    <div 
-                        x-show="open" 
-                        x-collapse.duration.300ms
-                        x-transition.opacity
-                        class="bg-gray-50 overflow-hidden">
-                        
-                        <a href="{{ route('admin.dashboard') }}" 
-                        class="block px-12 py-2 text-sm text-[#A3AED0] hover:text-indigo-600 hover:bg-gray-100">
-                            Categories
-                        </a>
-                        <a href="{{ route('admin.dashboard') }}" 
-                        class="block px-12 py-2 text-sm text-[#A3AED0] hover:text-indigo-600 hover:bg-gray-100">
-                            All Blogs
-                        </a>
-                    </div>
-                </div>
                 <div 
                     :class="[
                         'pl-6 bg-[#A3AED0] py-1 my-2 text-white font-normal text-[13px] transition-opacity duration-300',
@@ -164,7 +133,60 @@
                         Permissions
                     </span>
                 </div>
-
+                <div 
+                    :class="[
+                        'pl-6 bg-[#A3AED0] py-1 my-2 text-white font-normal text-[13px] transition-opacity duration-300',
+                        sidebarCollapsed ? 'opacity-0 hidden' : 'opacity-100 block'
+                    ]"
+                >
+                    Blog Managment
+                </div>
+                <div class="relative group">
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="flex text-[13px] items-center px-6 py-3 transition-all duration-300"
+                        :class="{
+                            'justify-center': sidebarCollapsed,
+                            'bg-indigo-600 text-white': '{{ Route::is('admin.categories.*') }}',
+                            'text-[#A3AED0] hover:bg-gray-200': '{{ !Route::is('admin.categories.*') }}'
+                        }">
+                        <i class="fas fa-folder"></i>
+                        <!-- Animated text -->
+                        <span 
+                            class="ml-4 font-medium origin-left transition-all duration-300"
+                            :class="sidebarCollapsed ? 'opacity-0 scale-90 hidden' : 'opacity-100 scale-100 inline-block'">
+                            Categories
+                        </span>
+                    </a>
+                    <span x-show="sidebarCollapsed" 
+                       class="absolute left-full top-1/2 -translate-y-1/2 ml-2
+                        bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0
+                        group-hover:opacity-100 transition duration-200 whitespace-nowrap">
+                        Categories
+                    </span>
+                </div>
+                 <div class="relative group">
+                    <a href="{{ route('admin.blogs.index') }}"
+                        class="flex text-[13px] items-center px-6 py-3 transition-all duration-300"
+                        :class="{
+                            'justify-center': sidebarCollapsed,
+                            'bg-indigo-600 text-white': '{{ Route::is('admin.blogs.*') }}',
+                            'text-[#A3AED0] hover:bg-gray-200': '{{ !Route::is('admin.blogs.*') }}'
+                        }">
+                        <i class="fas fa-blog"></i>
+                        <!-- Animated text -->
+                        <span 
+                            class="ml-4 font-medium origin-left transition-all duration-300"
+                            :class="sidebarCollapsed ? 'opacity-0 scale-90 hidden' : 'opacity-100 scale-100 inline-block'">
+                            Blogs
+                        </span>
+                    </a>
+                    <span x-show="sidebarCollapsed" 
+                       class="absolute left-full top-1/2 -translate-y-1/2 ml-2
+                        bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0
+                        group-hover:opacity-100 transition duration-200 whitespace-nowrap">
+                        Blogs
+                    </span>
+                </div>
                 <div 
                     :class="[
                         'pl-6 bg-[#A3AED0] py-1 my-2 text-white font-normal text-[13px] transition-opacity duration-300',
