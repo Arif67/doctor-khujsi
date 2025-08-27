@@ -1,5 +1,5 @@
 <aside
-    class="fixed inset-y-0 left-0 bg-white shadow-md transform transition-all duration-300 ease-in-out z-50 sidebar-border
+    class="fixed inset-y-0 left-0 min-h-screen custom-scrollbar overflow-x-hidden overflow-y-scroll bg-white shadow-md transform transition-all duration-300 ease-in-out z-50 sidebar-border
     lg:static lg:translate-x-0"
     :class="{
         'translate-x-0': sidebarOpen, 
@@ -30,8 +30,7 @@
                             'bg-indigo-600 text-white': '{{ Route::is('admin.dashboard') }}',
                             'text-[#A3AED0] hover:bg-gray-200': '{{ !Route::is('admin.dashboard') }}'
                         }">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-
+                        <i class="fas fa-gauge"></i>
                         <!-- Animated text -->
                         <span 
                             class="ml-4 font-medium origin-left transition-all duration-300"
@@ -132,6 +131,60 @@
                         group-hover:opacity-100 transition duration-200 whitespace-nowrap">
                         Permissions
                     </span>
+                </div>
+                <div 
+                    :class="[
+                        'pl-6 bg-[#A3AED0] py-1 my-2 text-white font-normal text-[13px] transition-opacity duration-300',
+                        sidebarCollapsed ? 'opacity-0 hidden' : 'opacity-100 block'
+                    ]"
+                >
+                    Doctor Managment
+                </div>
+                <div class="relative group">
+                    <a href="{{ route('admin.departments.index') }}"
+                        class="flex text-[13px] items-center px-6 py-3 transition-all duration-300"
+                        :class="{
+                            'justify-center': sidebarCollapsed,
+                            'bg-indigo-600 text-white': '{{ Route::is('admin.departments.*') }}',
+                            'text-[#A3AED0] hover:bg-gray-200': '{{ !Route::is('admin.departments.*') }}'
+                        }">
+                        <i class="fas fa-building"></i>
+                        <!-- Animated text -->
+                        <span 
+                            class="ml-4 font-medium origin-left transition-all duration-300"
+                            :class="sidebarCollapsed ? 'opacity-0 scale-90 hidden' : 'opacity-100 scale-100 inline-block'">
+                            Department
+                        </span>
+                    </a>
+                    <span x-show="sidebarCollapsed" 
+                       class="absolute left-full top-1/2 -translate-y-1/2 ml-2
+                        bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0
+                        group-hover:opacity-100 transition duration-200 whitespace-nowrap">
+                        Department
+                    </span>
+                </div>
+                <div class="relative group">
+                    <a href="{{ route('admin.doctors.index') }}"
+                        class="flex text-[13px] items-center px-6 py-3 transition-all duration-300"
+                        :class="{
+                            'justify-center': sidebarCollapsed,
+                            'bg-indigo-600 text-white': '{{ Route::is('admin.doctors.*') }}',
+                            'text-[#A3AED0] hover:bg-gray-200': '{{ !Route::is('admin.doctors.*') }}'
+                        }">
+                       <i class="fas fa-user-md"></i>
+                        <!-- Animated text -->
+                        <span 
+                            class="ml-4 font-medium origin-left transition-all duration-300"
+                            :class="sidebarCollapsed ? 'opacity-0 scale-90 hidden' : 'opacity-100 scale-100 inline-block'">
+                            Doctors
+                        </span>
+                    </a>
+                    <span x-show="sidebarCollapsed" 
+                       class="absolute left-full top-1/2 -translate-y-1/2 ml-2
+                        bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0
+                        group-hover:opacity-100 transition duration-200 whitespace-nowrap">
+                        Doctors
+                </span>
                 </div>
                 <div 
                     :class="[
@@ -295,4 +348,3 @@
 
  <!-- Mobile overlay -->
 <div x-show="sidebarOpen" class="fixed inset-0 bg-black opacity-50 z-40 lg:hidden" @click="sidebarOpen = false"></div>
-
