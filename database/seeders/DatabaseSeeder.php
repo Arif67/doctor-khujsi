@@ -18,17 +18,19 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call(RolePermissionSeeder::class);
+        $this->call(PagesSeeder::class);
+
 
        $testUser = User::factory()->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'user@example.com',
             'password' => Hash::make('12345678'),
             'plan_password' => '12345678'
         ]);
 
-         $adminUser = User::factory()->create([
+        $adminUser = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin1@gmail.com',
             'password' => Hash::make('12345678'),
             'plan_password' => '12345678'
         ]);
