@@ -1,0 +1,91 @@
+ .top-header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 10px 0;
+    font-size: 0.9em;
+}
+
+img.app_logo {
+    width: 50px;
+    height: 100%;
+    border-radius: 100%;
+}
+nav.app_header{
+    background-color: var(--white);
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.header_main_nav li a{
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.header_main_nav li a:hover {
+    color: var(--primary-color);
+}
+
+.header_main_nav li.active a {
+    color: var(--primary-color);
+}
+.header_user_icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    color: var(--primary-color);
+    font-size: 18px;
+    margin-left: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.header_user_icon:hover {
+    background-color: var(--primary-color);
+    color: var(--white) !important;
+}
+.header_call_button{
+    background-color: #22B8CF;
+    color: white;
+    padding: 3px 18px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    text-decoration: none;
+}
+ 
+ .header_call_button:hover {
+    background-color: #199CB0;
+}
+.header_call_button:hover a{
+    color: var(--white);
+}
+
+.header_call_button i {
+    font-size: 16px;
+}
+
+
+
+@media only screen and (max-width: 600px){
+    .top-header .container span{
+        font-size: 12px;
+    }
+}
+@media (min-width: 600px) and (max-width: 767px) {
+   .top-header .container span{
+        font-size: 12px;
+    }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+    
+}
