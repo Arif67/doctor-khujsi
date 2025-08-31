@@ -800,7 +800,7 @@
         </a>
         <div class="call-button">
             <span>+88018574-45897</span>
-            <i class="fa-solid fa-phone"></i>
+            
         </div>
     </div>
 </nav>
