@@ -28,7 +28,7 @@
        </div>
        <div>
         <div>
-                <button type="submit" 
+            <button type="submit" 
                     class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
                 <i class="fas fa-save mr-2"></i> Save
             </button>

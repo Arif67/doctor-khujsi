@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('qualification')->nullable();
             $table->string('specialization')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
-            $table->unsignedBigInteger('created_by')->nullable();
             $table->string('photo')->nullable();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('set null');
             $table->timestamp('created_at')->useCurrent();

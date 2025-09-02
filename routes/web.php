@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AppSettings;
+use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\AttentionController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\Admin\PagesSectionUpdateController;
+use App\Http\Controllers\Admin\PagesUpdateController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -16,6 +19,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Artisan;
 
 // Frontend Controller Routes
 Route::controller(FrontendController::class)->group(function () {
@@ -57,6 +61,14 @@ Route::controller(FrontendController::class)->group(function () {
 });
 
 
+Route::get('/clear', function() {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    return redirect('/');
+});
+
 Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -71,15 +83,28 @@ Route::prefix('admin')
         Route::prefix('app/pages')
         ->name('app.')
         ->group(function(){
-            Route::get('/',[AppSettings::class,'PagesIndex'])->name('pages.index');
-            Route::get('/home',[AppSettings::class,'PagesHome'])->name('pages.home');
+            Route::get('/home',[PagesController::class,'PagesHome'])->name('pages.home');
         });
+
+        Route::get('app/settings',[AppSettingsController::class,'edit'])->name('app.setting.edit');
+        Route::put('app/settings/update',[AppSettingsController::class,'update'])->name('app.setting.update');
+
+        Route::prefix('app/section')
+        ->name('sections.')
+        ->group(function(){
+            Route::put('home_hero',[PagesSectionUpdateController::class,'home_hero'])->name('home.hero.update');
+            Route::put('home_freture',[PagesSectionUpdateController::class,'home_feature'])->name('home.feature.update');
+            Route::put('home_about_us',[PagesSectionUpdateController::class,'home_about_us'])->name('home.about_us.update');
+        });
+
+
+
         Route::resource('services', ServiceController::class);
         Route::resource('attentions', AttentionController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('blogs', BlogController::class);
         Route::resource('departments', DepartmentController::class);
-         Route::resource('doctors', DoctorController::class);
+        Route::resource('doctors', DoctorController::class);
     });
 
 

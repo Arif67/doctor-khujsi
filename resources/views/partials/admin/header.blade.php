@@ -1,65 +1,81 @@
- <header class="flex items-center justify-between px-6 py-4 bg-white border-b-2 border-gray-200">
-    <div class="flex items-center">
-        <!-- Mobile toggle -->
-        <button @click.stop="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none lg:hidden">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                <path d="M4 6H20M4 12H20M4 18H20"
-                        stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-        </button>
 
-        <!-- Desktop collapse toggle -->
-        <button @click="sidebarCollapsed = !sidebarCollapsed" class="hidden lg:block ml-4 text-gray-500 focus:outline-none">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                <path d="M4 6H20M4 12H20M4 18H20"
-                        stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-        </button>
-    </div>
 
-    <!-- User -->
-    <div class="relative" x-data="{ open: false }">
-        <!-- Profile button -->
-        <button @click="open = !open" class="flex items-center focus:outline-none">
-            <img class="w-8 h-8 rounded-full object-cover" 
-                src="{{ asset('admin/img/undraw_profile.svg') }}" 
-                alt="User avatar">
-            <span class="ml-2 text-sm font-inter font-normal text-[14px] text-[#1C1C1C] hidden lg:inline">
-                ByeWind
-            </span>
-            <svg class="w-4 h-4 ml-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 9l-7 7-7-7"></path>
-            </svg>
-        </button>
-
-        <!-- Dropdown menu -->
-        <div 
-            x-show="open" 
-            @click.away="open = false"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50"
-        >
-            <a href="{{ route('admin.users.profile',Auth::id()) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Profile
+ <nav class="app-header navbar navbar-expand bg-body">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Start Navbar Links-->
+        <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+            <i class="bi bi-list"></i>
             </a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Settings
+        </li>
+        </ul>
+        <!--end::Start Navbar Links-->
+        <!--begin::End Navbar Links-->
+        <ul class="navbar-nav ms-auto">
+        <!--begin::Navbar Search-->
+        <li class="nav-item">
+            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+            <i class="bi bi-search"></i>
             </a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Log Out
-                </button>
-            </form>
-        </div>
-    </div>
+        </li>
+        <!--end::Navbar Search-->
 
-</header>
+       
+        <!--begin::Fullscreen Toggle-->
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+            <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+            <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
+            </a>
+        </li>
+        <!--end::Fullscreen Toggle-->
+        <!--begin::User Menu Dropdown-->
+        <li class="nav-item dropdown user-menu">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <img
+                src="{{ asset('assets/img/undraw_profile.svg') }}"
+                class="user-image rounded-circle shadow"
+                alt="User Image"
+            />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+            <!--begin::User Image-->
+            <li class="user-header text-bg-primary">
+                <img
+                src="{{ asset('assets/img/undraw_profile.svg') }}"
+                class="rounded-circle shadow"
+                alt="User Image"
+                />
+                <p>
+                Alexander Pierce - Web Developer
+                <small>Member since Nov. 2023</small>
+                </p>
+            </li>
+            <!--end::User Image-->
+            <!--begin::Menu Body-->
+            <li class="user-body">
+                <!--begin::Row-->
+                <div class="row">
+                <div class="col-4 text-center"><a href="#">Followers</a></div>
+                <div class="col-4 text-center"><a href="#">Sales</a></div>
+                <div class="col-4 text-center"><a href="#">Friends</a></div>
+                </div>
+                <!--end::Row-->
+            </li>
+            <!--end::Menu Body-->
+            <!--begin::Menu Footer-->
+            <li class="user-footer">
+                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+            </li>
+            <!--end::Menu Footer-->
+            </ul>
+        </li>
+        <!--end::User Menu Dropdown-->
+        </ul>
+        <!--end::End Navbar Links-->
+    </div>
+    <!--end::Container-->
+    </nav>

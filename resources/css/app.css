@@ -21,7 +21,8 @@ div.dt-container.dt-tailwindcss.dt-empty-footer div.dt-length select {
 
 div.dt-container.dt-tailwindcss.dt-empty-footer 
     .grid.grid-cols-2.gap-4.mb-4:last-of-type {
-    align-items: center;
+    align-items: center !important;
+    background-color: red;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
