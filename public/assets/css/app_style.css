@@ -1,8 +1,21 @@
 @import url('./modules/global.css');
 @import url('./modules/header.css');
 @import url('./modules/app_home.css');
+@import url('./modules/about.css');
+@import url('./modules/services.css');
+@import url('./modules/contact.css');
 
 
+.section-pill {
+    display: inline-block;
+    background: #bbe0e4;
+    color: #3a3939;
+    font-weight: 600;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 7px 22px;
+    margin-bottom: 18px;
+}
 
 /* Footer Styles */
 .site-footer {

@@ -1,0 +1,70 @@
+
+.services-section {
+    padding: 80px 0;
+    background-color: #EBF7F9;
+}
+
+.services-img img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 420/340;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(44, 140, 153, 0.08);
+    background: #f3fafe;
+}
+
+
+
+.services-pill {
+    display: inline-block;
+    background: #bbe0e4;
+    color: #3a3939;
+    font-weight: 600;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 7px 22px;
+    margin-bottom: 18px;
+}
+
+
+.services-desc {
+    font-size: 1.04em;
+    color: #444;
+    margin-bottom: 28px;
+    max-width: 95%;
+}
+
+ .about-section {
+    padding: 80px 0;
+    background-color: #ffffff;
+}
+
+
+.description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+
+.about-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media only screen and (max-width: 600px){
+  .services-section, .about-section{
+    padding: 50px 0px;
+  }
+}
+@media (min-width: 600px) and (max-width: 767px) {
+  .services-section ,.about-section{
+    padding: 50px 0px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+   
+} 

@@ -5,9 +5,12 @@
     <div class="container-fluid">
         <!--begin::Start Navbar Links-->
         <ul class="navbar-nav">
-        <li class="nav-item">
+        <li class="nav-item d-flex align-items-center" >
             <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
-            <i class="bi bi-list"></i>
+                <i class="bi bi-list"></i>
+            </a>
+            <a href="{{route('app.home')}}" target="_blank" class="text-white bg-blue-700 py-1 px-2 rounded-full">
+               <i class="fas fa-globe-americas"></i>
             </a>
         </li>
         </ul>
