@@ -170,8 +170,8 @@
             <h1 class="heading-blue">CHIROPRACTIC</h1>
             <h1 class="heading-dark">CARE FOR THE FAMILY</h1>
             <p class="description">Nunc accumsan dui vel lobortis pulvinar. Duis convallis odio ut dignissim faucibus. Sed sit amet urna dictum.</p>
-            <a href="{{ route('booking') }}" class="btn">Book An Appointment &rarr;</a>
-            <a href="{{ route('home') }}" class="btn">Home</a>
+            <a href="{{ route('app.booking') }}" class="btn">Book An Appointment &rarr;</a>
+            <a href="{{ route('app.home') }}" class="btn">Home</a>
         </div>
         <div class="content-right">
             <div class="circle-outer">

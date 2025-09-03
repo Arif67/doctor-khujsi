@@ -8,21 +8,21 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\PagesSectionUpdateController;
-use App\Http\Controllers\Admin\PagesUpdateController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Frontend\FrontendController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Patient\DefaultController;
 use Illuminate\Support\Facades\Artisan;
 
 // Frontend Controller Routes
-Route::controller(FrontendController::class)->group(function () {
+Route::controller(FrontendController::class)
+->name('app.')
+->group(function () {
     // Home page
     Route::get('/', 'home')->name('home');
     Route::get('/home', 'home');
@@ -60,6 +60,18 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/blog/{slug}', 'blogInfo')->name('bloginfo');
 });
 
+// Patient Route
+Route::prefix('patient')
+->name('patient.')
+->group(function(){
+    Route::get( 'dashboard',[DefaultController::class,'dashboard'])->name('dashboard');
+    Route::get('profile',[DefaultController::class,'profile'])->name('profile');
+
+    Route::get('/appointments', [DefaultController::class,'appointments'])->name('appointments');
+    Route::get('/favorite-doctor', [DefaultController::class,'favoriteDoctor'])->name('favorite.doctor');
+    Route::get('/service-history', [DefaultController::class,'serviceHistory'])->name('service.history');
+});
+
 
 Route::get('/clear', function() {
     Artisan::call('config:clear');
@@ -69,6 +81,7 @@ Route::get('/clear', function() {
     return redirect('/');
 });
 
+// Admin Dashboard Route
 Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -107,23 +120,6 @@ Route::prefix('admin')
         Route::resource('doctors', DoctorController::class);
     });
 
-
-    // Admin Dashboard Route
-
-    // Profile Routes (Authenticated)
-    Route::middleware('auth')->controller(ProfileController::class)->group(function () {
-        // Main profile route - using edit as the main profile page
-        Route::get('/profile', 'edit')->name('profile');
-        
-        // Profile update and delete routes
-        Route::patch('/profile', 'update')->name('profile.update');
-        Route::delete('/profile', 'destroy')->name('profile.destroy');
-        
-        // Profile sections
-        Route::get('/profile/appointments', 'appointments')->name('profile.appointments');
-        Route::get('/profile/favorite', 'favorite')->name('profile.favorite');
-        Route::get('/profile/service-history', 'serviceHistory')->name('profile.service-history');
-    });
 
 // Logout route
 Route::post('/logout', function () {

@@ -19,17 +19,8 @@
      <link href="{{ asset('admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <!--end::Primary Meta Tags-->
      <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.tailwindcss.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.tailwindcss.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
-    <!--begin::Fonts-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-      crossorigin="anonymous"
-    />
-    <!--end::Fonts-->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+       <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css"
@@ -45,10 +36,13 @@
       crossorigin="anonymous"
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
+    <!--begin:: admin custom css -->
+    <link rel="stylesheet" href="{{asset('assets/css/admin_modules/custom.css')}}">
+    <!--end:: admin custom css -->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="{{asset('css/adminlte.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/adminlte.css')}}" />
+    
     <!--end::Required Plugin(AdminLTE)-->
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
   </head>
@@ -97,20 +91,6 @@
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <!--begin::Footer-->
-      <footer class="app-footer">
-        <!--begin::To the end-->
-        <div class="float-end d-none d-sm-inline">Anything you want</div>
-        <!--end::To the end-->
-        <!--begin::Copyright-->
-        <strong>
-          Copyright &copy; 2014-2024&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
-        </strong>
-        All rights reserved.
-        <!--end::Copyright-->
-      </footer>
-      <!--end::Footer-->
     </div>
     <!--end::App Wrapper-->
 
@@ -141,7 +121,7 @@
       crossorigin="anonymous"
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="{{asset('js/adminlte.js')}}"></script>
+    <script src="{{asset('assets/js/adminlte.js')}}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

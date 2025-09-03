@@ -1,0 +1,38 @@
+@media only screen and (min-width: 992px){
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar{
+        max-width: 60px;
+        min-width: 60px;
+    }
+    .app-sidebar {
+        transition: all 0.3s ease-in-out;
+    }
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar .sidebar-brand a{
+        width:50px !important;
+    }
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar .sidebar-brand a span{
+        display: none;
+    }
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper ul.sidebar-menu li.nav-item{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper ul.sidebar-menu li.nav-item a p{
+        display: none;
+    }
+
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper ul.sidebar-menu li.nav-header {
+        display: none;
+    }
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper[data-overlayscrollbars='host']{
+        overflow: unset !important;
+    }
+
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper div[data-overlayscrollbars-viewport="scrollbarHidden overflowXScroll overflowYHidden"]{
+        overflow: unset !important;
+    }
+
+
+}
+
+

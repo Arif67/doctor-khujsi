@@ -21,23 +21,31 @@
 
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav header_main_nav d-flex align-items-center gap-3 m-auto my-2 my-lg-0 navbar-nav-scroll">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">About Us</a>
-                    </li>
-                    <li class="nav-item position-relative mega-menu-parent">
-                        <a class="nav-link" href="#">Events</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Contact Us</a>
-                    </li>
-                    
+                <li class="nav-item {{ Route::is('app.home') ? 'active':'' }}">
+                    <a class="nav-link" href="{{route('app.home')}}">Home</a>
+                </li>
+                <li class="nav-item {{ Route::is('app.about') ? 'active':'' }}">
+                    <a class="nav-link" href="{{route('app.about')}}">About Us</a>
+                </li>
+                <li class="nav-item {{ Route::is('app.services') ? 'active':'' }}" >
+                    <a class="nav-link" href="{{route('app.services')}}">Services</a>
+                </li>
+                <li class="nav-item {{ Route::is('app.specialists') ? 'active':'' }}" >
+                    <a class="nav-link" href="{{route('app.specialists')}}">Specialists</a>
+                </li>
+                <li class="nav-item {{ Route::is('app.shop') ? 'active':'' }}">
+                    <a class="nav-link" href="{{ route('app.shop') }}">Shop</a>
+                </li>
+                <li class="nav-item {{ Route::is('app.blog') ? 'active':'' }}">
+                    <a class="nav-link" href="{{ route('app.blog') }}">Blog</a>
+                </li>
+                <li class="nav-item {{ Route::is('app.contact') ? 'active':'' }}">
+                    <a class="nav-link" href="{{ route('app.contact') }}">Contact</a>
+                </li>
             </ul>
             <ul class="navbar-nav d-flex align-items-center gap-4 ms-auto my-2 my-lg-0 navbar-nav-scroll">
                 <li class="nav-link">
-                    <a href="{{ route('profile') }}" class="header_user_icon" style="text-decoration: none; color: inherit;">
+                    <a href="{{route('patient.dashboard')}}" class="header_user_icon" style="text-decoration: none; color: inherit;">
                         <i class="fas fa-user"></i>
                     </a>
                 </li>

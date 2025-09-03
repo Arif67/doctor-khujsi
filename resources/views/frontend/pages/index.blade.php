@@ -344,8 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
         </p>
         <div class="buttons">
-            <a href="{{ route('booking') }}" class="btn-primary">Book Appointment</a>
-            <a href="{{ route('about') }}" class="btn-secondary">Learn More</a>
+            <a href="{{ route('app.booking') }}" class="btn-primary">Book Appointment</a>
+            <a href="{{ route('app.about') }}" class="btn-secondary">Learn More</a>
         </div>
     </div>
     <div class="content-right">

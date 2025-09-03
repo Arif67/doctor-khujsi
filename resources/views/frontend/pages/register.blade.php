@@ -1,8 +1,8 @@
-@extends('frontend.layout.masterlayout')
+@extends('layouts.app')
 
 @section('title', 'Register - Hospital Management')
 
-@section('styles')
+{{-- @section('styles')
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
     
@@ -343,6 +343,137 @@
         <div class="signin-link">
             Already have an account? <a href="{{ route('login') }}">Sign in here</a>
         </div>
+    </div>
+</div>
+@endsection --}}
+
+@section('content')
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5" style="max-width: 550px; width: 100%;">
+        {{-- Close Button --}}
+        <button class="btn-close position-absolute top-0 end-0 m-3" onclick="window.history.back()"></button>
+
+        {{-- Title --}}
+        <h3 class="text-center mb-4 fw-semibold">Create Your d Account</h3>
+
+        {{-- Success Message --}}
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        {{-- Error Messages --}}
+        @if($errors->any())
+            <div class="alert alert-danger">
+                @foreach($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
+
+        {{-- Register Form --}}
+        <form action="{{ route('register') }}" method="POST">
+            @csrf
+
+            <div class="row g-3">
+                {{-- First Name --}}
+                <div class="col-md-6">
+                    <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                    <input type="text" id="first_name" name="first_name" 
+                           class="form-control" value="{{ old('first_name') }}" required>
+                </div>
+                {{-- Last Name --}}
+                <div class="col-md-6">
+                    <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" id="last_name" name="last_name" 
+                           class="form-control" value="{{ old('last_name') }}" required>
+                </div>
+            </div>
+
+            {{-- Email --}}
+            <div class="mt-3">
+                <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                <input type="email" id="email" name="email" 
+                       class="form-control" value="{{ old('email') }}" required>
+            </div>
+
+            <div class="row g-3 mt-1">
+                {{-- Phone --}}
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                    <input type="tel" id="phone" name="phone" 
+                           class="form-control" value="{{ old('phone') }}" required>
+                </div>
+                {{-- DOB --}}
+                <div class="col-md-6">
+                    <label for="date_of_birth" class="form-label">Date of Birth</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" 
+                           class="form-control" value="{{ old('date_of_birth') }}">
+                </div>
+            </div>
+
+            <div class="row g-3 mt-1">
+                {{-- Gender --}}
+                <div class="col-md-6">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select id="gender" name="gender" class="form-select">
+                        <option value="">Select Gender</option>
+                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+                {{-- Blood Group --}}
+                <div class="col-md-6">
+                    <label for="blood_group" class="form-label">Blood Group</label>
+                    <select id="blood_group" name="blood_group" class="form-select">
+                        <option value="">Select Blood Group</option>
+                        @foreach(['A+','A-','B+','B-','AB+','AB-','O+','O-'] as $bg)
+                            <option value="{{ $bg }}" {{ old('blood_group') == $bg ? 'selected' : '' }}>{{ $bg }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            {{-- Address --}}
+            <div class="mt-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" name="address" 
+                       class="form-control" value="{{ old('address') }}" placeholder="Enter your full address">
+            </div>
+
+            <div class="row g-3 mt-1">
+                {{-- Password --}}
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                {{-- Confirm Password --}}
+                <div class="col-md-6">
+                    <label for="password_confirmation" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
+                </div>
+            </div>
+
+            {{-- Terms --}}
+            <div class="form-check mt-3">
+                <input type="checkbox" id="terms" name="terms" class="form-check-input" required {{ old('terms') ? 'checked' : '' }}>
+                <label for="terms" class="form-check-label">
+                    I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and 
+                    <a href="#" class="text-decoration-none">Privacy Policy</a>
+                </label>
+            </div>
+
+            {{-- Submit --}}
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-info text-white fw-semibold">Create Account</button>
+            </div>
+        </form>
+
+        {{-- Sign in link --}}
+        <p class="text-center mt-4 mb-0">
+            Already have an account? 
+            <a href="{{ route('login') }}" class="fw-semibold text-info text-decoration-none">Sign in here</a>
+        </p>
     </div>
 </div>
 @endsection

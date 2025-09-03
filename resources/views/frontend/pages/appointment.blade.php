@@ -1,4 +1,4 @@
-@extends('frontend.layout.masterlayout')
+@extends('layouts.app')
 
 @section('title', 'Book an Appointment - Hospital Management')
 
@@ -60,12 +60,11 @@
 @endsection
 
 @section('content')
-    @include('frontend.partials.header')
     
     <div class="appointment-container">
         <h1 class="appointment-title">Book an Appointment</h1>
         <div class="appointment-form">
-            <form action="{{ route('booking.store') }}" method="POST">
+            <form action="" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="name">Full Name</label>
@@ -101,6 +100,4 @@
             </form>
         </div>
     </div>
-
-    @include('frontend.partials.footer')
 @endsection

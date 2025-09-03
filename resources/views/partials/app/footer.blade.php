@@ -14,11 +14,11 @@
                    <div class="footer-column">
                         <h4>View Directions</h4>
                         <ul>
-                            <li><a href="{{ route('about') }}" class="footer-link">About Us</a></li>
-                            <li><a href="{{ route('services') }}" class="footer-link">Services</a></li>
-                            <li><a href="{{ route('specialists') }}" class="footer-link">Our Team</a></li>
-                            <li><a href="{{ route('shop') }}" class="footer-link">Shop</a></li>
-                            <li><a href="{{ route('contact') }}" class="footer-link">Contacts</a></li>
+                            <li><a href="{{ route('app.about') }}" class="footer-link">About Us</a></li>
+                            <li><a href="{{ route('app.services') }}" class="footer-link">Services</a></li>
+                            <li><a href="{{ route('app.specialists') }}" class="footer-link">Our Team</a></li>
+                            <li><a href="{{ route('app.shop') }}" class="footer-link">Shop</a></li>
+                            <li><a href="{{ route('app.contact') }}" class="footer-link">Contacts</a></li>
                         </ul>
                     </div>
             </div>
