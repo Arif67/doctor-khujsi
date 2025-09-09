@@ -19,7 +19,7 @@
      <link href="{{ asset('admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <!--end::Primary Meta Tags-->
      <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.tailwindcss.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
        <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <link
       rel="stylesheet"
@@ -35,6 +35,9 @@
       integrity="sha256-9kPW/n5nn53j4WMRYAxe9c1rCY96Oogo/MKSVdKzPmI="
       crossorigin="anonymous"
     />
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin:: admin custom css -->
     <link rel="stylesheet" href="{{asset('assets/css/admin_modules/custom.css')}}">
@@ -45,6 +48,16 @@
     <!--end::Required Plugin(AdminLTE)-->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
+    <style>
+      #toast-container>.toast-success{
+        background-color: #0fb417;
+        opacity: 1;
+      }
+      #toast-container>.toast-error{
+          background-color: red;
+          opacity: 1;
+      }
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -94,6 +107,7 @@
     </div>
     <!--end::App Wrapper-->
 
+    @includeIf('partials.modal')
     <!--begin::Script-->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
@@ -123,7 +137,9 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{asset('assets/js/adminlte.js')}}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
+  <!-- Toastr JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
       const Default = {
         scrollbarTheme: 'os-theme-light',
@@ -144,7 +160,48 @@
       });
     </script>
     <!--end::OverlayScrollbars Configure-->
+    <script>
+      $(document).ready(function () {
+          // event delegation ব্যবহার
+          $(document).on("click", ".confirm-delete", function (e) {
+              e.preventDefault();
+
+              console.log("Clicked: ", $(this).data("href"));
+
+              // modal show
+              $("#delete-modal").modal('show');
+
+              // form action set করা
+              $("form#delete-link").attr("action", $(this).data("href"));
+          });
+      });
+      </script>
+
     @stack('scripts')
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": 5000,         // 5 minute
+        };
+
+        @if(session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if(session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        @if(session('warning'))
+            toastr.warning("{{ session('warning') }}");
+        @endif
+
+        @if(session('info'))
+            toastr.info("{{ session('info') }}");
+        @endif
+    </script>
   </body>
   <!--end::Body-->
 </html>

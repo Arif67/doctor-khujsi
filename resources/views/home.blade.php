@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-
+@php
+    use Illuminate\Support\Str;
+@endphp
 <section class="hero-section overflow-hidden">
     <div class="container">
         <div class="row align-items-center row-gap-5">
@@ -94,91 +96,7 @@
     </div>
 </section> 
 
-<section class="services-section py-2">
-    <div class="container px-4 px-md-0">
-        <div class="row py-3 py-lg-5">
-            <div class="d-flex justify-content-between align-items-center">
-                <span class="services-pill">Our Services</span>
-                <button class="services-viewall-btn">View All Subjects <span class="arrow">→</span></button>
-            </div>
-        </div>
-
-        <div class="services-title heading_title">We Provide The Best<br>Services</div>
-        <div class="row row-gap-4">
-            <div class="col-md-6 col-xl-3">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-spa"></i></div>
-                    <div class="service-title">Cupping Therapy</div>
-                    <div class="service-desc">Lorem ipsum dolor sit amet consectetur. Elementum egestas sed consequat
-                        justo neque. Varius nullam adipiscing proin dapibus integer viverra eu. Quis nibh convallis
-                        turpis</div>
-                    <div class="text-end mt-3">
-                        <button class="service-arrow"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-               <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-hands"></i></div>
-                    <div class="service-title">Manual Therapy</div>
-                    <div class="service-desc">Lorem ipsum dolor sit amet consectetur. Elementum egestas sed consequat
-                        justo neque. Varius nullam adipiscing proin dapibus integer viverra eu. Quis nibh convallis
-                        turpis</div>
-                    <div class="text-end mt-3">
-                        <button class="service-arrow"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>         
-            </div>    
-            <div class="col-md-6 col-xl-3">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
-                    <div class="service-title">chronic pain</div>
-                    <div class="service-desc">Lorem ipsum dolor sit amet consectetur. Elementum egestas sed consequat
-                        justo neque. Varius nullam adipiscing proin dapibus integer viverra eu. Quis nibh convallis
-                        turpis</div>
-                    <div class="text-end mt-3">
-                        <button class="service-arrow"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-hand-paper"></i></div>
-                    <div class="service-title">Hand therapy</div>
-                    <div class="service-desc">Lorem ipsum dolor sit amet consectetur. Elementum egestas sed consequat
-                        justo neque. Varius nullam adipiscing proin dapibus integer viverra eu. Quis nibh convallis
-                        turpis</div>
-                    <div class="text-end mt-3">
-                        <button class="service-arrow"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
-             <div class="col-md-6 col-xl-3">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-hand-paper"></i></div>
-                    <div class="service-title">Hand therapy</div>
-                    <div class="service-desc">Lorem ipsum dolor sit amet consectetur. Elementum egestas sed consequat
-                        justo neque. Varius nullam adipiscing proin dapibus integer viverra eu. Quis nibh convallis
-                        turpis</div>
-                    <div class="text-end mt-3">
-                        <button class="service-arrow"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="services-bottom-bar d-flex gap-3 flex-column flex-lg-row justify-content-between mt-4">
-            <div class="services-bottom-left">
-                <div class="bottom-icon"><i class="fas fa-info-circle"></i></div>
-                <div>
-                    <div class="bottom-title">Ready to start your journey to recovery?</div>
-                    <div class="bottom-desc">We understand that injuries and acute pain can unexpectedly. Our
-                        emergency physiotherapy.</div>
-                </div>
-            </div>
-            <a href="{{ route('app.booking') }}" class="bottom-cta">Book An Appointment <span class="arrow">→</span></a>
-        </div>
-    </div>
-</section>
+@includeIf('components.app.services',$services)
 
 <section class="unique-condition-section">
     <div class="container">
@@ -247,39 +165,18 @@
             </div>
 
             <div class="attention-grid">
-                <div class="attention-card">
-                    <i class="fas fa-user-md"></i> <span>Neck Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-walking"></i> <span>Knee Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-hand-paper"></i> <span>Hand Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-child"></i> <span>Shoulder Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-shoe-prints"></i> <span>Ankle Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-dumbbell"></i> <span>Tricep Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-hand-rock"></i> <span>Elbow Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-shoe-prints"></i> <span>Foot Pain</span>
-                </div>
-                <div class="attention-card">
-                    <i class="fas fa-running"></i> <span>Sports Injuries</span>
-                </div>
+                @foreach($attentions as $attention)
+                    <div class="attention-card">
+                        {!! $attention->icon ?? '<i class="fas fa-user-md"></i>' !!}
+                        <span>{{ $attention->title ?? 'No Title' }}</span>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
 </section>
 
-@includeIf('components.app.doctors')
+@includeIf('components.app.doctors',$doctores)
 
 @includeIf('components.app.testimonials')
 
@@ -289,41 +186,25 @@
             <span class="blog-tag">News & Blog</span>
             <h2>Our Latest Insights & Updates</h2>
         </div>
-        <div class="blog-grid">
-            <div class="blog-post">
-                <div class="blog-img">
-                    <img src="https://lirp.cdn-website.com/83ac98e3/dms3rep/multi/opt/benefits-of-physiotherapy-01-1920w.jpg"
-                        alt="Physiotherapy benefits">
+        <div class="row">
+            @foreach ($blogs as $blog)
+                <div class="col-lg-4">
+                    <div class="blog-post ">
+                        <div class="blog-img">
+                            <img src="{{ $blog->thumbnail_image ? asset('storage/' . $blog->thumbnail_image) : 'https://lirp.cdn-website.com/83ac98e3/dms3rep/multi/opt/benefits-of-physiotherapy-01-1920w.jpg' }}" 
+                                alt="{{ $blog->title }}">
+                        </div>
+                        <div class="blog-content">
+                            <h3>{{ $blog->title }}</h3>
+                            <a href="{{ route('app.blog.info', ['blog' => $blog->id, 'slug' => \Illuminate\Support\Str::slug($blog->title)]) }}" class="blog-read">
+                                Read more <span>&rarr;</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="blog-content">
-                    <h3>10 essential benefits of regular physiotherapy</h3>
-                    <a href="#" class="blog-read">Read more <span>&rarr;</span></a>
-                </div>
-            </div>
-            <div class="blog-post">
-                <div class="blog-img">
-                    <img src="https://www.minsterlaw.co.uk/wp-content/uploads/2021/05/PI01-scaled.jpg"
-                        alt="Choosing a physiotherapist">
-                </div>
-                <div class="card-content">
-                    <h3>How to choose the right physiotherapist for you</h3>
-                    <a href="#" class="read-more">Read more &rarr;</a>
-                </div>
-            </div>
-
-            <div class=" blog-post">
-                <div class="card-image">
-                    <img src="https://lirp.cdn-website.com/83ac98e3/dms3rep/multi/opt/benefits-of-physiotherapy-01-1920w.jpg"
-                        alt="Correct posture importance">
-                </div>
-                <div class="card-content">
-                    <h3>Importance of correct posture and how to improve it</h3>
-                    <a href="#" class="read-more">Read more &rarr;</a>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
-
 
 @endsection

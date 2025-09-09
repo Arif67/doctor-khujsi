@@ -86,7 +86,7 @@
          <li class="nav-header">Blog Managment</li>
          <li class="nav-item {{ Route::is('admin.categories.*') ? 'menu-open':'' }}">
             <a href="#" class="nav-link ">
-               <i class="nav-icon fas fa-list"></i>
+               <i class="nav-icon fas fa-tags"></i>
                <p>
                   Category
                   <i class="nav-arrow bi bi-chevron-right"></i>

@@ -13,11 +13,18 @@ class Doctor extends Model
         'name',
         'email',
         'phone',
+        'office_phone',
         'department_id',
-        'qualification',
-        'specialization',
         'status',
         'photo',
+        'description',
+        'educations', 'shifts', 'social_links'
+    ];
+
+    protected $casts = [
+        'educations' => 'array',
+        'shifts' => 'array',
+        'social_links' => 'array',
     ];
 
     public function department() {

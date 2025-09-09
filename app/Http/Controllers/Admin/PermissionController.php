@@ -19,17 +19,21 @@ class PermissionController extends Controller
             return DataTables::of($permissions)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $edit = '<a href="'.route('admin.permissions.edit',$row->id).'" 
-                                class="px-2 py-1 mr-1 bg-blue-500 text-white rounded">
+                   $action = '
+                        <div class="flex flex-row gap-2">
+                             <a href="'.route('admin.permissions.edit',$row->id).'" 
+                                class="inline-flex items-center px-2 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
                                 <i class="fas fa-edit"></i>
-                            </a>';
+                            </a>
+                            <button 
+                                data-href="'.route("admin.permissions.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            
+                        </div>';
 
-                    $delete = '<button 
-                        onclick="openDeleteModal(\''.route('admin.permissions.destroy', $row->id).'\')"
-                        class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
-                        <i class="fas fa-trash"></i>
-                    </button>';
-                    return $edit.$delete;
+                    return $action;
                 })
                 ->rawColumns(['action'])
                 ->make(true);

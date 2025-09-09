@@ -1,37 +1,14 @@
-@extends('layouts.app')
-
-@section('title', 'Our Services - Hospital Management')
-
-@section('content')
-<section class="services-section">
+<section class="services-section pt-2 pb-5">
     <div class="container px-4 px-md-0">
-        <div class="row row-gap-5 align-items-center">
-            <div class="col-md-6">
-                <div class="services-hero-img-wrap">
-                    <img src="https://www.nurseregistry.com/wp-content/uploads/2019/01/nurses-in-hospital-setting.jpg" alt="Exercise Services">
-                </div>
-            </div>
-            <div class="col-md-6">
-                 <div class="services-hero-content">
-                    <span class="services-hero-pill">Our Services</span>
-                    <div class="heading_title mb-4">We Provide The Best<br>Services</div>
-                    <div class="services-hero-desc">World-class rehabilitation solutions and individualized recovery plans, from acute care to ongoing outpatient treatment and beyond.</div>
-                </div>    
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="services-section py-4 py-lg-5" style="background: none">
-    <div class="container px-4 px-md-0">
-        <div class="row py-3">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="row py-3 py-lg-5">
+            <div class="d-flex flex-column flex-md-row align-items-start  justify-content-between align-items-md-center">
                 <span class="services-pill">Our Services</span>
+                <button class="services-viewall-btn">View All Subjects <span class="arrow">→</span></button>
             </div>
         </div>
 
         <div class="services-title heading_title">We Provide The Best<br>Services</div>
-         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
             @foreach ($services as $service)
                 <div class="col d-flex">
                     <div class="service-card card flex-fill d-flex flex-column">
@@ -55,6 +32,7 @@
                 </div>
             @endforeach
         </div>
+
         <div class="services-bottom-bar d-flex gap-3 flex-column flex-lg-row justify-content-between mt-4">
             <div class="services-bottom-left">
                 <div class="bottom-icon"><i class="fas fa-info-circle"></i></div>
@@ -68,6 +46,3 @@
         </div>
     </div>
 </section>
-
-@includeIf('components.app.testimonials')
-@endsection

@@ -3,18 +3,28 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attention;
+use App\Models\Blog;
+use App\Models\Category;
+use App\Models\Doctor;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
 {
     public function home()
     {
-        return view('home');
+        $services = Service::latest()->get();
+        $attentions = Attention::latest()->get();
+        $doctores = Doctor::latest()->with('department')->get();
+        $blogs = Blog::latest()->get();
+        return view('home',compact('services','attentions','doctores','blogs'));
     }
 
     public function about()
     {
-        return view('frontend.pages.about');
+         $doctores = Doctor::latest()->with('department')->get();
+        return view('frontend.pages.about',compact('doctores'));
     }
 
     public function booking()
@@ -44,7 +54,8 @@ class FrontendController extends Controller
 
     public function services()
     {
-        return view('frontend.pages.services');
+         $services = Service::latest()->get();
+        return view('frontend.pages.services',compact('services'));
     }
 
     public function specialists()
@@ -52,23 +63,48 @@ class FrontendController extends Controller
         return view('frontend.pages.specialists');
     }
 
-    public function doctorProfile($id)
+    public function doctorProfile(Doctor $doctor,$name)
     {
-        return view('frontend.pages.doctor_profile', compact('id'));
+        return view('frontend.pages.doctor_profile', compact('doctor'));
     }
     
-    public function serviceInfo()
+    public function serviceHistory(Service $service,$title)
     {
-        return view('frontend.pages.service-info');
+
+        $services = Service::latest()->get();
+        return view('frontend.pages.service-info',compact('service','services'));
     }
     
     public function blog()
     {
-        return view('frontend.pages.blog');
+        $blogs = Blog::latest()->get();
+        return view('frontend.pages.blog',compact('blogs'));
     }
     
-    public function blogInfo($slug)
+    public function blogInfo(Blog $blog, $slug)
     {
-        return view('frontend.pages.bloginfo');
+
+        // Related blogs (same category, excluding current)
+        $relatedBlogs = Blog::where('category_id', $blog->category_id)
+                            ->where('id', '!=', $blog->id)
+                            ->latest()
+                            ->take(3)
+                            ->get();
+
+        // Sidebar: all categories
+        $categories = Category::latest()->get();
+
+        // Sidebar: recent blogs (latest 5, excluding current)
+        $recentBlogs = Blog::where('id', '!=', $blog->id)
+                        ->latest()
+                        ->take(5)
+                        ->get();
+
+        return view('frontend.pages.bloginfo', [
+            'blog' => $blog,
+            'relatedBlogs' => $relatedBlogs,
+            'categories' => $categories,
+            'recentBlogs' => $recentBlogs
+        ]);
     }
 }

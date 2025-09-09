@@ -22,21 +22,21 @@ class DatabaseSeeder extends Seeder
 
 
        $testUser = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'user@example.com',
+            'name' => 'Patient',
+            'email' => 'patient@gmail.com',
             'password' => Hash::make('12345678'),
             'plan_password' => '12345678'
         ]);
 
         $adminUser = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin1@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
             'plan_password' => '12345678'
         ]);
 
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+        $userRole = Role::firstOrCreate(['name' => 'patient', 'guard_name' => 'web']);
         $adminUser->assignRole($adminRole);
         $testUser->assignRole($userRole);
     }

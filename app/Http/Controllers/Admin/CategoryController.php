@@ -28,8 +28,8 @@ class CategoryController extends Controller
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button 
-                                onclick="openDeleteModal(\''.route('admin.categories.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                data-href="'.route("admin.categories.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';
@@ -60,7 +60,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         Category::create($request->validated());
-        return redirect()->back()->with('success','Category created successfully');
+        return redirect()->route('admin.categories.index')->with('success','Category created successfully');
     }
 
 
@@ -87,7 +87,7 @@ class CategoryController extends Controller
      public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
-        return redirect()->back()->with('success','Category updated successfully');
+        return redirect()->route('admin.categories.index')->with('success','Category updated successfully');
     }
 
     /**

@@ -52,34 +52,23 @@
 @push('scripts')
 <script>
     $(document).ready(function(){
-        // URL থেকে section নাম বের করি
         let urlParams = new URLSearchParams(window.location.search);
         let section = urlParams.get('section') || 'hero'; // default hero
 
         function activateTab(section) {
-            // সব tab থেকে active style মুছে ফেলি
             $(".tab-link").removeClass("border-blue-500 text-blue-600");
-            // যেটা সিলেক্টেড সেটা active করি
             $(".tab-link[data-section='"+section+"']").addClass("border-blue-500 text-blue-600");
 
-            // সব content hide
             $(".tab-content").addClass("hidden");
-            // সিলেক্টেড content show
             $("#"+section).removeClass("hidden");
         }
 
-        // পেজ load হলে URL দেখে active tab করি
         activateTab(section);
-
-        // Tab এ ক্লিক করলে
         $(".tab-link").on("click", function(e){
             e.preventDefault();
             let sec = $(this).data("section");
 
-            // URL update করা (reload ছাড়াই)
             window.history.pushState({}, '', '?section=' + sec);
-
-            // সেই tab active করি
             activateTab(sec);
         });
     });

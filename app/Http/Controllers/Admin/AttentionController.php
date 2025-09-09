@@ -28,8 +28,8 @@ class AttentionController extends Controller
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button 
-                                onclick="openDeleteModal(\''.route('admin.attentions.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                data-href="'.route("admin.attentions.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';

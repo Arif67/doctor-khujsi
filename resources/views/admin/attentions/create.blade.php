@@ -17,12 +17,12 @@
        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Icon</label>
-                <input type="text" name="icon" value="{{ old('icon') }}" class="w-full border rounded px-3 py-2">
+                <input type="text" name="icon" value="{{ old('icon') }}" class="w-full border rounded px-3 py-2" placeholder="<i class='fas fa-user-md'></i>">
                 @error('icon') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
             </div>
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Title</label>
-                <input type="text" name="title" value="{{ old('title') }}" class="w-full border rounded px-3 py-2">
+                <input type="text" name="title" value="{{ old('title') }}" class="w-full border rounded px-3 py-2" placeholder="Title">
                 @error('title') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
             </div>
        </div>

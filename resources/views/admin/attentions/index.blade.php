@@ -14,7 +14,7 @@
     </div>
     <hr class="mb-5">
 
-    <table id="attentions-table" class="min-w-full bg-white border rounded shadow">
+    <table id="attentions-table" class="min-w-full">
         <thead class="bg-gray-200">
             <tr>
                 <th class="px-4 py-2">SL</th>
@@ -42,7 +42,9 @@ $(function() {
             { data: 'title', name: 'title' },
             { data: 'created_at', name: 'created_at' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
-        ]
+        ],
+         responsive: true,
+         scrollX: true
     });
 });
 </script>

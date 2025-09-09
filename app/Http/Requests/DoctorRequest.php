@@ -22,7 +22,7 @@ class DoctorRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('doctor'); 
+         $id = $this->route('doctor'); 
         return [
             'name' => 'required|string|max:255',
             'email' => [
@@ -32,11 +32,26 @@ class DoctorRequest extends FormRequest
                 Rule::unique('doctors', 'email')->ignore($id),
             ],
             'phone' => 'nullable|string|max:20',
-            'department_id' => 'nullable|exists:departments,id',
-            'qualification' => 'nullable|string|max:255',
-            'specialization' => 'nullable|string|max:255',
+            'department_id' => 'required|exists:departments,id',
             'status' => 'required|in:active,inactive',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
+
+            // Educations
+            'educations' => 'nullable|array',
+            'educations.*.title' => 'nullable|string|max:255',
+            'educations.*.details' => 'nullable|string|max:500',
+
+            // Shifts
+            'shifts' => 'nullable|array',
+            'shifts.*.day' => 'nullable|string|max:20',
+            'shifts.*.start_time' => 'nullable|string|max:10',
+            'shifts.*.end_time' => 'nullable|string|max:10',
+
+            // Social links
+            'social_links' => 'nullable|array',
+            'social_links.*.platform' => 'nullable|string|max:50',
+            'social_links.*.url' => 'nullable|url',
         ];
     }
 }

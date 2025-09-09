@@ -26,9 +26,21 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // Session regenerate for security
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home', absolute: false));
+        // Get logged-in user
+        $user = auth()->user();
+        
+        // Check roles using Spatie
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->hasRole('patient')) {
+            return redirect()->route('patient.dashboard');
+        }
+
+        // fallback (if no role matched)
+        return redirect()->route('app.home');
     }
 
     /**

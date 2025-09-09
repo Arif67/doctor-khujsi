@@ -9,7 +9,7 @@
     <div id="feature-items">
         @if(!empty($featureSection->data['features']))
             @foreach($featureSection->data['features'] as $index => $item)
-                <div class="feature-item border p-4 rounded-lg mb-3 relative bg-gray-50">
+                <div class="feature-item border mb-2 relative">
                     <button type="button" class="remove-feature absolute top-2 right-2 text-red-600">
                         <i class="fas fa-times"></i>
                     </button>
@@ -63,8 +63,8 @@
         // Add Feature
         $('#add-feature').click(function () {
             let html = `
-            <div class="feature-item border p-4 rounded-lg mb-3 relative bg-gray-50">
-                <button type="button" class="remove-feature absolute top-2 right-2 text-red-600">
+            <div class="feature-item mb-3 relative">
+                <button type="button" class="remove-feature mb-1 absolute top-1 right-2 text-red-600">
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -21,6 +21,13 @@ class DoctorController extends Controller
             $query = Doctor::with('department');
             return DataTables::of($query)
                 ->addIndexColumn()
+                ->addColumn('photo', function($row) {
+                    if ($row->photo) {
+                        $url = asset('storage/'.$row->photo);
+                        return '<img src="'.$url.'" alt="photo" class="w-6 h-6 rounded-full object-cover" />';
+                    }
+                    return '<img src="'.asset('assets/img/default.png').'" alt="default" class="w-6 h-6 rounded-full object-cover" />';
+                })
                 ->addColumn('department', fn($row) => $row->department?->name ?? '-')
                 ->addColumn('action', function ($row) {
                    $action = '
@@ -34,16 +41,15 @@ class DoctorController extends Controller
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button 
-                                onclick="openDeleteModal(\''.route('admin.doctors.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                data-href="'.route("admin.doctors.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';
 
                     return $action;
                 })
-                ->editColumn('status', fn($row)=> ucfirst($row->status))
-                ->rawColumns(['action'])
+                ->rawColumns(['action','photo'])
                 ->make(true);
         }
         return view('admin.doctors.index');
@@ -62,15 +68,26 @@ class DoctorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-     public function store(DoctorRequest $request)
+    public function store(DoctorRequest $request)
     {
-
         $data = $request->validated();
+        // --- Photo Upload ---
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('doctors','public');
+            $data['photo'] = $request->file('photo')->store('doctors', 'public');
         }
+
+        // --- Handle Description (Summernote + Images) ---
+        $data['description'] = $this->saveSummernoteImages($request->description ?? '');
+
+        // --- JSON fields (already nested) ---
+        $data['educations']   = $request->educations ?? [];
+        $data['shifts']       = $request->shifts ?? [];
+        $data['social_links'] = $request->social_links ?? [];
+
         Doctor::create($data);
-        return redirect()->route('admin.doctors.index')->with('success','Doctor created successfully.');
+
+        return redirect()->route('admin.doctors.index')
+            ->with('success', 'Doctor created successfully.');
     }
 
     /**
@@ -98,33 +115,158 @@ class DoctorController extends Controller
     {
         $data = $request->validated();
 
-        if($request->has('delete_photo_db') && !$request->hasFile('photo')){
-            if($doctor->photo){
+        // --- Handle Delete Photo ---
+        if ($request->has('delete_photo_db') && !$request->hasFile('photo')) {
+            if ($doctor->photo) {
                 Storage::disk('public')->delete($doctor->photo);
                 $doctor->photo = null;
             }
         }
 
-        if($request->hasFile('photo')){
-            if($doctor->photo){
-                Storage::disk('public')->delete($doctor->photo); 
+        // --- Handle Upload New Photo ---
+        if ($request->hasFile('photo')) {
+            if ($doctor->photo) {
+                Storage::disk('public')->delete($doctor->photo);
             }
-
-            $doctor->photo = $request->file('photo')->store('doctors','public'); 
+            $doctor->photo = $request->file('photo')->store('doctors', 'public');
         }
 
-        $doctor->update($request->except(['photo','delete_photo_db']));
+        // --- Handle Description (Summernote + Images) ---
+        $data['description'] = $this->updateSummernoteImages(
+            $request->description ?? '',
+            $doctor->description
+        );
 
-        return redirect()->route('admin.doctors.index')->with('success','Doctor updated successfully.');
+        // --- JSON fields (nested arrays directly from request) ---
+        $data['educations']   = $request->educations ?? [];
+        $data['shifts']       = $request->shifts ?? [];
+        $data['social_links'] = $request->social_links ?? [];
+
+        // --- Update doctor ---
+        $doctor->update(collect($data)->except(['photo', 'delete_photo_db'])->toArray());
+
+        return redirect()->route('admin.doctors.index')
+            ->with('success', 'Doctor updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-     public function destroy(Doctor $doctor)
+    public function destroy(Doctor $doctor)
     {
         if($doctor->photo) Storage::disk('public')->delete($doctor->photo);
+        if (!empty($doctor->description)) {
+            $this->deleteSummaryImages($doctor->description);
+        }
         $doctor->delete();
         return redirect()->back()->with('success','Doctor deleted successfully.');
     }
+    
+    /**
+     * Save summernote images from base64
+     */
+    private function saveSummernoteImages($content)
+    {
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+
+        foreach ($images as $img) {
+            $src = $img->getAttribute('src');
+
+            // Base64 image detect
+            if (preg_match('/^data:image\/(\w+);base64,/', $src)) {
+                $imageData = explode(',', $src);
+                $mimeType = explode(';', substr($src, 5))[0];
+                $extension = explode('/', $mimeType)[1]; // jpg, png etc.
+
+                $imageName = uniqid() . '.' . $extension;
+                $path = 'doctors/' . $imageName;
+
+                Storage::disk('public')->put($path, base64_decode($imageData[1]));
+
+                // Replace base64 with storage path
+                $img->setAttribute('src', asset('storage/' . $path));
+            }
+        }
+
+        return $dom->saveHTML();
+    }
+
+    /**
+     * Update summernote images (add new, delete old)
+     */
+    private function updateSummernoteImages($content, $oldContent = null)
+    {
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+        $newImagePaths = [];
+
+        foreach ($images as $img) {
+            $src = $img->getAttribute('src');
+
+            if (preg_match('/^data:image\/(\w+);base64,/', $src)) {
+                $imageData = explode(',', $src);
+                $mimeType = explode(';', substr($src, 5))[0];
+                $extension = explode('/', $mimeType)[1];
+
+                $imageName = uniqid() . '.' . $extension;
+                $path = 'doctors/' . $imageName;
+
+                Storage::disk('public')->put($path, base64_decode($imageData[1]));
+
+                $img->setAttribute('src', asset('storage/' . $path));
+                $newImagePaths[] = 'storage/' . $path;
+            } else {
+                $newImagePaths[] = $src;
+            }
+        }
+
+        // Delete old removed images
+        if ($oldContent) {
+            $oldDom = new \DOMDocument();
+            libxml_use_internal_errors(true);
+            $oldDom->loadHTML($oldContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+            $oldImages = $oldDom->getElementsByTagName('img');
+            foreach ($oldImages as $oldImg) {
+                $oldSrc = $oldImg->getAttribute('src');
+                if (!in_array($oldSrc, $newImagePaths)) {
+                    $relativePath = str_replace(asset('storage') . '/', '', $oldSrc);
+                    if (Storage::disk('public')->exists($relativePath)) {
+                        Storage::disk('public')->delete($relativePath);
+                    }
+                }
+            }
+        }
+
+        return $dom->saveHTML();
+    }
+
+   private function deleteSummaryImages($content)
+    {
+        if (empty($content)) return;
+
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true); // prevent HTML warnings
+        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+
+        foreach ($images as $img) {
+            $src = $img->getAttribute('src');
+
+            // convert full asset url to relative storage path
+            $relativePath = str_replace(asset('storage') . '/', '', $src);
+
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+        }
+   }
 }

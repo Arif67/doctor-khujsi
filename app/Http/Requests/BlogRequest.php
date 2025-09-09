@@ -32,7 +32,7 @@ class BlogRequest extends FormRequest
             ],
             'category_id' => 'required|exists:categories,id',
             'short_description' => 'nullable|string|max:500',
-            'content' => 'nullable|string',
+            'description' => 'nullable|string',
             'status' => 'nullable|in:draft,published',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
