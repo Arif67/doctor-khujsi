@@ -81,7 +81,7 @@
                     <button type="button" id="delete-logo-btn" class="hidden bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                 @endif
             </div>
-            <input type="hidden" name="delete_logo" id="delete-logo" value="true">
+            <input type="hidden" name="delete_logo" id="delete-logo">
             <input type="file" name="logo" id="logo-input" class="border rounded w-full mb-2">
             <input type="text" name="logo_title" value="{{ $setting->logo['title'] ?? '' }}" placeholder="Logo Title" class="border rounded px-3 py-2 w-full">
         </div>

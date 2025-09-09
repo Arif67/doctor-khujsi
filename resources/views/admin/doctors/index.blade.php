@@ -19,6 +19,7 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">SL</th>
+                    <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Photo</th>
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Phone</th>
@@ -43,12 +44,13 @@ $(function(){
         ajax: '{!! route('admin.doctors.index') !!}',
         columns:[
             {data:'DT_RowIndex',name:'DT_RowIndex',orderable:false,searchable:false},
+            {data:'photo',name:'photo'},
             {data:'name',name:'name'},
             {data:'email',name:'email'},
             {data:'phone',name:'phone'},
             {data:'department',name:'department'},
             {data:'status',name:'status',render: function(data,type,row){
-                if(data === 'active'){
+                if(data == 'active'){
                     return '<span class="px-2 py-1 rounded text-white bg-green-600 text-xs sm:text-sm">Active</span>';
                 } else {
                     return '<span class="px-2 py-1 rounded text-white bg-red-600 text-xs sm:text-sm">Inactive</span>';

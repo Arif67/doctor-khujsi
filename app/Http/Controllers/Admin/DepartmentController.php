@@ -28,8 +28,8 @@ class DepartmentController extends Controller
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button 
-                                onclick="openDeleteModal(\''.route('admin.departments.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                data-href="'.route("admin.departments.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';
@@ -62,7 +62,7 @@ class DepartmentController extends Controller
         $data = $request->validated();
         Department::create($data);
 
-        return redirect()->back()->with('success', 'Department created successfully.');
+        return redirect()->route('admin.departments.index')->with('success', 'Department created successfully.');
     }
 
     /**

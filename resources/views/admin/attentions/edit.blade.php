@@ -14,12 +14,12 @@
         @method('PUT')
         <div class="mb-4">
             <label class="block font-semibold mb-1">Icon</label>
-            <input type="text" name="icon" value="{{ old('icon',$attention->icon) }}" class="w-full border rounded px-3 py-2">
+            <input type="text" name="icon" value="{{ old('icon',$attention->icon) }}" class="w-full border rounded px-3 py-2" placeholder="<i class='fas fa-user-md'></i>">
             @error('icon') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
         <div class="mb-4">
             <label class="block font-semibold mb-1">Title</label>
-            <input type="text" name="title" value="{{ old('title',$attention->title) }}" class="w-full border rounded px-3 py-2">
+            <input type="text" name="title" value="{{ old('title',$attention->title) }}" class="w-full border rounded px-3 py-2" placeholder="Title">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
         <div>

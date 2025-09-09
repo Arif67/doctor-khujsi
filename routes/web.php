@@ -48,21 +48,22 @@ Route::controller(FrontendController::class)
     Route::get('/favorite', 'favorite')->name('favorite');
     
     // Service history (public route)
-    Route::get('/service-history', 'serviceHistory')->name('service-history');
+    Route::get('/service-history/{service}/{title}', 'serviceHistory')->name('service.history');
     
     // Doctor profile (public route)
-    Route::get('/doctor-profile/{id}', 'doctorProfile')->name('doctor-profile');
+    Route::get('/doctor-profile/{doctor}/{name}', 'doctorProfile')->name('doctor-profile');
     
     // Service info page
     Route::get('/service-info', 'serviceInfo')->name('serviceinfo');
     
     // Blog info page
-    Route::get('/blog/{slug}', 'blogInfo')->name('bloginfo');
+    Route::get('/blog/{blog}/{slug}', 'blogInfo')->name('blog.info');
 });
 
 // Patient Route
 Route::prefix('patient')
 ->name('patient.')
+->middleware(['auth', 'role:patient']) 
 ->group(function(){
     Route::get( 'dashboard',[DefaultController::class,'dashboard'])->name('dashboard');
     Route::get('profile',[DefaultController::class,'profile'])->name('profile');
@@ -84,6 +85,7 @@ Route::get('/clear', function() {
 // Admin Dashboard Route
 Route::prefix('admin')
     ->name('admin.')
+     ->middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::resource('roles', RoleController::class);

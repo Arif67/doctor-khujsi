@@ -44,9 +44,9 @@ class UserController extends Controller
                                 class="inline-flex items-center px-2 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button 
-                                onclick="openDeleteModal(\''.route('admin.users.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                             <button 
+                                data-href="'.route("admin.users.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';
@@ -65,7 +65,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('name', ['admin', 'user'])->latest()->get();
+
         return view('admin.users.create', compact('roles'));
     }
     /**
@@ -104,7 +105,7 @@ class UserController extends Controller
      */
      public function edit(User $user)
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('name', ['admin', 'user'])->latest()->get();
         return view('admin.users.edit', compact('user', 'roles'));
     }
 

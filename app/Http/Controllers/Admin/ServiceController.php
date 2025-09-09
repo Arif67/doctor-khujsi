@@ -33,8 +33,8 @@ class ServiceController extends Controller
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button 
-                                onclick="openDeleteModal(\''.route('admin.services.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                data-href="'.route("admin.services.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';
@@ -63,7 +63,7 @@ class ServiceController extends Controller
     {
         Service::create($request->validated());
 
-        return redirect()->back()->with('success','Service created successfully.');
+        return redirect()->route('admin.services.index')->with('success','Service created successfully.');
     }
 
     /**
@@ -89,7 +89,7 @@ class ServiceController extends Controller
     {
        $service->update($request->validated());
 
-        return redirect()->back()->with('success','Service updated successfully.');
+        return redirect()->route('admin.services.index')->with('success','Service updated successfully.');
     }
 
     /**

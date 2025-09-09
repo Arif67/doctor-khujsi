@@ -2,7 +2,7 @@
     <div class="container px-4 px-md-0">
         <div class="testimonials-header  mb-4">
             <span class="testimonials-tag  mb-2">Clients Review</span>
-            <h2 class="testimonials-title">What Our Client Say</h2>
+            <h2 class="heading_title">What Our Client Say</h2>
         </div>
         <div class="testimonial_sliders row ">
             <div class="col-12 col-md-6 col-lg-4">

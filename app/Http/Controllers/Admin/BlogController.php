@@ -44,8 +44,8 @@ class BlogController extends Controller
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button 
-                                onclick="openDeleteModal(\''.route('admin.blogs.destroy', $row->id).'\')" 
-                                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                data-href="'.route("admin.blogs.destroy", $row->id).'"
+                                class="confirm-delete px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>';
@@ -83,10 +83,10 @@ class BlogController extends Controller
             $data['featured_image'] = $request->file('featured_image')->store('blogs','public');
         }
 
-         $data['content'] = $this->saveSummernoteImages($request->text);
+        $data['content'] = $this->saveSummernoteImages($request->description);
 
         Blog::create($data);
-        return redirect()->back()->with('success','Blog created successfully');
+        return redirect()->route('admin.blogs.index')->with('success','Blog created successfully');
     }
 
     /**
@@ -124,10 +124,10 @@ class BlogController extends Controller
             $data['featured_image'] = $request->file('featured_image')->store('blogs','public');
         }
 
-         $data['content'] = $this->saveSummernoteImages($request->text);
+        $data['content'] = $this->updateSummernoteImages($request->description,$blog->content);
 
         $blog->update($data);
-        return redirect()->back()->with('success','Blog updated successfully');
+        return redirect()->route('admin.blogs.index')->with('success','Blog updated successfully');
     }
 
     /**
@@ -146,21 +146,8 @@ class BlogController extends Controller
         }
 
         // Delete all images inside blog body (summernote content)
-        if ($blog->content) {
-            $dom = new \DomDocument();
-            @$dom->loadHtml($blog->content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-            $images = $dom->getElementsByTagName('img');
-
-            foreach ($images as $img) {
-                $src = $img->getAttribute('src');
-
-                $path = str_replace(url('/storage') . '/', '', $src);
-
-                if (Storage::disk('public')->exists($path)) {
-                    Storage::disk('public')->delete($path);
-                }
-            }
+        if (!empty($blog->content)) {
+            $this->deleteSummaryImages($blog->content);
         }
         $blog->delete();
         return redirect()->back()->with('success', 'Blog deleted successfully.');
@@ -194,4 +181,74 @@ class BlogController extends Controller
 
         return $dom->saveHTML();
     }
+    private function updateSummernoteImages($content, $oldContent = null)
+    {
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+        $newImagePaths = [];
+
+        foreach ($images as $img) {
+            $src = $img->getAttribute('src');
+
+            if (preg_match('/^data:image\/(\w+);base64,/', $src)) {
+                $imageData = explode(',', $src);
+                $mimeType = explode(';', substr($src, 5))[0];
+                $extension = explode('/', $mimeType)[1];
+
+                $imageName = uniqid() . '.' . $extension;
+                $path = 'blogs/' . $imageName;
+
+                Storage::disk('public')->put($path, base64_decode($imageData[1]));
+
+                $img->setAttribute('src', asset('storage/' . $path));
+                $newImagePaths[] = 'storage/' . $path;
+            } else {
+                $newImagePaths[] = $src;
+            }
+        }
+
+        // Delete old removed images
+        if ($oldContent) {
+            $oldDom = new \DOMDocument();
+            libxml_use_internal_errors(true);
+            $oldDom->loadHTML($oldContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+            $oldImages = $oldDom->getElementsByTagName('img');
+            foreach ($oldImages as $oldImg) {
+                $oldSrc = $oldImg->getAttribute('src');
+                if (!in_array($oldSrc, $newImagePaths)) {
+                    $relativePath = str_replace(asset('storage') . '/', '', $oldSrc);
+                    if (Storage::disk('public')->exists($relativePath)) {
+                        Storage::disk('public')->delete($relativePath);
+                    }
+                }
+            }
+        }
+
+        return $dom->saveHTML();
+    }
+    private function deleteSummaryImages($content)
+    {
+        if (empty($content)) return;
+
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true); // prevent HTML warnings
+        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+
+        foreach ($images as $img) {
+            $src = $img->getAttribute('src');
+
+            // convert full asset url to relative storage path
+            $relativePath = str_replace(asset('storage') . '/', '', $src);
+
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+        }
+   }
 }

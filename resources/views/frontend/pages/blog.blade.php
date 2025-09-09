@@ -53,7 +53,7 @@
 
     .blog-card-img img {
         width: 100%;
-        height: 100%;
+        height: 250px;
         object-fit: cover;
     }
 
@@ -109,83 +109,22 @@
 <section class="blog-cards-section">
     <div class="container px-4 px-md-4">
         <div class="row row-gap-4">
-            <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-lg-3">
-                <div class="blog-card">
-                    <div class="blog-card-img">
-                        <img src="{{asset('blogs/blog_1.png')}}" alt="Blog 1">
-                    </div>
-                    <div class="blog-card-content">
-                        <div class="blog-card-title">Transitional Rehab: What to Expect</div>
-                        <a class="blog-card-readmore" href="{{route('app.bloginfo','1')}}">Read more &rarr;</a>
-                    </div>
-                </div>
-            </div>
+            @foreach ($blogs as $blog)
+                <div class="col-md-4 col-lg-3">
+                    <a href="{{route('app.blog.info',['blog' => $blog->id, 'slug' => \Illuminate\Support\Str::slug($blog->title)])}}">
+                        <div class="blog-card">
+                            <div class="blog-card-img">
+                                <img src="{{ $blog->thumbnail_image ? asset('storage/' . $blog->thumbnail_image) : 'https://lirp.cdn-website.com/83ac98e3/dms3rep/multi/opt/benefits-of-physiotherapy-01-1920w.jpg' }}" 
+                                    alt="{{ $blog->title }}">
+                            </div>
+                            <div class="blog-card-content">
+                                <div class="blog-card-title">Transitional Rehab: What to Expect</div>
+                                <a href="{{route('app.blog.info',['blog' => $blog->id, 'slug' => \Illuminate\Support\Str::slug($blog->title)])}}" class="blog-card-readmore" href="">Read more &rarr;</a>
+                            </div>
+                        </div>
+                    </a>
+                </div>     
+            @endforeach
         </div>
     </div>
 

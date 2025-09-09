@@ -17,74 +17,84 @@
         </a>
     </div>
     <hr class="mb-5">
-    <form action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-        @csrf
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block font-semibold mb-1">Title</label>
-                <input type="text" name="title" class="w-full border px-3 py-2 rounded" required>
-                 @error('title') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
-            </div>
-            <div>
-                <label class="block font-semibold mb-1">Thumbnail Image</label>
-                <input type="file" name="thumbnail_image" class="w-full border  rounded" id="thumbnail_image">
-                @error('thumbnail_image') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
-            </div>
+   <form action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+    @csrf
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block font-semibold mb-1">Title</label>
+            <input type="text" name="title" class="w-full border px-3 py-2 rounded" placeholder="Enter blog title" required>
+            @error('title') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
+        <div>
+            <label class="block font-semibold mb-1">Thumbnail Image</label>
+            <input type="file" name="thumbnail_image" class="w-full border py-[6px] rounded" id="thumbnail_image">
+            @error('thumbnail_image') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
 
-            <div>
-                <label class="block font-semibold mb-1">Featured Image</label>
-                <input type="file" name="featured_image" class="w-full border rounded" id="featured_image">
-                @error('featured_image') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
-            </div>
+        <div>
+            <label class="block font-semibold mb-1">Featured Image</label>
+            <input type="file" name="featured_image" class="w-full py-[6px] border rounded" id="featured_image">
+            @error('featured_image') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
 
-            <div>
-                <label class="block font-semibold mb-1">Category</label>
-                <select name="category_id" class="w-full border px-3 py-2 rounded" required>
-                    <option value="">Select Category</option>
-                    @foreach($categories as $c)
-                    <option value="{{ $c->id }}">{{ $c->name }}</option>
-                    @endforeach
-                </select>
-                @error('category_id') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
-            </div>
+        <div>
+            <label class="block font-semibold mb-1">Category</label>
+            <select name="category_id" class="w-full border px-3 py-2 rounded" required>
+                <option value="">Select Category</option>
+                @foreach($categories as $c)
+                <option value="{{ $c->id }}">{{ $c->name }}</option>
+                @endforeach
+            </select>
+            @error('category_id') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
+    </div>
+
+    <div>
+        <label class="block font-semibold mb-1">Short Description</label>
+        <textarea name="short_description" class="w-full border px-3 py-2 rounded" placeholder="Enter a short description" required>
+
+        </textarea>
+        @error('short_description') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+    </div>
+
+    <div>
+        <label class="block font-semibold mb-1">Text</label>
+        <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded" placeholder="Enter the blog content" required></textarea>
+        @error('description') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block">Status</label>
+            <select name="status" class="w-full border px-3 py-2 rounded" required>
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+            </select>
         </div>
         <div>
-            <label class="block font-semibold mb-1">Short Description</label>
-            <textarea name="short_description" class="w-full border px-3 py-2 rounded" required></textarea>
+            <label class="block">Meta Title</label>
+            <input type="text" name="meta_title" class="w-full border px-3 py-2 rounded" placeholder="Enter meta title">
         </div>
-       <div>
-            <label class="block font-semibold mb-1">Text</label>
-            <textarea name="text" id="summernote" class="w-full border px-3 py-2 rounded" required></textarea>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block">Status</label>
-                <select name="status" class="w-full border px-3 py-2 rounded" required>
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                </select>
-            </div>
-            <div>
-                <label class="block">Meta Title</label>
-                <input type="text" name="meta_title" class="w-full border px-3 py-2 rounded">
-            </div>
-        </div>
-        
-        <div>
-            <label class="block">Meta Description</label>
-            <textarea name="meta_description" class="w-full border px-3 py-2 rounded"></textarea>
-        </div>
-        <div>
-            <label class="block">Meta Keywords</label>
-            <input type="text" name="meta_keywords" class="w-full border px-3 py-2 rounded">
-        </div>
-        <div>
-            <button type="submit" 
-                class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
-                <i class="fas fa-save mr-2"></i> Save
-            </button>
-        </div>
-    </form>
+    </div>
+
+    <div>
+        <label class="block">Meta Description</label>
+        <textarea name="meta_description" class="w-full border px-3 py-2 rounded" placeholder="Enter meta description"></textarea>
+    </div>
+
+    <div>
+        <label class="block">Meta Keywords</label>
+        <input type="text" name="meta_keywords" class="w-full border px-3 py-2 rounded" placeholder="Enter meta keywords separated by commas">
+    </div>
+
+    <div>
+        <button type="submit" 
+            class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
+            <i class="fas fa-save mr-2"></i> Save
+        </button>
+    </div>
+</form>
+
 </div>
 @endsection
 

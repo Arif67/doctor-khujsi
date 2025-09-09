@@ -48,4 +48,9 @@ class User extends Authenticatable
             'dob' => 'date',
         ];
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Doctor::class, 'favorites', 'patient_id', 'doctor_id');
+    }
 }
