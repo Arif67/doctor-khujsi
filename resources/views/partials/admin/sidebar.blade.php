@@ -232,6 +232,15 @@
                </p>
             </a>
          </li>
+         <li class="nav-header">Contact Message</li>
+         <li class="nav-item">
+            <a href="{{route('admin.contact.messages')}}" class="nav-link {{ Route::is('admin.contact.messages') ? 'active':'' }}">
+               <i class="nav-icon fas fa-comment "></i>
+               <p>
+                  Contact Messages
+               </p>
+            </a>
+         </li>
           <li class="nav-header">Role Permissions</li>
           <li class="nav-item {{ Route::is('admin.roles.*') ? 'menu-open':'' }}">
             <a href="#" class="nav-link">

@@ -79,20 +79,37 @@
                     <h2 class="heading_title">Contact Information</h2>
                     <p class="contact-form-desc">If you have any questions, you can contact us. Please, fill out the form
                         below.</p>
-                    <form class="contact-form">
+                    <form class="contact-form" action="{{ route('app.contact.msg.store') }}" method="POST">
+                        @csrf
                         <div class="row row-gap-4">
                             <div class="col-lg-6">
                                 <label for="contact-name" class="form-label">Your Name</label>
-                                <input id="contact-name" type="text" class="form-input form-control" placeholder="Your Name">
+                                <input id="contact-name" name="name" type="text"
+                                    value="{{ old('name') }}"
+                                    class="form-input form-control @error('name') is-invalid @enderror"
+                                    placeholder="Your Name">
+                                @error('name')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-lg-6">
                                 <label for="contact-email" class="form-label">Your Email</label>
-                                <input id="contact-email" type="email" class="form-input form-control" placeholder="Your Email">
+                                <input id="contact-email" name="email" type="email"
+                                    value="{{ old('email') }}"
+                                    class="form-input form-control @error('email') is-invalid @enderror"
+                                    placeholder="Your Email">
+                                @error('email')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12">
                                 <label for="contact-message" class="form-label">Your Message</label>
-                                <textarea id="contact-message" class="form-textarea form-control" rows="4"
-                                    placeholder="Your Message"></textarea>
+                                <textarea id="contact-message" name="message"
+                                        class="form-textarea form-control @error('message') is-invalid @enderror"
+                                        rows="4" placeholder="Your Message">{{ old('message') }}</textarea>
+                                @error('message')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <button type="submit" class="form-submit">Send Message</button>

@@ -4,18 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppSetting;
+use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class AppSettingsController extends Controller
 {
-     public function edit()
+    public function edit()
     {
         $setting = AppSetting::first();
         return view('admin.app.settings', compact('setting'));
     }
 
-   public function update(Request $request)
+    public function update(Request $request)
     {
 
        //dd($request->all());
@@ -77,4 +79,19 @@ class AppSettingsController extends Controller
         return redirect()->back()->with('success', 'App settings updated.');
     }
 
+    public function contactMessages(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = ContactMessage::latest()->get();
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('created_at', function($row){
+                    return $row->created_at->format('d M Y h:i A');
+                })
+                ->make(true);
+        }
+
+        return view('admin.app.contact_messages');
+    }
 }
