@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Patient\DefaultController;
+use App\Http\Controllers\DefaultController as SiteDefaultController;
 use Illuminate\Support\Facades\Artisan;
 
 // Frontend Controller Routes
@@ -61,6 +62,7 @@ Route::controller(FrontendController::class)
     Route::get('/blog/{blog}/{slug}', 'blogInfo')->name('blog.info');
 });
 
+Route::post('/contact-message', [SiteDefaultController::class, 'contactMessageStore'])->name('app.contact.msg.store');
 // Patient Route
 Route::prefix('patient')
 ->name('patient.')
@@ -121,6 +123,7 @@ Route::prefix('admin')
         Route::resource('blogs', BlogController::class);
         Route::resource('departments', DepartmentController::class);
         Route::resource('doctors', DoctorController::class);
+        Route::get('contact-messages', [AppSettingsController::class, 'contactMessages'])->name('contact.messages');
     });
 
 
