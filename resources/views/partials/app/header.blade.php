@@ -1,11 +1,18 @@
 
 <header class="top-header">
     <div class="container">
-        <div class="d-flex flex-md-row flex-column  gap-1 gap-lg-3">
+        <div class="d-md-flex flex-row gap-lg-3 d-none">
             <span class="d-flex gap-1 align-items-center"><i class="fas fa-phone"></i> +88018674-45897</span>
             <span class="d-flex gap-1 align-items-center"><i class="fas fa-envelope"></i> example@gmail.com</span>
             <span class="d-flex gap-1 align-items-center"><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh</span>
         </div>
+        <marquee class="d-md-none d-block" behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
+            <div class="d-md-none d-flex flex-row gap-2">
+                <span class="d-flex gap-1 align-items-center"><i class="fas fa-phone"></i> +88018674-45897</span>
+                <span class="d-flex gap-1 align-items-center"><i class="fas fa-envelope"></i> example@gmail.com</span>
+                <span class="d-flex gap-1 align-items-center"><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh</span>
+            </div>
+        </marquee>
     </div>
 </header>
 

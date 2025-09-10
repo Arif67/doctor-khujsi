@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\PagesSectionUpdateController;
+use App\Http\Controllers\Admin\PatientController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -113,7 +114,7 @@ Route::prefix('admin')
         });
 
 
-
+        Route::resource('patients', PatientController::class);
         Route::resource('services', ServiceController::class);
         Route::resource('attentions', AttentionController::class);
         Route::resource('categories', CategoryController::class);

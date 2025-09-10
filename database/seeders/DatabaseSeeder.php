@@ -22,14 +22,14 @@ class DatabaseSeeder extends Seeder
 
 
        $testUser = User::factory()->create([
-            'name' => 'Patient',
+            'first_name' => 'Patient',
             'email' => 'patient@gmail.com',
             'password' => Hash::make('12345678'),
             'plan_password' => '12345678'
         ]);
 
         $adminUser = User::factory()->create([
-            'name' => 'Admin',
+            'first_name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
             'plan_password' => '12345678'
