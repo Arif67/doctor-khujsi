@@ -167,7 +167,7 @@
                                     class="btn btn-link p-0 border-0 bg-transparent fav-btn" 
                                     data-doctor="{{ $doctor->id }}"
                                     data-auth="{{ auth()->check() ? '1' : '0' }}"
-                                    data-role="{{ auth()->check() ? auth()->user()->role : '' }}">
+                                     data-roles="{{ auth()->check() ? auth()->user()->getRoleNames()->first() : '' }}">
                                     <i class="fas fa-heart 
                                         {{ auth()->check() && auth()->user()->favorites && auth()->user()->favorites->contains($doctor->id) ? 'text-danger' : '' }}">
                                     </i>
@@ -284,42 +284,48 @@
     <script>
     $(document).ready(function () {
         $(".fav-btn").click(function () {
-            var $btn = $(this);
-            var doctorId = $btn.data("doctor");
-            var isAuth = $btn.data("auth") === "1";
-            var role = $btn.data("role");
+             let doctorId = $(this).data("doctor");
+            let isAuth = $(this).data("auth");
+            let roles = $(this).data("roles");
+            let $btn = $(this);
 
             if (!isAuth) {
                 toastr.error("You must login first to favorite a doctor.");
+                playSound();
                 return;
             }
 
-            if (role !== "patient") {
-                toastr.error("Only patients can favorite doctors.");
+            if (!roles.includes("patient")) {
+                toastr.error("Only patients can add favorite doctors!");
+                playSound();
                 return;
             }
 
-            // AJAX request
-            // $.ajax({
-            //     url: "/doctor/" + doctorId + "/favorite",
-            //     type: "POST",
-            //     headers: {
-            //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-            //     },
-            //     dataType: "json",
-            //     success: function (data) {
-            //         if (data.status === "added") {
-            //             toastr.success("Doctor added to favorites!");
-            //             $btn.find("i").addClass("text-danger");
-            //         } else if (data.status === "removed") {
-            //             toastr.info("Doctor removed from favorites!");
-            //             $btn.find("i").removeClass("text-danger");
-            //         }
-            //     },
-            //     error: function (xhr, status, error) {
-            //         toastr.error("Something went wrong!");
-            //     }
-            // });
+                $.ajax({
+                    url: "{{ route('patient.favorite.doctore', ':id') }}".replace(':id', doctorId),
+                    type: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        let $icon = $btn.find("i");
+
+                        if (data.status === "added") {
+                            toastr.success("Doctor added to favorites!");
+                            $icon.addClass("text-danger");
+                            playSound();
+                        } else if (data.status === "removed") {
+                            toastr.success("Doctor removed from favorites!");
+                            $icon.removeClass("text-danger");
+                            playSound();
+                        }
+                    },
+                    error: function () {
+                        toastr.error("Something went wrong!");
+                        playSound();
+                    }
+                });
         });
     });
 </script>

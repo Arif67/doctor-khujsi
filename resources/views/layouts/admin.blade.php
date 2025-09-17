@@ -57,6 +57,9 @@
           background-color: red;
           opacity: 1;
       }
+      .pending{
+        background: #ffc107;
+      }
     </style>
   </head>
   <!--end::Head-->

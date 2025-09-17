@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('department_id')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
             $table->string('photo')->nullable();
-             $table->text('description')->nullable();
+            $table->text('description')->nullable();
             $table->json('educations')->nullable(); // array of {title, details}
             $table->json('shifts')->nullable();     // array of {day, start_time, end_time}
             $table->json('social_links')->nullable();

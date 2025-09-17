@@ -9,11 +9,19 @@
         <a class="navbar-brand" href="">
             <img class="app_logo" src="{{ asset('assets/img/logo.jpg') }}" alt="">
         </a>
+         <a class="navbar-brand" href="{{route('app.home')}}" target="_blank">
+            <i class="fas fa-globe-americas text-primary"></i>
+        </a>    
 
         <!-- Right side dropdown -->
         <div class="dropdown ms-auto">
             <a class="nav-link dropdown-toggle text-dark d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-2" width="32" height="32" alt="User">
+                @php
+                    $photo = $globalUser->photo 
+                        ? asset('storage/' . $globalUser->photo) 
+                        : asset('assets/img/' . $globalUser->gender . '.jpg');
+                @endphp
+                <img src="{{$photo}}" class="rounded-circle me-2" width="32" height="32" alt="User">
                 John Doe
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

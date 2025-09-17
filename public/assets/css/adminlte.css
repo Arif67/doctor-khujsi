@@ -11912,6 +11912,7 @@ textarea.form-control-lg{
     color:var(--lte-sidebar-color)
 }
 .sidebar-wrapper .nav-treeview>.nav-item>.nav-link{
+    padding: 5px 10px;
     color:var(--lte-sidebar-submenu-color)
 }
 .sidebar-wrapper .nav-treeview>.nav-item>.nav-link:focus,.sidebar-wrapper .nav-treeview>.nav-item>.nav-link:hover{
@@ -11951,7 +11952,6 @@ textarea.form-control-lg{
 .sidebar-menu .nav-link{
     position:relative;
     transition:width ease-in-out .3s;
-    border-radius:.375rem
 }
 @media (prefers-reduced-motion:reduce){
     .sidebar-menu .nav-link{

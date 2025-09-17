@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'mobile',
         'blood',
+        'gender',
         'sex',
         'date_of_birth',
         'photo',
@@ -60,5 +61,26 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->belongsToMany(Doctor::class, 'favorites', 'patient_id', 'doctor_id');
+    }
+    public function favoritesCount()
+    {
+        return $this->favorites()->count();
+    }
+
+   public function appointments()
+   {
+        return $this->hasMany(Appointment::class, 'patient_id', 'id');
+    }
+
+    public function appointmentsCount()
+    {
+        return $this->appointments()->count();
+    }
+
+    public function serviceHistory(){
+        return $this->hasMany(ServiceHistory::class,'patient_id','id');
+    }
+    public function serviceHistoryCount(){
+        return $this->serviceHistory()->count();
     }
 }

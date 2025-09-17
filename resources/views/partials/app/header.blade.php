@@ -49,9 +49,23 @@
             </ul>
             <ul class="navbar-nav d-flex align-items-center gap-4 ms-auto my-2 my-lg-0 navbar-nav-scroll">
                 <li class="nav-link">
-                    <a href="{{route('patient.dashboard')}}" class="header_user_icon" style="text-decoration: none; color: inherit;">
+                   <a href="{{ route('auth.redirect') }}" class="header_user_icon" style="text-decoration: none; color: inherit;">
+                    @if (Auth::check())
+                        @if ($globalUser->photo)
+                            <img src="{{ asset('storage/' . $globalUser->photo) }}" 
+                                class="rounded-circle shadow-sm" 
+                                width="28" height="30" alt="Patient">
+                        @elseif ($globalUser->gender)
+                            <img src="{{ asset('assets/img/' . $globalUser->gender . '.jpg') }}" 
+                                class="rounded-circle shadow-sm" 
+                                width="28" height="30" alt="Patient">
+                        @else
+                            <i class="fas fa-user"></i>
+                        @endif
+                    @else
                         <i class="fas fa-user"></i>
-                    </a>
+                    @endif
+                </a>
                 </li>
                 <li class="nav-item header_call_button">
                     <a class="nav-link" href="">
@@ -68,8 +82,22 @@
 <div class="offcanvas offcanvas-start" style="width: 300px" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
     <div class="offcanvas-header">
        <div class="d-flex align-items-center gap-3">
-        <a href="{{route('patient.dashboard')}}" class="header_user_icon">
-                <i class="fas fa-user"></i>
+            <a href="{{route('auth.redirect')}}" class="header_user_icon">
+                @if (Auth::check())
+                    @if ($globalUser->photo)
+                        <img src="{{ asset('storage/' . $globalUser->photo) }}" 
+                            class="rounded-circle shadow-sm" 
+                            width="28" height="30" alt="Patient">
+                    @elseif ($globalUser->gender)
+                        <img src="{{ asset('assets/img/' . $globalUser->gender . '.jpg') }}" 
+                            class="rounded-circle shadow-sm" 
+                            width="28" height="30" alt="Patient">
+                    @else
+                        <i class="fas fa-user"></i>
+                    @endif
+                @else
+                    <i class="fas fa-user"></i>
+                @endif
             </a>
             <a class="nav-link" href="" style="color:#00bcd4;">
                 <i class="fa-solid fa-phone"></i>

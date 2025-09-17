@@ -15,7 +15,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">Total Appointments</h6>
-                        <h4 class="mb-0">24</h4>
+                        <h4 class="mb-0">{{ $count['appointments'] }}</h4>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">Favorite Doctors</h6>
-                        <h4 class="mb-0">8</h4>
+                        <h4 class="mb-0">{{ $count['favorites'] }}</h4>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">Services History</h6>
-                        <h4 class="mb-0">15</h4>
+                        <h4 class="mb-0">{{ $count['serviceHistoryCount'] }}</h4>
                     </div>
                 </div>
             </div>
@@ -69,34 +69,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Dr. Jakir Ali</td>
-                            <td>Cupping Therapy</td>
-                            <td>12/12/2024</td>
-                            <td>12:00 – 01:00 PM</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                        </tr>
-                        <tr>
-                            <td>Dr. Mahmud Hasan</td>
-                            <td>Physiotherapy</td>
-                            <td>15/12/2024</td>
-                            <td>03:00 – 04:00 PM</td>
-                            <td><span class="badge bg-warning text-dark">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>Dr. Afsana Rahman</td>
-                            <td>General Checkup</td>
-                            <td>20/12/2024</td>
-                            <td>10:00 – 11:00 AM</td>
-                            <td><span class="badge bg-danger">Cancelled</span></td>
-                        </tr>
-                        <tr>
-                            <td>Dr. Lisa White</td>
-                            <td>Dental Cleaning</td>
-                            <td>25/12/2024</td>
-                            <td>11:00 – 12:00 PM</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                        </tr>
+                        @forelse ($items as $item)
+                            <tr>
+                                <td>{{ $item->doctor->name ?? 'N/A' }}</td>
+                                <td>{{ $item->service->title ?? 'N/A' }}</td>
+                                <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                                <td>{{ $item->created_at->format('h:i A') }} – {{ $item->created_at->addHour()->format('h:i A') }}</td>
+                                <td>
+                                    @php
+                                        $statusClass = match($item->status) {
+                                            'done'   => 'bg-success',
+                                            'pending'=> 'bg-warning text-dark',
+                                            'cencel' => 'bg-danger',
+                                            default  => 'bg-secondary',
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $statusClass }}">
+                                        {{ ucfirst($item->status) }}
+                                    </span>
+                                </td>
+                            </tr>     
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No records found</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
