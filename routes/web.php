@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\AttentionController;
 use App\Http\Controllers\Admin\BlogController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Frontend\FrontendController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\AuthenticateRedirectController;
 use App\Http\Controllers\Patient\DefaultController;
 use App\Http\Controllers\DefaultController as SiteDefaultController;
 use Illuminate\Support\Facades\Artisan;
@@ -70,13 +72,15 @@ Route::prefix('patient')
 ->group(function(){
     Route::get( 'dashboard',[DefaultController::class,'dashboard'])->name('dashboard');
     Route::get('profile',[DefaultController::class,'profile'])->name('profile');
-
+    Route::put('profile-update',[DefaultController::class,'profileUpdate'])->name('profile.update');
     Route::get('/appointments', [DefaultController::class,'appointments'])->name('appointments');
     Route::get('/favorite-doctor', [DefaultController::class,'favoriteDoctor'])->name('favorite.doctor');
     Route::get('/service-history', [DefaultController::class,'serviceHistory'])->name('service.history');
+
+    Route::post('favorite-doctore/{id}',[DefaultController::class,'favoriteDcotore'])->name('favorite.doctore');
 });
 
-
+// Clear Cache Route
 Route::get('/clear', function() {
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
@@ -85,10 +89,13 @@ Route::get('/clear', function() {
     return redirect('/');
 });
 
+// Auth Redirect Route
+Route::get('auth/redirect',[AuthenticateRedirectController::class,'handleAuthRedirect'])->name('auth.redirect');
+
 // Admin Dashboard Route
 Route::prefix('admin')
     ->name('admin.')
-     ->middleware(['auth', 'role:admin'])
+    ->middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::resource('roles', RoleController::class);
@@ -115,7 +122,6 @@ Route::prefix('admin')
             Route::put('home_about_us',[PagesSectionUpdateController::class,'home_about_us'])->name('home.about_us.update');
         });
 
-
         Route::resource('patients', PatientController::class);
         Route::resource('services', ServiceController::class);
         Route::resource('attentions', AttentionController::class);
@@ -124,6 +130,13 @@ Route::prefix('admin')
         Route::resource('departments', DepartmentController::class);
         Route::resource('doctors', DoctorController::class);
         Route::get('contact-messages', [AppSettingsController::class, 'contactMessages'])->name('contact.messages');
+
+        // add for appointments route
+        Route::get('appointments',[AppointmentController::class,'index'])->name('appointments.index');
+        Route::get('appointment-assign/{id}',[AppointmentController::class,'appointmentsAssign'])->name('appointments.assign');
+        Route::post('/appointments/{appointment}/assign', [AppointmentController::class, 'assignService'])
+        ->name('appointments.assignService');
+        Route::get('patient-profile/{id}',[AppointmentController::class,'patientProfile'])->name('patient.profile');
     });
 
 

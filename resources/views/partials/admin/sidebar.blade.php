@@ -39,7 +39,7 @@
          <li class="nav-header">Doctor Managment</li>
          <li class="nav-item {{ Route::is('admin.doctors.*') ? 'menu-open':'' }}">
             <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-stethoscope"></i>
+               <i class="nav-icon fas fa-stethoscope"></i>
             <p>
                Doctor
                <i class="nav-arrow bi bi-chevron-right"></i>
@@ -48,13 +48,11 @@
             <ul class="nav nav-treeview">
                <li class="nav-item">
                   <a href="{{route('admin.doctors.index')}}" class="nav-link {{ Route::is('admin.doctors.index') ? 'active':'' }}">
-                     <i class="nav-icon bi bi-circle"></i>
                      <p>Doctors</p>
                   </a>
                </li>
                <li class="nav-item">
                   <a href="{{route('admin.doctors.create')}}" class="nav-link {{ Route::is('admin.doctors.create') ? 'active':'' }}">
-                     <i class="nav-icon bi bi-circle"></i>
                      <p>Add Doctor</p>
                   </a>
                </li>
@@ -86,7 +84,7 @@
          <li class="nav-header">Patient Managment</li>
          <li class="nav-item {{ Route::is('admin.patients.*') ? 'menu-open':'' }}">
             <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-stethoscope"></i>
+            <i class="nav-icon fas fa-wheelchair"></i>
             <p>
                Patient
                <i class="nav-arrow bi bi-chevron-right"></i>
@@ -103,6 +101,30 @@
                   <a href="{{route('admin.patients.create')}}" class="nav-link {{ Route::is('admin.patients.create') ? 'active':'' }}">
                      <i class="nav-icon bi bi-circle"></i>
                      <p>Add Patient</p>
+                  </a>
+               </li>
+            </ul>
+         </li>
+         <li class="nav-header">Appointments Managment</li>
+         <li class="nav-item {{ Route::is('admin.appointments.*') ? 'menu-open':'' }}">
+            <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-wheelchair"></i>
+            <p>
+               Appointment
+               <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+            </a>
+            <ul class="nav nav-treeview">
+               <li class="nav-item">
+                  <a href="{{route('admin.appointments.index')}}" class="nav-link {{ Route::is(['admin.appointments.index','admin.appointments.assign']) ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Appointments</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="{{route('admin.patients.create')}}" class="nav-link {{ Route::is('admin.patients.create') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Add Appointment</p>
                   </a>
                </li>
             </ul>

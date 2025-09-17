@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('mobile')->nullable();
             $table->string('blood')->nullable();
-            $table->string('sex')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('age')->nullable();
             $table->string('date_of_birth')->nullable();
             $table->string('photo')->nullable();
             $table->text('address')->nullable();

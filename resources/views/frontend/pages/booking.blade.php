@@ -79,38 +79,81 @@
 @section('content')
 <div class="main-wrap py-5">
     <div class="container">
-        <div class="row row-gap-4">
+        <div class="row row-gap-4 align-items-md-center">
             <div class="col-lg-4 d-none d-lg-block">
                 <div class="booking-image">
                     <img src="https://i.postimg.cc/yN0NFzRH/image.png" alt="booking-image">
                 </div>
             </div>
+            @if ($errors->any())
+                {{ $errors }}
+            @endif
             <div class="col-lg-8">
                 <div class="booking-content p-3">
                     <h1 class="heading_title">Book Your Appointment</h1>
                     <p class="booking-subtitle">Schedule your visit with our experienced medical professionals. Fill out the form below and we'll get back to you shortly.</p>
                     
-                    <form class="booking-form" action="" method="POST">
+                    <form class="booking-form" action="{{route('app.booking.store')}}" method="POST">
                         @csrf   
                         <div class="row row-gap-4">
                             <div class="col-md-6">
-                                <label for="full_name">Full Name <span class="required">*</span></label>
-                                <input type="text" id="full_name" class="form-control" name="full_name" required>
+                                <label for="first_name">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" required placeholder="First Name">
                             </div>
                             <div class="col-md-6">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required placeholder="Last Name">
+                            </div>
+                            
+                            <div class="col-md-6">
                                  <label for="email">Email Address <span class="required">*</span></label>
-                                <input type="email" id="email" class="form-control" name="email" required>
+                                <input type="email" id="email" class="form-control" name="email" required placeholder="Email Address">
                             </div>
                             <div class="col-md-6">
                                 <label for="phone">Phone Number <span class="required">*</span></label>
-                                <input type="tel" id="phone" name="phone" class="form-control" required>
+                                <input type="tel" id="phone" name="phone" class="form-control" required placeholder="Phone Number">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="mobile">Mobile</label>
+                                <input type="tel" id="mobile" name="mobile" class="form-control" required placeholder="Mobile">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="blood">Blood Group</label>
+                                <select name="blood" class="form-select">
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+" {{ old('blood') == 'A+' ? 'selected' : '' }}>A+</option>
+                                    <option value="A-" {{ old('blood') == 'A-' ? 'selected' : '' }}>A-</option>
+                                    <option value="B+" {{ old('blood') == 'B+' ? 'selected' : '' }}>B+</option>
+                                    <option value="B-" {{ old('blood') == 'B-' ? 'selected' : '' }}>B-</option>
+                                    <option value="O+" {{ old('blood') == 'O+' ? 'selected' : '' }}>O+</option>
+                                    <option value="O-" {{ old('blood') == 'O-' ? 'selected' : '' }}>O-</option>
+                                    <option value="AB+" {{ old('blood') == 'AB+' ? 'selected' : '' }}>AB+</option>
+                                    <option value="AB-" {{ old('blood') == 'AB-' ? 'selected' : '' }}>AB-</option>
+                                </select>
+                                @error('blood') 
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p> 
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sex">Sex</label>
+                                <select name="sex" class="form-select">
+                                    <option value="">Select</option>
+                                    <option value="Male" {{ old('sex') == 'Male' ? 'selected' : '' }}>Male</option>
+                                    <option value="Female" {{ old('sex') == 'Female' ? 'selected' : '' }}>Female</option>
+                                </select>
+                                @error('sex') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="date_of_birth">Date of Birth</label>
+                                <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control">
+                                @error('date_of_birth') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                             </div>
                              <div class="col-md-6">
-                                <label for="appointment_date">Preferred Date <span class="required">*</span></label>
+                                <label for="appointment_date">Appointment Date <span class="required">*</span></label>
                                 <input type="date" id="appointment_date" class="form-control" name="appointment_date" required>
                             </div>
                              <div class="col-md-6">
-                                <label for="appointment_time">Preferred Time <span class="required">*</span></label>
+                                <label for="appointment_time">Appointment Time <span class="required">*</span></label>
                                 <select id="appointment_time" class="form-select" name="appointment_time" class="form-control" required>
                                     <option value="">Select Time</option>
                                     <option value="09:00">9:00 AM</option>
@@ -122,15 +165,17 @@
                                 </select>
                             </div>
                              <div class="col-md-6">
-                                <label for="department">Department <span class="required">*</span></label>
-                                <select id="department" class="form-select" name="department" required>
+                                <label for="department_id">Department <span class="required">*</span></label>
+                                <select id="department_id" class="form-select" name="department_id" required>
                                     <option value="">Select Department</option>
-                                    <option value="cardiology">Cardiology</option>
-                                    <option value="neurology">Neurology</option>
-                                    <option value="orthopedics">Orthopedics</option>
-                                    <option value="pediatrics">Pediatrics</option>
-                                    <option value="general">General Medicine</option>
+                                    @foreach ($departments as $department)
+                                    <option value="{{$department->id}}">{{$department->name}}</option>
+                                    @endforeach
                                 </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" name="password" class="form-control" required placeholder="Enter Password">
                             </div>
                             <div class="col-12">
                                 <label for="message">Additional Message</label>

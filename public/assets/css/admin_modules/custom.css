@@ -1,41 +1,77 @@
 @media only screen and (min-width: 992px){
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar{
+    /* Sidebar collapse size */
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar {
         max-width: 60px;
         min-width: 60px;
-    }
-    .app-sidebar {
         transition: all 0.3s ease-in-out;
     }
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar .sidebar-brand a{
-        width:50px !important;
+
+    /* Brand logo small */
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar .sidebar-brand a {
+        width: 50px !important;
     }
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar .sidebar-brand a span{
+    .sidebar-collapse:not(.sidebar-mini) .app-sidebar .sidebar-brand a span {
         display: none;
     }
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper ul.sidebar-menu li.nav-item{
+
+    /* Nav items center align */
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu li.nav-item {
         display: flex;
         align-items: center;
-        justify-content: center;
     }
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper ul.sidebar-menu li.nav-item a p{
+
+    /* Collapse এ label hide */
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu > li.nav-item > a > p {
         display: none;
     }
 
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper ul.sidebar-menu li.nav-header {
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu li.nav-item:hover ul.nav.nav-treeview li a p {
+        display: inline;
+    }
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu > li.nav-item {
+        position: relative;
+    }
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu li.nav-item ul.nav.nav-treeview {
+        display: none;
+        position: absolute;
+        left: 22px;
+        top: 0px;
+        background: #1a2226;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+    }
+  
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu li.nav-item:hover > ul.nav.nav-treeview {
+        display: block;
+    }
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu li.nav-item:hover > ul.nav.nav-treeview > .nav-item > a{
+        width: 100%;
+    }
+
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper ul.sidebar-menu li.nav-header {
         display: none;
     }
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper[data-overlayscrollbars='host']{
+
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper[data-overlayscrollbars='host'],
+    .sidebar-collapse:not(.sidebar-mini) 
+    .app-sidebar .sidebar-wrapper div[data-overlayscrollbars-viewport] {
         overflow: unset !important;
     }
-
-    .sidebar-collapse:not(.sidebar-mini) .app-sidebar div.sidebar-wrapper div[data-overlayscrollbars-viewport="scrollbarHidden overflowXScroll overflowYHidden"]{
-        overflow: unset !important;
-    }
-
 
 }
 
-
+ul.nav.nav-treeview{
+    margin-left: 30px;
+}
 
 /* for modal zoom in css */
 .modal.fade .modal-dialog.modal-dialog-zoom {-webkit-transform: translate(0,0)scale(.5);transform: translate(0,0)scale(.5);}

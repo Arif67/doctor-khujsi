@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title', 'Hospital Management System')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -37,7 +39,9 @@
 
     @includeIf('partials.app.footer')
     @yield('scripts')
-
+    <audio id="successSound">
+        <source src="{{ asset('assets/mp3/ton.m4a') }}" type="audio/mpeg">
+    </audio>
 
     {{-- jquery js add --}}
     <script src="{{asset('assets/js/query.min.js')}}"></script>
@@ -56,12 +60,23 @@
             "timeOut": 3000,   
         };
 
+         // Audio helper
+        function playSound() {
+            const audio = document.getElementById("successSound");
+            if(audio){
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+
         @if(session('success'))
             toastr.success("{{ session('success') }}");
+            playSound();
         @endif
 
         @if(session('error'))
             toastr.error("{{ session('error') }}");
+            playSound();
         @endif
 
     </script>
