@@ -32,8 +32,12 @@ class DoctorRequest extends FormRequest
                 Rule::unique('doctors', 'email')->ignore($id),
             ],
             'phone' => 'nullable|string|max:20',
-            'department_id' => 'required|exists:departments,id',
+            'office_phone' => 'nullable|string|max:20',
+            'department_id' => 'nullable|exists:departments,id',
+            'speciality' => 'nullable|string|max:255',
+            'experience' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'show_on_homepage' => 'nullable|boolean',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
 

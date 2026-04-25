@@ -26,6 +26,11 @@
             <input type="text" name="phone" value="{{ old('phone', $doctor->phone ?? '') }}" class="w-full border p-2 rounded">
             @error('phone') <p class="text-red-500">{{ $message }}</p> @enderror
         </div>
+        <div class="">
+            <label class="block font-medium mb-1">Speciality</label>
+            <input type="text" name="speciality" value="{{ old('speciality', $doctor->speciality ?? '') }}" class="w-full border p-2 rounded">
+            @error('speciality') <p class="text-red-500">{{ $message }}</p> @enderror
+        </div>
          {{-- Department --}}
         <div class="">
             <label class="block font-medium mb-1">Department</label>
@@ -59,6 +64,17 @@
                 </select>
                 @error('status') <p class="text-red-500">{{ $message }}</p> @enderror
             </div>
+            <div>
+                <label class="block font-medium mb-1">Experience</label>
+                <input type="text" name="experience" value="{{ old('experience', $doctor->experience ?? '') }}" class="w-full border p-2 rounded" placeholder="e.g. 8 years">
+                @error('experience') <p class="text-red-500">{{ $message }}</p> @enderror
+            </div>
+            @if(auth()->user()?->hasRole('admin'))
+                <div class="flex items-center gap-2 mt-8">
+                    <input type="checkbox" name="show_on_homepage" id="show_on_homepage" value="1" {{ old('show_on_homepage', $doctor->show_on_homepage ?? false) ? 'checked' : '' }}>
+                    <label for="show_on_homepage" class="font-medium mb-0">Show on homepage</label>
+                </div>
+            @endif
 
             {{-- Profile Photo --}}
             <div class="relative">

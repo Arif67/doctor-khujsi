@@ -16,6 +16,22 @@
     </div>
 </header>
 
+@php
+    $headerUserPhoto = asset('assets/img/default.png');
+
+    if (Auth::check()) {
+        if ($globalUser->photo) {
+            $headerUserPhoto = asset('storage/' . $globalUser->photo);
+        } elseif ($globalUser->gender) {
+            $genderPhoto = public_path('assets/img/' . ucfirst(strtolower($globalUser->gender)) . '.jpg');
+
+            if (file_exists($genderPhoto)) {
+                $headerUserPhoto = asset('assets/img/' . ucfirst(strtolower($globalUser->gender)) . '.jpg');
+            }
+        }
+    }
+@endphp
+
 <nav class="navbar navbar-expand-lg app_header tm-bg-primary ">
     <div class="container navbar_container flex flex-row align-items-center">
         <a class="navbar-brand" href="">
@@ -51,17 +67,9 @@
                 <li class="nav-link">
                    <a href="{{ route('auth.redirect') }}" class="header_user_icon" style="text-decoration: none; color: inherit;">
                     @if (Auth::check())
-                        @if ($globalUser->photo)
-                            <img src="{{ asset('storage/' . $globalUser->photo) }}" 
-                                class="rounded-circle shadow-sm" 
-                                width="28" height="30" alt="Patient">
-                        @elseif ($globalUser->gender)
-                            <img src="{{ asset('assets/img/' . $globalUser->gender . '.jpg') }}" 
-                                class="rounded-circle shadow-sm" 
-                                width="28" height="30" alt="Patient">
-                        @else
-                            <i class="fas fa-user"></i>
-                        @endif
+                        <img src="{{ $headerUserPhoto }}"
+                            class="rounded-circle shadow-sm"
+                            width="28" height="30" alt="Patient">
                     @else
                         <i class="fas fa-user"></i>
                     @endif
@@ -84,17 +92,9 @@
        <div class="d-flex align-items-center gap-3">
             <a href="{{route('auth.redirect')}}" class="header_user_icon">
                 @if (Auth::check())
-                    @if ($globalUser->photo)
-                        <img src="{{ asset('storage/' . $globalUser->photo) }}" 
-                            class="rounded-circle shadow-sm" 
-                            width="28" height="30" alt="Patient">
-                    @elseif ($globalUser->gender)
-                        <img src="{{ asset('assets/img/' . $globalUser->gender . '.jpg') }}" 
-                            class="rounded-circle shadow-sm" 
-                            width="28" height="30" alt="Patient">
-                    @else
-                        <i class="fas fa-user"></i>
-                    @endif
+                    <img src="{{ $headerUserPhoto }}"
+                        class="rounded-circle shadow-sm"
+                        width="28" height="30" alt="Patient">
                 @else
                     <i class="fas fa-user"></i>
                 @endif

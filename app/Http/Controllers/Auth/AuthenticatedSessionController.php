@@ -35,12 +35,13 @@ class AuthenticatedSessionController extends Controller
         // Check roles using Spatie
         if ($user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
+        } elseif ($user->hasRole('hospital_owner')) {
+            return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully.');
         } elseif ($user->hasRole('patient')) {
             return redirect()->route('patient.dashboard');
         }
 
-        // fallback (if no role matched)
-        return redirect()->route('app.home');
+        return redirect()->route('dashboard');
     }
 
     /**

@@ -52,8 +52,8 @@
                 alt="User Image"
                 />
                 <p>
-                Alexander Pierce - Web Developer
-                <small>Member since Nov. 2023</small>
+                {{ auth()->user()?->hospital_name ?: auth()->user()?->name }}
+                <small>{{ auth()->user()?->roles->pluck('name')->join(', ') }}</small>
                 </p>
             </li>
             <!--end::User Image-->
@@ -61,16 +61,14 @@
             <li class="user-body">
                 <!--begin::Row-->
                 <div class="row">
-                <div class="col-4 text-center"><a href="#">Followers</a></div>
-                <div class="col-4 text-center"><a href="#">Sales</a></div>
-                <div class="col-4 text-center"><a href="#">Friends</a></div>
+                <div class="col-12 text-center px-3">{{ auth()->user()?->email }}</div>
                 </div>
                 <!--end::Row-->
             </li>
             <!--end::Menu Body-->
             <!--begin::Menu Footer-->
             <li class="user-footer">
-                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>

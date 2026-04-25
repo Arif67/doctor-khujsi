@@ -1,0 +1,146 @@
+### 📌 প্রজেক্ট রিকোয়ারমেন্ট: নাগারপুর এলাকার হাসপাতাল ডিরেক্টরি ও বুকিং ওয়েবসাইট
+
+#### 🎯 প্রজেক্টের উদ্দেশ্য
+
+নাগারপুর এলাকার সব হাসপাতালকে এক প্ল্যাটফর্মে আনা, যেখানে হাসপাতালগুলো নিজেদের রেজিস্ট্রেশন করে ডাক্তারদের প্রোফাইল পোস্ট করতে পারবে এবং রোগীরা সহজে ডাক্তার খুঁজে বুকিং দিতে পারবে।
+
+---
+
+## 👨‍💻 ইউজার রোল (User Roles)
+
+### 1. Super Admin
+
+* পুরো সিস্টেম কন্ট্রোল করবে
+* নতুন হাসপাতাল রেজিস্ট্রেশন **approve/reject** করবে
+* হোমপেজে কোন ১০টি ডাক্তার প্রোফাইল দেখাবে তা নির্বাচন করবে
+* সব হাসপাতালের পোস্ট এবং বুকিং দেখতে পারবে
+
+### 2. Hospital Owner (Hospital Admin)
+
+* রেজিস্ট্রেশন করার পর Super Admin approve করলে লগইন করতে পারবে
+* শুধুমাত্র:
+
+  * ডাক্তার প্রোফাইল **post করতে পারবে**
+  * নিজের পোস্টের বুকিংগুলো **দেখতে পারবে**
+* অন্য কোনো হাসপাতালের ডাটা দেখতে পারবে না
+
+### 3. Patient (Public User)
+
+* লগইন ছাড়াই:
+
+  * ডাক্তার প্রোফাইল দেখতে পারবে
+  * সহজ ফর্ম দিয়ে বুকিং করতে পারবে
+
+---
+
+## 🏥 Hospital Registration System
+
+### প্রয়োজনীয় ফিল্ড:
+
+* Hospital Name
+* Location
+* Phone Number
+* Gmail (Optional)
+
+### প্রসেস:
+
+* রেজিস্ট্রেশন করার পর status থাকবে: **Pending**
+* Super Admin approve করলে তবেই লগইন access পাবে
+
+---
+
+## 👨‍⚕️ Doctor Profile Post System
+
+Hospital Owner নিচের তথ্য দিয়ে ডাক্তার প্রোফাইল পোস্ট করবে:
+
+* Doctor Name
+* Speciality (optional হলে ভালো)
+* Experience (optional)
+* Profile Image
+* Description
+
+📌 পোস্ট করলে:
+
+* সব পোস্ট একটি নির্দিষ্ট “Doctors Page”-এ দেখাবে
+* Home Page-এ ১০টি ডাক্তার দেখানো হবে (Super Admin select করবে)
+
+---
+
+## 🏠 Home Page Features
+
+* Top 10 Doctor Profile Card (Admin selected)
+* প্রতিটি কার্ডে থাকবে:
+
+  * Doctor Image
+  * Name
+  * Hospital Name
+  * Short Info
+  * Book Now Button
+
+---
+
+## 📄 Doctors Listing Page
+
+* সব হাসপাতালের সব ডাক্তার প্রোফাইল এখানে দেখাবে
+* Card/Grid আকারে দেখানো হবে
+
+---
+
+## 📅 Booking System
+
+### Booking Form (Simple):
+
+* Patient Name
+* Phone Number
+* Age
+
+### Booking Rules:
+
+* Booking করলে:
+
+  * শুধুমাত্র ওই Hospital Owner এবং Super Admin দেখতে পারবে
+* Patient login লাগবে না
+
+---
+
+## 🔐 Permission System
+
+| Feature           | Super Admin | Hospital Owner |
+| ----------------- | ----------- | -------------- |
+| Hospital Approve  | ✅           | ❌              |
+| Doctor Post       | ✅           | ✅ (Own only)   |
+| All Bookings View | ✅           | ❌              |
+| Own Bookings View | ✅           | ✅              |
+
+---
+
+## ⚙️ Additional Features (Optional but Recommended)
+
+* Search (Doctor Name / Hospital)
+* Filter (Location / Speciality)
+* Mobile Responsive Design
+* Admin Dashboard (Clean UI - Tailwind CSS prefer)
+
+---
+
+## 💻 Tech Suggestion
+
+* Backend: Laravel
+* Frontend: Blade + Tailwind CSS
+* Database: MySQL
+
+---
+
+## 🚀 Summary Flow
+
+1. Hospital registers → Pending
+2. Super Admin approves
+3. Hospital owner logs in → posts doctor profiles
+4. Doctors show on listing page
+5. Admin selects top 10 → show on homepage
+6. Patient books → booking saved
+7. Booking visible only to Admin + respective Hospital
+
+---
+
+👉 Note: System must be simple, fast, and mobile-friendly.

@@ -20,7 +20,11 @@
                             </div>
                             <a href="{{route('app.doctor-profile', ['doctor' => $item->id , 'name' => \Illuminate\Support\Str::slug($item->name)])}}">
                                 <div class="team-name">{{ $item->name }}</div>
-                                <div class="team-role">{{ $item->department?->name ?? '-' }}</div>
+                                <div class="team-role">{{ $item->speciality ?: ($item->department?->name ?? 'Specialist') }}</div>
+                                <div class="team-role">{{ $item->owner?->hospital_name ?? 'Hospital pending' }}</div>
+                                <div class="mt-2">
+                                    <span class="btn btn-sm btn-outline-info">Book Now</span>
+                                </div>
                             </a>
                         </div>
                     </a>

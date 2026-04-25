@@ -7,6 +7,7 @@ use App\Http\Requests\DoctorRequest;
 use App\Models\Department;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -18,7 +19,12 @@ class DoctorController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Doctor::with('department');
+            $query = Doctor::with(['department', 'owner']);
+
+            if (Auth::user()?->hasRole('hospital_owner')) {
+                $query->where('owner_id', Auth::id());
+            }
+
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('photo', function($row) {
@@ -29,6 +35,7 @@ class DoctorController extends Controller
                     return '<img src="'.asset('assets/img/default.png').'" alt="default" class="w-6 h-6 rounded-full object-cover" />';
                 })
                 ->addColumn('department', fn($row) => $row->department?->name ?? '-')
+                ->addColumn('hospital', fn($row) => $row->owner?->hospital_name ?? '-')
                 ->addColumn('action', function ($row) {
                    $action = '
                         <div class="flex flex-row gap-2">
@@ -71,6 +78,12 @@ class DoctorController extends Controller
     public function store(DoctorRequest $request)
     {
         $data = $request->validated();
+        $isHospitalOwner = Auth::user()?->hasRole('hospital_owner');
+        $data['show_on_homepage'] = $isHospitalOwner ? false : $request->boolean('show_on_homepage');
+        $data['owner_id'] = $isHospitalOwner
+            ? Auth::id()
+            : ($data['owner_id'] ?? null);
+
         // --- Photo Upload ---
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('doctors', 'public');
@@ -95,6 +108,7 @@ class DoctorController extends Controller
      */
     public function show(Doctor $doctor)
     {
+        $this->ensureDoctorAccess($doctor);
         return view('admin.doctors.show', compact('doctor'));
     }
 
@@ -104,6 +118,7 @@ class DoctorController extends Controller
      */
     public function edit(Doctor $doctor)
     {
+        $this->ensureDoctorAccess($doctor);
         $departments = Department::all();
         return view('admin.doctors.edit', compact('doctor','departments'));
     }
@@ -113,7 +128,13 @@ class DoctorController extends Controller
      */
     public function update(DoctorRequest $request, Doctor $doctor)
     {
+        $this->ensureDoctorAccess($doctor);
         $data = $request->validated();
+        $isHospitalOwner = Auth::user()?->hasRole('hospital_owner');
+        $data['show_on_homepage'] = $isHospitalOwner ? $doctor->show_on_homepage : $request->boolean('show_on_homepage');
+        $data['owner_id'] = $isHospitalOwner
+            ? $doctor->owner_id
+            : ($data['owner_id'] ?? $doctor->owner_id);
 
         // --- Handle Delete Photo ---
         if ($request->has('delete_photo_db') && !$request->hasFile('photo')) {
@@ -128,7 +149,7 @@ class DoctorController extends Controller
             if ($doctor->photo) {
                 Storage::disk('public')->delete($doctor->photo);
             }
-            $doctor->photo = $request->file('photo')->store('doctors', 'public');
+            $data['photo'] = $request->file('photo')->store('doctors', 'public');
         }
 
         // --- Handle Description (Summernote + Images) ---
@@ -143,7 +164,7 @@ class DoctorController extends Controller
         $data['social_links'] = $request->social_links ?? [];
 
         // --- Update doctor ---
-        $doctor->update(collect($data)->except(['photo', 'delete_photo_db'])->toArray());
+        $doctor->update(collect($data)->except(['delete_photo_db'])->toArray());
 
         return redirect()->route('admin.doctors.index')
             ->with('success', 'Doctor updated successfully.');
@@ -154,6 +175,7 @@ class DoctorController extends Controller
      */
     public function destroy(Doctor $doctor)
     {
+        $this->ensureDoctorAccess($doctor);
         if($doctor->photo) Storage::disk('public')->delete($doctor->photo);
         if (!empty($doctor->description)) {
             $this->deleteSummaryImages($doctor->description);
@@ -248,7 +270,7 @@ class DoctorController extends Controller
         return $dom->saveHTML();
     }
 
-   private function deleteSummaryImages($content)
+    private function deleteSummaryImages($content)
     {
         if (empty($content)) return;
 
@@ -268,5 +290,12 @@ class DoctorController extends Controller
                 Storage::disk('public')->delete($relativePath);
             }
         }
-   }
+    }
+
+    private function ensureDoctorAccess(Doctor $doctor): void
+    {
+        if (Auth::user()?->hasRole('hospital_owner') && $doctor->owner_id !== Auth::id()) {
+            abort(403);
+        }
+    }
 }

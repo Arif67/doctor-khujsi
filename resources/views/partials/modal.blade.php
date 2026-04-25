@@ -23,3 +23,29 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="reject-hospital-modal" tabindex="-1" aria-labelledby="rejectHospitalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="rejectHospitalModalLabel">Reject Hospital Account</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form id="reject-hospital-form" action="" method="POST">
+        <div class="modal-body">
+          @csrf
+          @method('PATCH')
+          <div class="mb-3">
+            <label for="reject_reason" class="form-label">Reject Reason</label>
+            <textarea id="reject_reason" name="rejection_reason" class="form-control" rows="4" maxlength="1000" placeholder="Why this hospital is being rejected?" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Reject Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

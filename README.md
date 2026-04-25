@@ -51,3 +51,4 @@
 ```bash
 git clone https://github.com/34Sakib/Hospital_Management.git
 cd Hospital_Management
+# doctor-khujsi

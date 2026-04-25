@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
         // Predefined permissions
         $permissionNames = [
             'create user',
@@ -32,7 +35,7 @@ class RolePermissionSeeder extends Seeder
         }
 
         // Predefined roles
-        $roleNames = ['doctor', 'present', 'admin', 'user'];
+        $roleNames = ['doctor', 'present', 'admin', 'user', 'patient', 'hospital_owner'];
 
         foreach ($roleNames as $roleName) {
             $role = Role::firstOrCreate([
@@ -45,6 +48,6 @@ class RolePermissionSeeder extends Seeder
         }
 
         $this->command->info('Roles and Permissions created successfully!');
-
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

@@ -1,4 +1,8 @@
 
+ @php
+   $isHospitalOwner = auth()->user()?->hasRole('hospital_owner');
+ @endphp
+
  <aside class="app-sidebar bg-[#222d32] shadow" data-bs-theme="dark">
    <!--begin::Sidebar Brand-->
    <div class="sidebar-brand">
@@ -12,7 +16,7 @@
       />
       <!--end::Brand Image-->
       <!--begin::Brand Text-->
-      <span class="brand-text fw-light">AdminLTE 4</span>
+      <span class="brand-text fw-light">{{ $isHospitalOwner ? 'Hospital Panel' : 'Admin Panel' }}</span>
       <!--end::Brand Text-->
       </a>
       <!--end::Brand Link-->
@@ -36,6 +40,34 @@
                </p>
             </a>
          </li>
+         @if($isHospitalOwner)
+         <li class="nav-header">Hospital Workspace</li>
+         <li class="nav-item">
+            <a href="{{route('admin.doctors.index')}}" class="nav-link {{ Route::is('admin.doctors.index') ? 'active':'' }}">
+               <i class="nav-icon fas fa-user-md"></i>
+               <p>My Doctors</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.doctor-bookings.index')}}" class="nav-link {{ Route::is('admin.doctor-bookings.index') || Route::is('admin.doctor-bookings.show') ? 'active':'' }}">
+               <i class="nav-icon fas fa-calendar-check"></i>
+               <p>Bookings</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.doctor-bookings.analytics')}}" class="nav-link {{ Route::is('admin.doctor-bookings.analytics') ? 'active':'' }}">
+               <i class="nav-icon fas fa-chart-line"></i>
+               <p>Booking Analytics</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.support.index')}}" class="nav-link {{ Route::is('admin.support.*') ? 'active':'' }}">
+               <i class="nav-icon fas fa-headset"></i>
+               <p>Contact Super Admin</p>
+            </a>
+         </li>
+         @endif
+         @if(auth()->user()?->hasRole('admin'))
          <li class="nav-header">Doctor Managment</li>
          <li class="nav-item {{ Route::is('admin.doctors.*') ? 'menu-open':'' }}">
             <a href="#" class="nav-link">
@@ -51,12 +83,25 @@
                      <p>Doctors</p>
                   </a>
                </li>
-               <li class="nav-item">
-                  <a href="{{route('admin.doctors.create')}}" class="nav-link {{ Route::is('admin.doctors.create') ? 'active':'' }}">
-                     <p>Add Doctor</p>
-                  </a>
-               </li>
             </ul>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.doctor-bookings.index')}}" class="nav-link {{ Route::is('admin.doctor-bookings.*') ? 'active':'' }}">
+               <i class="nav-icon fas fa-calendar-check"></i>
+               <p>Doctor Bookings</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.doctor-bookings.analytics')}}" class="nav-link {{ Route::is('admin.doctor-bookings.analytics') ? 'active':'' }}">
+               <i class="nav-icon fas fa-chart-bar"></i>
+               <p>Doctor Analytics</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.support.index')}}" class="nav-link {{ Route::is('admin.support.*') ? 'active':'' }}">
+               <i class="nav-icon fas fa-headset"></i>
+               <p>Support Inbox</p>
+            </a>
          </li>
          <li class="nav-item {{ Route::is('admin.departments.*') ? 'menu-open':'' }}">
             <a href="#" class="nav-link ">
@@ -333,6 +378,7 @@
                </li>
             </ul>
          </li>
+         @endif
       </ul>
       <!--end::Sidebar Menu-->
       </nav>

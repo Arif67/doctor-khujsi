@@ -10,7 +10,13 @@ class DefaultController extends Controller
 {
     public function contactMessageStore(ContactMsgRequest $request)
     {
-        ContactMessage::create($request->validated());
+        ContactMessage::create([
+            ...$request->validated(),
+            'subject' => 'Website contact',
+            'type' => 'public',
+            'priority' => 'normal',
+            'status' => 'open',
+        ]);
 
         return back()->with('success', 'Thank you for contacting us!');
     }

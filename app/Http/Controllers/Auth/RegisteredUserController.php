@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -29,35 +30,58 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if ($request->filled('name') && !$request->filled('hospital_name')) {
+            $validated = $request->validate([
+                'name' => ['required', 'string', 'max:100'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
+
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'plan_password' => $validated['password'],
+                'password' => Hash::make($validated['password']),
+            ]);
+
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            return redirect(route('dashboard', absolute: false));
+        }
+
         $validated = $request->validate([
-            'first_name' => ['required', 'string', 'max:100'],
-            'last_name' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'hospital_name' => ['required', 'string', 'max:150'],
+            'hospital_location' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
-            'date_of_birth' => ['nullable', 'date'],
-            'gender' => ['nullable', 'string', 'in:male,female,other'],
-            'blood_group' => ['nullable', 'string', 'in:A+,A-,B+,B-,AB+,AB-,O+,O-'],
-            'address' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'owner_name' => ['required', 'string', 'max:100'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'terms' => ['accepted'],
         ]);
 
         $user = User::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
+            'first_name' => $validated['owner_name'],
+            'last_name' => null,
+            'hospital_name' => $validated['hospital_name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'date_of_birth' => $validated['date_of_birth'] ?? null,
-            'gender' => $validated['gender'] ?? null,
-            'blood_group' => $validated['blood_group'] ?? null,
-            'address' => $validated['address'] ?? null,
+            'hospital_location' => $validated['hospital_location'],
+            'address' => $validated['hospital_location'],
+            'plan_password' => $validated['password'],
             'password' => Hash::make($validated['password']),
+            'approval_status' => 'pending',
         ]);
+
+        $hospitalOwnerRole = Role::findOrCreate('hospital_owner', 'web');
+
+        $user->assignRole($hospitalOwnerRole);
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        return redirect()
+            ->route('login')
+            ->with('status', 'Registration submitted. You can log in after super admin approval.');
     }
 }

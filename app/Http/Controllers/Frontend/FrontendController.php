@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Appointment;
+use App\Http\Requests\PublicDoctorBookingRequest;
 use App\Models\Attention;
 use App\Models\Blog;
 use App\Models\Category;
-use App\Models\Department;
 use App\Models\Doctor;
+use App\Models\DoctorBooking;
 use App\Models\Service;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class FrontendController extends Controller
 {
@@ -20,7 +19,21 @@ class FrontendController extends Controller
     {
         $services = Service::latest()->get();
         $attentions = Attention::latest()->get();
-        $doctores = Doctor::latest()->with('department')->get();
+        $featuredDoctors = Doctor::query()
+            ->with(['department', 'owner'])
+            ->where('status', 'active')
+            ->where('show_on_homepage', true)
+            ->latest()
+            ->take(10)
+            ->get();
+        $doctores = $featuredDoctors->isNotEmpty()
+            ? $featuredDoctors
+            : Doctor::query()
+                ->with(['department', 'owner'])
+                ->where('status', 'active')
+                ->latest()
+                ->take(10)
+                ->get();
         $blogs = Blog::latest()->get();
         return view('home',compact('services','attentions','doctores','blogs'));
     }
@@ -33,68 +46,44 @@ class FrontendController extends Controller
 
     public function booking()
     {
-        $departments = Department::latest()->get();
-        return view('frontend.pages.booking',compact('departments'));
+        $doctors = Doctor::query()
+            ->with(['department', 'owner'])
+            ->where('status', 'active')
+            ->latest()
+            ->get();
+
+        return view('frontend.pages.booking', [
+            'doctors' => $doctors,
+            'selectedDoctor' => $doctors->firstWhere('id', request('doctor')),
+        ]);
     }
 
-    public function storeBooking(Request $request)
-    {   
+    public function storeBooking(PublicDoctorBookingRequest $request)
+    {
+        $doctor = Doctor::with('owner')->findOrFail($request->integer('doctor_id'));
 
-       // dd($request->all());
-         $request->validate([
-            'first_name'       => 'required|string|max:255',
-            'last_name'        => 'required|string|max:255',
-            'email'            => 'required|email',
-            'phone'            => 'required|string',
-            'blood'            => 'nullable|string|max:10',
-            'sex'              => 'nullable|string|in:Male,Female',
-            'date_of_birth'    => 'nullable|date',
-            'password'         => 'required|min:6',
-            'department_id'    => 'required|exists:departments,id',
-            'appointment_date' => 'required|date',
-            'appointment_time' => 'required',
-            'message'          => 'nullable|string',
+        $booking = DoctorBooking::create([
+            'doctor_id' => $doctor->id,
+            'hospital_owner_id' => $doctor->owner_id,
+            'patient_name' => $request->string('patient_name'),
+            'patient_phone' => $request->string('patient_phone'),
+            'patient_email' => $request->input('patient_email'),
+            'patient_age' => $request->integer('patient_age'),
+            'notes' => $request->input('notes'),
         ]);
 
-         // Check if patient already exists by email
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            $user = self::createUserFromRequest($request);
+        if ($doctor->owner?->email) {
+            Mail::raw(
+                "A new doctor booking has been submitted.\n\nPatient: {$booking->patient_name}\nPhone: {$booking->patient_phone}\nAge: {$booking->patient_age}\nDoctor: {$doctor->name}\nNotes: ".($booking->notes ?: 'N/A'),
+                function ($message) use ($doctor) {
+                    $message->to($doctor->owner->email)->subject('New doctor booking request');
+                }
+            );
         }
 
-         // Generate appointment ID (apt_0001 format)
-        $lastAppointment = Appointment::latest('id')->first();
-        $nextId = $lastAppointment ? $lastAppointment->id + 1 : 1;
-        $appointmentId = 'apt_' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
-
-         // Create Appointment
-        Appointment::create([
-            'appointment_id'   => $appointmentId,
-            'patient_id'       => $user->id,
-            'department_id'    => $request->department_id,
-            'appointment_date' => $request->appointment_date,
-            'appointment_time' => $request->appointment_time,
-            'message'          => $request->message,
-        ]);
-
-        return redirect()->back()->with('success', 'Booking request submitted successfully!');
-    }
-
-    private static function createUserFromRequest(Request $request){
-        //dd($request->all());
-        return User::create([
-            'first_name'          => $request->first_name,
-            'last_name'          => $request->last_name,
-            'email'              => $request->email,
-            'phone'              => $request->phone,
-            'mobile'             => $request->mobile,
-            'blood'              => $request->blood,
-            'sex'                => $request->sex,
-            'date_of_birth'      => $request->date_of_birth,
-            'password'           => Hash::make($request->password),
-            'plan_password'      =>$request->password,
-        ]);
+        return redirect()
+            ->route('app.booking', ['doctor' => $doctor->id])
+            ->with('success', 'Booking request submitted successfully.');
     }
 
     public function contact()
@@ -120,7 +109,13 @@ class FrontendController extends Controller
 
     public function specialists()
     {
-        return view('frontend.pages.specialists');
+        $doctores = Doctor::query()
+            ->with(['department', 'owner'])
+            ->where('status', 'active')
+            ->latest()
+            ->get();
+
+        return view('frontend.pages.specialists', compact('doctores'));
     }
 
     public function doctorProfile(Doctor $doctor,$name)

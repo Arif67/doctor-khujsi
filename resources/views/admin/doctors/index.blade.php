@@ -4,7 +4,14 @@
 <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 lg:p-8 overflow-x-auto">
     <!-- Header -->
     <div class="flex flex-row justify-between items-center mb-4">
-        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-2 sm:mb-0">Doctors</h2>
+        <div>
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-1">
+                {{ auth()->user()?->hasRole('hospital_owner') ? 'My Doctors' : 'Doctors' }}
+            </h2>
+            <p class="text-sm text-gray-500 mb-0">
+                {{ auth()->user()?->hasRole('hospital_owner') ? 'Manage the doctors currently assigned to your hospital.' : 'Manage all doctors across the platform.' }}
+            </p>
+        </div>
         <a href="{{ route('admin.doctors.create') }}" 
            class="flex flex-row gap-2 items-center px-4 sm:px-5 py-2 bg-indigo-600 text-white text-sm sm:text-base font-medium rounded shadow hover:bg-indigo-700 transition">
             <i class="fas fa-plus"></i>
@@ -24,6 +31,9 @@
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    @unless(auth()->user()?->hasRole('hospital_owner'))
+                        <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Hospital</th>
+                    @endunless
                     <th class="px-3 py-2 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-3 py-2 text-center text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
@@ -49,6 +59,9 @@ $(function(){
             {data:'email',name:'email'},
             {data:'phone',name:'phone'},
             {data:'department',name:'department'},
+            @unless(auth()->user()?->hasRole('hospital_owner'))
+            {data:'hospital',name:'hospital',orderable:false,searchable:false},
+            @endunless
             {data:'status',name:'status',render: function(data,type,row){
                 if(data == 'active'){
                     return '<span class="px-2 py-1 rounded text-white bg-green-600 text-xs sm:text-sm">Active</span>';

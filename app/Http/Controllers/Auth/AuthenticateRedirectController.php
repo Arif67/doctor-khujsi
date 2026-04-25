@@ -14,6 +14,8 @@ class AuthenticateRedirectController extends Controller
             $user = Auth::user();
             if ($user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard');
+            } elseif ($user->hasRole('hospital_owner')) {
+                return redirect()->route('admin.dashboard');
             } elseif ($user->hasRole('doctor')) {
                 return redirect()->route('doctor.dashboard');
             } elseif ($user->hasRole('patient')) {

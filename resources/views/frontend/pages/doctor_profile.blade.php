@@ -185,49 +185,16 @@
                 <div class="col-lg-5 mb-4 mb-lg-0">
                     <div class="consultation-form">
                         <h4>Book a Consultation:</h4>
-                        <form>
-                            <div class="mb-3">
-                                <label for="services" class="form-label">Services</label>
-                                <select class="form-select" id="services">
-                                    <option selected>Services Name</option>
-                                    <option value="1">General Checkup</option>
-                                    <option value="2">Dental Care</option>
-                                    <option value="3">Cardiology</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="yourName" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="yourName" placeholder="Your Name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="yourPhone" class="form-label">Your Phone</label>
-                                <input type="tel" class="form-control" id="yourPhone" placeholder="Your Phone Number">
-                            </div>
-                            <div class="mb-3">
-                                <label for="selectDate" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="selectDate">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label">Time</label>
-                                <div class="row">
-                                    <div class="col">
-                                        <select class="form-select">
-                                            <option selected>03:00</option>
-                                            <option>04:00</option>
-                                            <option>05:00</option>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-select">
-                                            <option>03:00</option>
-                                            <option selected>04:00</option>
-                                            <option>05:00</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-book">Book Your Appointment <i class="fas fa-arrow-right"></i></button>
-                        </form>
+                        <p class="text-muted">Submit a simple booking request without creating a patient account.</p>
+                        <div class="mb-3">
+                            <strong>Hospital:</strong> {{ $doctor->owner?->hospital_name ?? 'Hospital not assigned' }}
+                        </div>
+                        <div class="mb-4">
+                            <strong>Speciality:</strong> {{ $doctor->speciality ?: ($doctor->department?->name ?? 'Specialist') }}
+                        </div>
+                        <a href="{{ route('app.booking', ['doctor' => $doctor->id]) }}" class="btn btn-book">
+                            Book This Doctor <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
 

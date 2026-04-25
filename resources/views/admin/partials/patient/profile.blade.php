@@ -3,7 +3,7 @@
         @php
             $photo = $user->photo 
                 ? asset('storage/'.$user->photo) 
-                : asset('assets/img/' . $user->gender . '.jpg');
+                : asset('assets/img/default.png');
         @endphp
         <img src="{{ $photo }}" class="rounded-circle shadow-sm m-auto" style="width:100px;height:92px;" alt="Patient">
         <h5 class="mt-3 mb-0">{{ $user->name }}</h5>

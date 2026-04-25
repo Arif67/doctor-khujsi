@@ -15,29 +15,105 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         $this->call(RolePermissionSeeder::class);
         $this->call(PagesSeeder::class);
 
-
-       $testUser = User::factory()->create([
-            'first_name' => 'Patient',
-            'email' => 'patient@gmail.com',
-            'password' => Hash::make('12345678'),
-            'plan_password' => '12345678'
-        ]);
-
-        $adminUser = User::factory()->create([
-            'first_name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('12345678'),
-            'plan_password' => '12345678'
-        ]);
-
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $hospitalOwnerRole = Role::firstOrCreate(['name' => 'hospital_owner', 'guard_name' => 'web']);
         $userRole = Role::firstOrCreate(['name' => 'patient', 'guard_name' => 'web']);
-        $adminUser->assignRole($adminRole);
-        $testUser->assignRole($userRole);
+
+        $patientUser = User::updateOrCreate(
+            ['email' => 'patient@gmail.com'],
+            [
+                'first_name' => 'Patient',
+                'last_name' => 'Demo',
+                'phone' => '01710000000',
+                'address' => 'Dhaka, Bangladesh',
+                'password' => Hash::make('12345678'),
+                'plan_password' => '12345678',
+                'email_verified_at' => now(),
+            ]
+        );
+        $patientUser->syncRoles([$userRole]);
+
+        $adminUsers = [
+            [
+                'first_name' => 'Super',
+                'last_name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'phone' => '01710000001',
+            ],
+            [
+                'first_name' => 'Main',
+                'last_name' => 'Admin',
+                'email' => 'superadmin1@gmail.com',
+                'phone' => '01710000002',
+            ],
+            [
+                'first_name' => 'Support',
+                'last_name' => 'Admin',
+                'email' => 'superadmin2@gmail.com',
+                'phone' => '01710000003',
+            ],
+        ];
+
+        foreach ($adminUsers as $adminData) {
+            $adminUser = User::updateOrCreate(
+                ['email' => $adminData['email']],
+                [
+                    ...$adminData,
+                    'address' => 'Dhaka, Bangladesh',
+                    'password' => Hash::make('12345678'),
+                    'plan_password' => '12345678',
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            $adminUser->syncRoles([$adminRole]);
+        }
+
+        $hospitalUsers = [
+            [
+                'first_name' => 'City',
+                'last_name' => 'Hospital',
+                'email' => 'hospital1@gmail.com',
+                'phone' => '01710000011',
+                'hospital_name' => 'City Care Hospital',
+                'hospital_location' => 'Dhanmondi, Dhaka',
+            ],
+            [
+                'first_name' => 'Green',
+                'last_name' => 'Life',
+                'email' => 'hospital2@gmail.com',
+                'phone' => '01710000012',
+                'hospital_name' => 'Green Life Medical',
+                'hospital_location' => 'Uttara, Dhaka',
+            ],
+            [
+                'first_name' => 'Popular',
+                'last_name' => 'Diagnostic',
+                'email' => 'hospital3@gmail.com',
+                'phone' => '01710000013',
+                'hospital_name' => 'Popular Diagnostic Center',
+                'hospital_location' => 'Mirpur, Dhaka',
+            ],
+        ];
+
+        foreach ($hospitalUsers as $hospitalData) {
+            $hospitalUser = User::updateOrCreate(
+                ['email' => $hospitalData['email']],
+                [
+                    ...$hospitalData,
+                    'address' => 'Dhaka, Bangladesh',
+                    'password' => Hash::make('12345678'),
+                    'plan_password' => '12345678',
+                    'approval_status' => 'approved',
+                    'approved_at' => now(),
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            $hospitalUser->syncRoles([$hospitalOwnerRole]);
+        }
     }
 }

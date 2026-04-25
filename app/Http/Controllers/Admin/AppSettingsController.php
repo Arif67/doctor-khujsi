@@ -82,7 +82,13 @@ class AppSettingsController extends Controller
     public function contactMessages(Request $request)
     {
          if ($request->ajax()) {
-            $data = ContactMessage::latest()->get();
+            $data = ContactMessage::query()
+                ->where(function ($query) {
+                    $query->where('type', 'public')
+                        ->orWhereNull('type');
+                })
+                ->latest()
+                ->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

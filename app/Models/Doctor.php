@@ -10,12 +10,16 @@ class Doctor extends Model
 {
     use HasFactory;
      protected $fillable = [
+        'owner_id',
         'name',
         'email',
         'phone',
         'office_phone',
         'department_id',
+        'speciality',
+        'experience',
         'status',
+        'show_on_homepage',
         'photo',
         'description',
         'educations', 'shifts', 'social_links'
@@ -29,5 +33,15 @@ class Doctor extends Model
 
     public function department() {
         return $this->belongsTo(Department::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(DoctorBooking::class);
     }
 }

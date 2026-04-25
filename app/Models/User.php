@@ -19,8 +19,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'name',
         'first_name',
         'last_name',
+        'hospital_name',
         'phone',
         'email',
         'mobile',
@@ -30,8 +32,12 @@ class User extends Authenticatable
         'date_of_birth',
         'photo',
         'address',
+        'hospital_location',
         'plan_password',        
         'password',
+        'approval_status',
+        'approved_at',
+        'rejection_reason',
     ];
 
     /**
@@ -55,7 +61,32 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'dob' => 'date',
+            'approved_at' => 'datetime',
         ];
+    }
+
+    public function getNameAttribute(): string
+    {
+        return trim(implode(' ', array_filter([$this->first_name, $this->last_name])));
+    }
+
+    public function setNameAttribute(?string $value): void
+    {
+        $value = trim((string) $value);
+        $parts = preg_split('/\s+/', $value, 2) ?: [];
+
+        $this->attributes['first_name'] = $parts[0] ?? '';
+        $this->attributes['last_name'] = $parts[1] ?? null;
+    }
+
+    public function doctors()
+    {
+        return $this->hasMany(Doctor::class, 'owner_id');
+    }
+
+    public function doctorBookings()
+    {
+        return $this->hasMany(DoctorBooking::class, 'hospital_owner_id');
     }
 
     public function favorites()
