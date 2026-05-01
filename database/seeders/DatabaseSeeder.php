@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
         $this->call(PagesSeeder::class);
+        $this->call(BangladeshLocationSeeder::class);
+        $this->call(ServiceSeeder::class);
 
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $hospitalOwnerRole = Role::firstOrCreate(['name' => 'hospital_owner', 'guard_name' => 'web']);
@@ -80,6 +82,9 @@ class DatabaseSeeder extends Seeder
                 'phone' => '01710000011',
                 'hospital_name' => 'City Care Hospital',
                 'hospital_location' => 'Dhanmondi, Dhaka',
+                'district' => 'Dhaka',
+                'thana' => 'Dhanmondi',
+                'area' => 'Dhanmondi',
             ],
             [
                 'first_name' => 'Green',
@@ -88,6 +93,9 @@ class DatabaseSeeder extends Seeder
                 'phone' => '01710000012',
                 'hospital_name' => 'Green Life Medical',
                 'hospital_location' => 'Uttara, Dhaka',
+                'district' => 'Dhaka',
+                'thana' => 'Uttara',
+                'area' => 'Uttara East',
             ],
             [
                 'first_name' => 'Popular',
@@ -96,6 +104,9 @@ class DatabaseSeeder extends Seeder
                 'phone' => '01710000013',
                 'hospital_name' => 'Popular Diagnostic Center',
                 'hospital_location' => 'Mirpur, Dhaka',
+                'district' => 'Dhaka',
+                'thana' => 'Mirpur',
+                'area' => 'Mirpur',
             ],
         ];
 
@@ -115,5 +126,7 @@ class DatabaseSeeder extends Seeder
 
             $hospitalUser->syncRoles([$hospitalOwnerRole]);
         }
+
+        $this->call(HospitalDemoContentSeeder::class);
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Page;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PagesSeeder extends Seeder
@@ -17,10 +16,10 @@ class PagesSeeder extends Seeder
         $pages = ['Home', 'About', 'Service', 'Specialists', 'Blog', 'Contact'];
 
         foreach ($pages as $page) {
-            DB::table('pages')->insert([
-                'name' => $page,
-                'slug' => Str::slug($page), // Automatically converts to lowercase and hyphenated
-            ]);
+            Page::updateOrCreate(
+                ['slug' => Str::slug($page)],
+                ['name' => $page]
+            );
         }
     }
 }

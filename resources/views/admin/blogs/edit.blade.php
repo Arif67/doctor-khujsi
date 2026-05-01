@@ -34,9 +34,14 @@
         @method('PUT')
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label class="block font-semibold mb-1">Title</label>
-                <input type="text" name="title" class="w-full border px-3 py-2 rounded" value="{{ $blog->title }}" required>
+                <label class="block font-semibold mb-1">Title (English)</label>
+                <input type="text" name="title" class="w-full border px-3 py-2 rounded" value="{{ old('title', $blog->getRawOriginal('title')) }}" required>
                  @error('title') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block font-semibold mb-1">Title (Bangla)</label>
+                <input type="text" name="title_bn" class="w-full border px-3 py-2 rounded" value="{{ old('title_bn', $blog->getRawOriginal('title_bn')) }}">
+                 @error('title_bn') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block font-semibold mb-1">Thumbnail Image</label>
@@ -61,15 +66,29 @@
                 @error('category_id') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
             </div>
         </div>
-        <div>
-            <label class="block font-semibold mb-1">Short Description</label>
-            <textarea name="short_description" class="w-full border px-3 py-2 rounded" required>{{ $blog->short_description }}</textarea>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+            <label class="block font-semibold mb-1">Short Description (English)</label>
+            <textarea name="short_description" class="w-full border px-3 py-2 rounded">{{ old('short_description', $blog->getRawOriginal('short_description')) }}</textarea>
         </div>
-        <div>
-            <label class="block font-semibold mb-1">Text</label>
-            <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded" required>
-                {!! $blog->content !!}
+            <div>
+            <label class="block font-semibold mb-1">Short Description (Bangla)</label>
+            <textarea name="short_description_bn" class="w-full border px-3 py-2 rounded">{{ old('short_description_bn', $blog->getRawOriginal('short_description_bn')) }}</textarea>
+        </div>
+        </div>
+        <div class="grid grid-cols-1 gap-4">
+            <div>
+            <label class="block font-semibold mb-1">Text (English)</label>
+            <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded">
+                {!! old('description', $blog->getRawOriginal('content')) !!}
             </textarea>
+        </div>
+            <div>
+            <label class="block font-semibold mb-1">Text (Bangla)</label>
+            <textarea name="description_bn" id="summernote_bn" class="w-full border px-3 py-2 rounded">
+                {!! old('description_bn', $blog->getRawOriginal('content_bn')) !!}
+            </textarea>
+        </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -80,18 +99,34 @@
                 </select>
             </div>
             <div>
-                <label class="block">Meta Title</label>
-                <input type="text" name="meta_title" class="w-full border px-3 py-2 rounded" value="{{ $blog->meta_title }}">
+                <label class="block">Meta Title (English)</label>
+                <input type="text" name="meta_title" class="w-full border px-3 py-2 rounded" value="{{ old('meta_title', $blog->getRawOriginal('meta_title')) }}">
+            </div>
+            <div>
+                <label class="block">Meta Title (Bangla)</label>
+                <input type="text" name="meta_title_bn" class="w-full border px-3 py-2 rounded" value="{{ old('meta_title_bn', $blog->getRawOriginal('meta_title_bn')) }}">
             </div>
         </div>
         
-        <div>
-            <label class="block">Meta Description</label>
-            <textarea name="meta_description" class="w-full border px-3 py-2 rounded">{{ $blog->meta_description }}</textarea>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+            <label class="block">Meta Description (English)</label>
+            <textarea name="meta_description" class="w-full border px-3 py-2 rounded">{{ old('meta_description', $blog->getRawOriginal('meta_description')) }}</textarea>
         </div>
-        <div>
-            <label class="block">Meta Keywords</label>
-            <input type="text" name="meta_keywords" class="w-full border px-3 py-2 rounded" value="{{ $blog->meta_keywords }}">
+            <div>
+            <label class="block">Meta Description (Bangla)</label>
+            <textarea name="meta_description_bn" class="w-full border px-3 py-2 rounded">{{ old('meta_description_bn', $blog->getRawOriginal('meta_description_bn')) }}</textarea>
+        </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+            <label class="block">Meta Keywords (English)</label>
+            <input type="text" name="meta_keywords" class="w-full border px-3 py-2 rounded" value="{{ old('meta_keywords', $blog->getRawOriginal('meta_keywords')) }}">
+        </div>
+            <div>
+            <label class="block">Meta Keywords (Bangla)</label>
+            <input type="text" name="meta_keywords_bn" class="w-full border px-3 py-2 rounded" value="{{ old('meta_keywords_bn', $blog->getRawOriginal('meta_keywords_bn')) }}">
+        </div>
         </div>
         <div>
             <button type="submit" 
@@ -108,6 +143,19 @@
    $(document).ready(function(){
      $('#summernote').summernote({
         placeholder: 'Write your blog content here...',
+        tabsize: 2,
+        height: 300,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline','clear']],
+            ['fontname', ['fontname']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['codeview']]
+        ]
+    });
+    $('#summernote_bn').summernote({
+        placeholder: 'বাংলা ব্লগ কনটেন্ট এখানে লিখুন...',
         tabsize: 2,
         height: 300,
         toolbar: [

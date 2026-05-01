@@ -60,6 +60,58 @@
                <p>Booking Analytics</p>
             </a>
          </li>
+         <li class="nav-item {{ Route::is('admin.services.*') ? 'menu-open':'' }}">
+            <a href="#" class="nav-link">
+               <i class="nav-icon fas fa-briefcase-medical"></i>
+               <p>
+                  Services
+                  <i class="nav-arrow bi bi-chevron-right"></i>
+               </p>
+            </a>
+            <ul class="nav nav-treeview">
+               <li class="nav-item">
+                  <a href="{{route('admin.services.index')}}" class="nav-link {{ Route::is('admin.services.index') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>My Services</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="{{route('admin.services.create')}}" class="nav-link {{ Route::is('admin.services.create') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Add Service</p>
+                  </a>
+               </li>
+            </ul>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.hospital.profile.edit')}}" class="nav-link {{ Route::is('admin.hospital.profile.*') ? 'active':'' }}">
+               <i class="nav-icon fas fa-hospital-user"></i>
+               <p>Hospital Profile</p>
+            </a>
+         </li>
+         <li class="nav-item {{ Route::is('admin.hospital-galleries.*') ? 'menu-open':'' }}">
+            <a href="#" class="nav-link">
+               <i class="nav-icon fas fa-images"></i>
+               <p>
+                  Hospital Gallery
+                  <i class="nav-arrow bi bi-chevron-right"></i>
+               </p>
+            </a>
+            <ul class="nav nav-treeview">
+               <li class="nav-item">
+                  <a href="{{route('admin.hospital-galleries.index')}}" class="nav-link {{ Route::is('admin.hospital-galleries.index') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Gallery Images</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="{{route('admin.hospital-galleries.create')}}" class="nav-link {{ Route::is('admin.hospital-galleries.create') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Add Image</p>
+                  </a>
+               </li>
+            </ul>
+         </li>
          <li class="nav-item">
             <a href="{{route('admin.support.index')}}" class="nav-link {{ Route::is('admin.support.*') ? 'active':'' }}">
                <i class="nav-icon fas fa-headset"></i>
@@ -101,6 +153,12 @@
             <a href="{{route('admin.support.index')}}" class="nav-link {{ Route::is('admin.support.*') ? 'active':'' }}">
                <i class="nav-icon fas fa-headset"></i>
                <p>Support Inbox</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="{{route('admin.hospital-reviews.index')}}" class="nav-link {{ Route::is('admin.hospital-reviews.*') ? 'active':'' }}">
+               <i class="nav-icon fas fa-star-half-alt"></i>
+               <p>Hospital Reviews</p>
             </a>
          </li>
          <li class="nav-item {{ Route::is('admin.departments.*') ? 'menu-open':'' }}">
@@ -146,6 +204,36 @@
                   <a href="{{route('admin.patients.create')}}" class="nav-link {{ Route::is('admin.patients.create') ? 'active':'' }}">
                      <i class="nav-icon bi bi-circle"></i>
                      <p>Add Patient</p>
+                  </a>
+               </li>
+            </ul>
+         </li>
+         <li class="nav-header">Location Managment</li>
+         <li class="nav-item {{ Route::is('admin.districts.*') || Route::is('admin.thanas.*') || Route::is('admin.areas.*') ? 'menu-open':'' }}">
+            <a href="#" class="nav-link">
+               <i class="nav-icon fas fa-map-marked-alt"></i>
+               <p>
+                  Locations
+                  <i class="nav-arrow bi bi-chevron-right"></i>
+               </p>
+            </a>
+            <ul class="nav nav-treeview">
+               <li class="nav-item">
+                  <a href="{{ route('admin.districts.index') }}" class="nav-link {{ Route::is('admin.districts.*') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Districts</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="{{ route('admin.thanas.index') }}" class="nav-link {{ Route::is('admin.thanas.*') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Thanas</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="{{ route('admin.areas.index') }}" class="nav-link {{ Route::is('admin.areas.*') ? 'active':'' }}">
+                     <i class="nav-icon bi bi-circle"></i>
+                     <p>Areas</p>
                   </a>
                </li>
             </ul>

@@ -16,9 +16,14 @@
         @csrf @method('PUT')
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label class="block font-semibold mb-1">Name</label>
-                <input type="text" name="name" value="{{ $category->name }}" class="w-full border px-3 py-2 rounded" required>
+                <label class="block font-semibold mb-1">Name (English)</label>
+                <input type="text" name="name" value="{{ old('name', $category->getRawOriginal('name')) }}" class="w-full border px-3 py-2 rounded" required>
                  @error('name') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block font-semibold mb-1">Name (Bangla)</label>
+                <input type="text" name="name_bn" value="{{ old('name_bn', $category->getRawOriginal('name_bn')) }}" class="w-full border px-3 py-2 rounded">
+                 @error('name_bn') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block font-semibold mb-1">Parent Category</label>
@@ -31,10 +36,17 @@
                 @error('parent_id') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
             </div>
         </div>
-        <div>
-            <label class="block font-semibold mb-1">Description</label>
-            <textarea name="description" class="w-full border px-3 py-2 rounded">{{ $category->description }}</textarea>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+            <label class="block font-semibold mb-1">Description (English)</label>
+            <textarea name="description" class="w-full border px-3 py-2 rounded">{{ old('description', $category->getRawOriginal('description')) }}</textarea>
             @error('description') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
+            <div>
+            <label class="block font-semibold mb-1">Description (Bangla)</label>
+            <textarea name="description_bn" class="w-full border px-3 py-2 rounded">{{ old('description_bn', $category->getRawOriginal('description_bn')) }}</textarea>
+            @error('description_bn') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
         </div>
         
         <div>

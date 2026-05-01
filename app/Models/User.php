@@ -23,6 +23,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'hospital_name',
+        'about_hospital',
         'phone',
         'email',
         'mobile',
@@ -33,6 +34,10 @@ class User extends Authenticatable
         'photo',
         'address',
         'hospital_location',
+        'privacy_policy',
+        'district',
+        'thana',
+        'area',
         'plan_password',        
         'password',
         'approval_status',
@@ -60,7 +65,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'dob' => 'date',
+            'date_of_birth' => 'date',
             'approved_at' => 'datetime',
         ];
     }
@@ -89,6 +94,21 @@ class User extends Authenticatable
         return $this->hasMany(DoctorBooking::class, 'hospital_owner_id');
     }
 
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'owner_id');
+    }
+
+    public function hospitalGalleries()
+    {
+        return $this->hasMany(HospitalGallery::class, 'owner_id');
+    }
+
+    public function hospitalReviews()
+    {
+        return $this->hasMany(HospitalReview::class, 'hospital_owner_id');
+    }
+
     public function favorites()
     {
         return $this->belongsToMany(Doctor::class, 'favorites', 'patient_id', 'doctor_id');
@@ -113,5 +133,15 @@ class User extends Authenticatable
     }
     public function serviceHistoryCount(){
         return $this->serviceHistory()->count();
+    }
+
+    public function patientReports()
+    {
+        return $this->hasMany(PatientReport::class, 'patient_id', 'id');
+    }
+
+    public function patientPrescriptions()
+    {
+        return $this->hasMany(PatientPrescription::class, 'patient_id', 'id');
     }
 }

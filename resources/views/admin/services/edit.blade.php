@@ -9,24 +9,40 @@
         </a>
     </div>
     <hr class="mb-5">
-    <form action="{{ route('admin.services.update',$service->id) }}" method="POST">
+    <form action="{{ route('admin.services.update',$service->id) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
         <div class="mb-4">
-            <label class="block mb-1 font-semibold">Icon (HTML Tag)</label>
-            <input type="text" name="icon" value="{{ old('icon',$service->icon) }}" 
-                   class="w-full border p-2 rounded">
-            @error('icon') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            <label class="block mb-1 font-semibold">Image</label>
+            <input type="file" name="image" class="w-full border p-2 rounded" accept="image/*">
+            @error('image') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+
+            @if ($service->image)
+                <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->title }}" class="w-24 h-24 rounded object-cover mt-3">
+            @endif
         </div>
         <div class="mb-4">
-            <label class="block mb-1 font-semibold">Title</label>
-            <input type="text" name="title" value="{{ old('title',$service->title) }}" 
+            <label class="block mb-1 font-semibold">Title (English)</label>
+            <input type="text" name="title" value="{{ old('title',$service->getRawOriginal('title')) }}" 
                    class="w-full border p-2 rounded">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
-       <div class="mb-4">
-            <label class="block mb-1 font-semibold">Description</label>
-            <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded" required>{{ $service->description}}</textarea>
+        <div class="mb-4">
+            <label class="block mb-1 font-semibold">Title (Bangla)</label>
+            <input type="text" name="title_bn" value="{{ old('title_bn',$service->getRawOriginal('title_bn')) }}" 
+                   class="w-full border p-2 rounded">
+            @error('title_bn') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="mb-4">
+            <label class="block mb-1 font-semibold">Description (English)</label>
+            <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded" required>{{ old('description', $service->getRawOriginal('description')) }}</textarea>
             @error('description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+       </div>
+        <div class="mb-4">
+            <label class="block mb-1 font-semibold">Description (Bangla)</label>
+            <textarea name="description_bn" id="summernote_bn" class="w-full border px-3 py-2 rounded">{{ old('description_bn', $service->getRawOriginal('description_bn')) }}</textarea>
+            @error('description_bn') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+       </div>
        </div>
         <div>
             <button type="submit" 
@@ -43,6 +59,19 @@
    $(document).ready(function(){
     $('#summernote').summernote({
         placeholder: 'Write your blog content here...',
+        tabsize: 2,
+        height: 300,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline','clear']],
+            ['fontname', ['fontname']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['codeview']]
+        ]
+    });
+    $('#summernote_bn').summernote({
+        placeholder: 'বাংলা সার্ভিস কনটেন্ট এখানে লিখুন...',
         tabsize: 2,
         height: 300,
         toolbar: [

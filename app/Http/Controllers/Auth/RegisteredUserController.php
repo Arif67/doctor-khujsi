@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\LocationDistrict;
 use App\Models\User;
+use App\Support\BangladeshLocation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +22,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'districts' => LocationDistrict::query()->orderBy('name')->get(['id', 'name']),
+        ]);
     }
 
     /**
@@ -54,12 +58,20 @@ class RegisteredUserController extends Controller
         $validated = $request->validate([
             'hospital_name' => ['required', 'string', 'max:150'],
             'hospital_location' => ['required', 'string', 'max:255'],
+            'district_id' => ['required', 'exists:location_districts,id'],
+            'thana_id' => ['required', 'exists:location_thanas,id'],
+            'area_id' => ['nullable', 'exists:location_areas,id'],
             'phone' => ['required', 'string', 'max:20'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'owner_name' => ['required', 'string', 'max:100'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'terms' => ['accepted'],
         ]);
+        $locations = BangladeshLocation::namesFromIds(
+            (int) $validated['district_id'],
+            (int) $validated['thana_id'],
+            isset($validated['area_id']) ? (int) $validated['area_id'] : null,
+        );
 
         $user = User::create([
             'first_name' => $validated['owner_name'],
@@ -68,7 +80,10 @@ class RegisteredUserController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'hospital_location' => $validated['hospital_location'],
-            'address' => $validated['hospital_location'],
+            'district' => $locations['district'],
+            'thana' => $locations['thana'],
+            'area' => $locations['area'],
+            'address' => BangladeshLocation::composeAddress($locations['district'], $locations['thana'], $locations['area']),
             'plan_password' => $validated['password'],
             'password' => Hash::make($validated['password']),
             'approval_status' => 'pending',

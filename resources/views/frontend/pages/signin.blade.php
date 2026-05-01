@@ -25,7 +25,7 @@
         display: flex;
         align-items: flex-start;
         background: transparent;
-        gap: 60px;
+        gap: 0;
         max-width: 1000px;
         width: 100%;
     }
@@ -259,12 +259,12 @@
 <div class="main-wrap">
     <div class="signin-container">
         <div class="signin-image">
-            <img src="https://i.postimg.cc/yN0NFzRH/image.png" alt="signin-image">
+            <img src="{{ asset('assets/img/register.jpg') }}" alt="{{ __('Hospital reception') }}">
         </div>
         
         <div class="signin-content">
-            <h1 class="signin-title">Welcome Back</h1>
-            <p class="signin-subtitle">Sign in to your account to access your healthcare dashboard and manage your appointments.</p>
+            <h1 class="signin-title">{{ __('Welcome Back') }}</h1>
+            <p class="signin-subtitle">{{ __('Sign in to your account to access your healthcare dashboard and manage your appointments.') }}</p>
             
             @if(session('success'))
                 <div class="alert alert-success">
@@ -284,28 +284,28 @@
                 @csrf
                 
                 <div class="form-group">
-                    <label for="email">Email Address <span class="required">*</span></label>
+                    <label for="email">{{ __('Email Address') }} <span class="required">*</span></label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password <span class="required">*</span></label>
+                    <label for="password">{{ __('Password') }} <span class="required">*</span></label>
                     <input type="password" id="password" name="password" required>
                 </div>
                 
                 <div class="form-options">
                     <label class="remember-me">
                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                        Remember me
+                        {{ __('Remember me') }}
                     </label>
-                    <a href="{{ route('password.request') }}" class="forgot-password">Forgot Password?</a>
+                    <a href="{{ route('password.request') }}" class="forgot-password">{{ __('Forgot Password?') }}</a>
                 </div>
                 
-                <button type="submit" class="signin-btn">Sign In</button>
+                <button type="submit" class="signin-btn">{{ __('Sign In') }}</button>
             </form>
             
             <div class="signup-link">
-                Don't have an account? <a href="{{ route('register') }}">Sign up here</a>
+                {{ __('Don\'t have an account?') }} <a href="{{ route('register') }}">{{ __('Sign up here') }}</a>
             </div>
         </div>
     </div>

@@ -8,6 +8,11 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DoctorBookingController;
 use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\HospitalGalleryController;
+use App\Http\Controllers\Admin\HospitalReviewController;
+use App\Http\Controllers\Admin\LocationAreaController;
+use App\Http\Controllers\Admin\LocationDistrictController;
+use App\Http\Controllers\Admin\LocationThanaController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\PagesSectionUpdateController;
 use App\Http\Controllers\Admin\PatientController;
@@ -17,11 +22,14 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SupportMessageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticateRedirectController;
 use App\Http\Controllers\Patient\DefaultController;
+use App\Http\Controllers\Patient\PrescriptionController;
+use App\Http\Controllers\Patient\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DefaultController as SiteDefaultController;
 use Illuminate\Support\Facades\Artisan;
@@ -38,6 +46,9 @@ Route::controller(FrontendController::class)
     Route::get('/about', 'about')->name('about');
     Route::get('/contact', 'contact')->name('contact');
     Route::get('/services', 'services')->name('services');
+    Route::get('/hospitals', 'hospitals')->name('hospitals');
+    Route::get('/hospitals/{hospital}/{slug}', 'hospitalDetails')->name('hospitals.show');
+    Route::post('/hospitals/{hospital}/{slug}/reviews', 'storeHospitalReview')->name('hospitals.reviews.store');
     Route::get('/specialists', 'specialists')->name('specialists');
     Route::get('/shop', 'shop')->name('shop');
     Route::get('/blog', 'blog')->name('blog');
@@ -68,6 +79,18 @@ Route::controller(FrontendController::class)
 });
 
 Route::post('/contact-message', [SiteDefaultController::class, 'contactMessageStore'])->name('app.contact.msg.store');
+Route::get('/language/{locale}', function (string $locale) {
+    abort_unless(in_array($locale, ['en', 'bn'], true), 404);
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('language.switch');
+
+Route::prefix('locations')->name('locations.')->group(function () {
+    Route::get('/districts/{district}/thanas', [LocationController::class, 'thanas'])->name('thanas');
+    Route::get('/thanas/{thana}/areas', [LocationController::class, 'areas'])->name('areas');
+});
 // Patient Route
 Route::prefix('patient')
 ->name('patient.')
@@ -77,8 +100,17 @@ Route::prefix('patient')
     Route::get('profile',[DefaultController::class,'profile'])->name('profile');
     Route::put('profile-update',[DefaultController::class,'profileUpdate'])->name('profile.update');
     Route::get('/appointments', [DefaultController::class,'appointments'])->name('appointments');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+    Route::get('/reports/{report}/download', [ReportController::class, 'download'])->name('reports.download');
+    Route::delete('/reports/{report}', [ReportController::class, 'destroy'])->name('reports.destroy');
+    Route::get('/prescriptions', [PrescriptionController::class, 'index'])->name('prescriptions.index');
+    Route::post('/prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
+    Route::get('/prescriptions/{prescription}/download', [PrescriptionController::class, 'download'])->name('prescriptions.download');
+    Route::delete('/prescriptions/{prescription}', [PrescriptionController::class, 'destroy'])->name('prescriptions.destroy');
     Route::get('/favorite-doctor', [DefaultController::class,'favoriteDoctor'])->name('favorite.doctor');
     Route::get('/service-history', [DefaultController::class,'serviceHistory'])->name('service.history');
+    Route::get('/timeline', [DefaultController::class,'timeline'])->name('timeline');
 
     Route::post('favorite-doctore/{id}',[DefaultController::class,'favoriteDcotore'])->name('favorite.doctore');
 });
@@ -117,9 +149,16 @@ Route::prefix('admin')
         Route::get('doctor-bookings-summary', [DoctorBookingController::class, 'summary'])->name('doctor-bookings.summary');
         Route::patch('doctor-bookings/{doctorBooking}/notes', [DoctorBookingController::class, 'updateNotes'])->name('doctor-bookings.update-notes');
         Route::patch('doctor-bookings/{doctorBooking}/status', [DoctorBookingController::class, 'updateStatus'])->name('doctor-bookings.update-status');
-        Route::get('support', [SupportMessageController::class, 'index'])->name('support.index');
-        Route::post('support', [SupportMessageController::class, 'store'])->name('support.store');
-        Route::patch('support/{supportMessage}/reply', [SupportMessageController::class, 'reply'])->name('support.reply');
+            Route::get('support', [SupportMessageController::class, 'index'])->name('support.index');
+            Route::post('support', [SupportMessageController::class, 'store'])->name('support.store');
+            Route::patch('support/{supportMessage}/reply', [SupportMessageController::class, 'reply'])->name('support.reply');
+            Route::get('hospital-reviews', [HospitalReviewController::class, 'index'])->name('hospital-reviews.index');
+            Route::patch('hospital-reviews/{hospitalReview}', [HospitalReviewController::class, 'update'])->name('hospital-reviews.update');
+            Route::delete('hospital-reviews/{hospitalReview}', [HospitalReviewController::class, 'destroy'])->name('hospital-reviews.destroy');
+            Route::resource('services', ServiceController::class);
+        Route::resource('hospital-galleries', HospitalGalleryController::class)->except(['show']);
+        Route::get('hospital-profile', [UserController::class, 'hospitalProfile'])->name('hospital.profile.edit');
+        Route::put('hospital-profile', [UserController::class, 'updateHospitalProfile'])->name('hospital.profile.update');
 
         Route::middleware('role:admin')->group(function () {
             Route::resource('roles', RoleController::class);
@@ -144,12 +183,20 @@ Route::prefix('admin')
             ->name('sections.')
             ->group(function(){
                 Route::put('home_hero',[PagesSectionUpdateController::class,'home_hero'])->name('home.hero.update');
+                Route::put('home_hero_slider',[PagesSectionUpdateController::class,'home_hero_slider'])->name('home.hero.slider.update');
+                Route::post('home_hero_slider/slides',[PagesSectionUpdateController::class,'storeHomeHeroSlide'])->name('home.hero.slider.store');
+                Route::put('home_hero_slider/slides/{slideIndex}',[PagesSectionUpdateController::class,'updateHomeHeroSlide'])->name('home.hero.slider.slide.update');
+                Route::delete('home_hero_slider/slides/{slideIndex}',[PagesSectionUpdateController::class,'destroyHomeHeroSlide'])->name('home.hero.slider.slide.destroy');
                 Route::put('home_freture',[PagesSectionUpdateController::class,'home_feature'])->name('home.feature.update');
                 Route::put('home_about_us',[PagesSectionUpdateController::class,'home_about_us'])->name('home.about_us.update');
+                Route::put('home_featured_hospitals',[PagesSectionUpdateController::class,'home_featured_hospitals'])->name('home.featured_hospitals.update');
+                Route::put('home_services',[PagesSectionUpdateController::class,'home_services'])->name('home.services.update');
             });
 
             Route::resource('patients', PatientController::class);
-            Route::resource('services', ServiceController::class);
+            Route::resource('districts', LocationDistrictController::class)->except(['show']);
+            Route::resource('thanas', LocationThanaController::class)->except(['show']);
+            Route::resource('areas', LocationAreaController::class)->except(['show']);
             Route::resource('attentions', AttentionController::class);
             Route::resource('categories', CategoryController::class);
             Route::resource('blogs', BlogController::class);

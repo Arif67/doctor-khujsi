@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DoctorRequest;
 use App\Models\Department;
 use App\Models\Doctor;
+use App\Models\LocationDistrict;
+use App\Support\BangladeshLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -69,7 +71,11 @@ class DoctorController extends Controller
     public function create()
     {
         $departments = Department::all();
-        return view('admin.doctors.create', compact('departments'));
+        return view('admin.doctors.create', [
+            'departments' => $departments,
+            'districts' => LocationDistrict::query()->orderBy('name')->get(['id', 'name']),
+            'locationSelection' => ['district_id' => null, 'thana_id' => null, 'area_id' => null],
+        ]);
     }
 
     /**
@@ -78,11 +84,20 @@ class DoctorController extends Controller
     public function store(DoctorRequest $request)
     {
         $data = $request->validated();
+        $locations = BangladeshLocation::namesFromIds(
+            $request->integer('district_id') ?: null,
+            $request->integer('thana_id') ?: null,
+            $request->integer('area_id') ?: null,
+        );
         $isHospitalOwner = Auth::user()?->hasRole('hospital_owner');
         $data['show_on_homepage'] = $isHospitalOwner ? false : $request->boolean('show_on_homepage');
         $data['owner_id'] = $isHospitalOwner
             ? Auth::id()
             : ($data['owner_id'] ?? null);
+        $data['district'] = $locations['district'];
+        $data['thana'] = $locations['thana'];
+        $data['area'] = $locations['area'];
+        unset($data['district_id'], $data['thana_id'], $data['area_id']);
 
         // --- Photo Upload ---
         if ($request->hasFile('photo')) {
@@ -120,7 +135,12 @@ class DoctorController extends Controller
     {
         $this->ensureDoctorAccess($doctor);
         $departments = Department::all();
-        return view('admin.doctors.edit', compact('doctor','departments'));
+        return view('admin.doctors.edit', [
+            'doctor' => $doctor,
+            'departments' => $departments,
+            'districts' => LocationDistrict::query()->orderBy('name')->get(['id', 'name']),
+            'locationSelection' => BangladeshLocation::idsFromNames($doctor->district, $doctor->thana, $doctor->area),
+        ]);
     }
 
     /**
@@ -130,11 +150,20 @@ class DoctorController extends Controller
     {
         $this->ensureDoctorAccess($doctor);
         $data = $request->validated();
+        $locations = BangladeshLocation::namesFromIds(
+            $request->integer('district_id') ?: null,
+            $request->integer('thana_id') ?: null,
+            $request->integer('area_id') ?: null,
+        );
         $isHospitalOwner = Auth::user()?->hasRole('hospital_owner');
         $data['show_on_homepage'] = $isHospitalOwner ? $doctor->show_on_homepage : $request->boolean('show_on_homepage');
         $data['owner_id'] = $isHospitalOwner
             ? $doctor->owner_id
             : ($data['owner_id'] ?? $doctor->owner_id);
+        $data['district'] = $locations['district'];
+        $data['thana'] = $locations['thana'];
+        $data['area'] = $locations['area'];
+        unset($data['district_id'], $data['thana_id'], $data['area_id']);
 
         // --- Handle Delete Photo ---
         if ($request->has('delete_photo_db') && !$request->hasFile('photo')) {

@@ -101,7 +101,7 @@ class AppointmentController extends Controller
     }
 
     public function patientProfile($id){
-        $user = User::findOrFail($id); 
+        $user = User::with('patientReports')->findOrFail($id); 
         return view('admin.partials.patient.profile', compact('user'));
     }
 }

@@ -50,6 +50,30 @@
             <input type="text" name="office_phone" value="{{ old('office_phone', $doctor->office_phone ?? '') }}" class="w-full border p-2 rounded">
             @error('office_phone') <p class="text-red-500">{{ $message }}</p> @enderror
         </div>
+        <div class="">
+            <label class="block font-medium mb-1">Jila</label>
+            <select name="district_id" id="district_id" class="w-full border p-2 rounded" data-selected="{{ old('district_id', $locationSelection['district_id']) }}">
+                <option value="">Select jila</option>
+                @foreach($districts as $district)
+                    <option value="{{ $district->id }}" @selected(old('district_id', $locationSelection['district_id']) == $district->id)>{{ $district->name }}</option>
+                @endforeach
+            </select>
+            @error('district_id') <p class="text-red-500">{{ $message }}</p> @enderror
+        </div>
+        <div class="">
+            <label class="block font-medium mb-1">Thana</label>
+            <select name="thana_id" id="thana_id" class="w-full border p-2 rounded" data-selected="{{ old('thana_id', $locationSelection['thana_id']) }}" disabled>
+                <option value="">Select thana</option>
+            </select>
+            @error('thana_id') <p class="text-red-500">{{ $message }}</p> @enderror
+        </div>
+        <div class="">
+            <label class="block font-medium mb-1">Area</label>
+            <select name="area_id" id="area_id" class="w-full border p-2 rounded" data-selected="{{ old('area_id', $locationSelection['area_id']) }}" disabled>
+                <option value="">Select area</option>
+            </select>
+            @error('area_id') <p class="text-red-500">{{ $message }}</p> @enderror
+        </div>
         </div>
         
     </div>
@@ -256,6 +280,70 @@ $(document).ready(function(){
     // --- Dynamic Fields ---
     function getIndex(wrapper, rowClass){
         return $(wrapper + ' .' + rowClass).length;
+    }
+
+    const districtSelect = document.getElementById('district_id');
+    const thanaSelect = document.getElementById('thana_id');
+    const areaSelect = document.getElementById('area_id');
+
+    function fillSelect(select, items, placeholder, selectedValue) {
+        select.innerHTML = `<option value="">${placeholder}</option>`;
+
+        items.forEach((item) => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.name;
+
+            if (String(selectedValue || '') === String(item.id)) {
+                option.selected = true;
+            }
+
+            select.appendChild(option);
+        });
+
+        select.disabled = items.length === 0;
+    }
+
+    async function loadThanas(districtId, selectedThanaId = '') {
+        fillSelect(thanaSelect, [], 'Select thana', '');
+        fillSelect(areaSelect, [], 'Select area', '');
+
+        if (!districtId) {
+            return;
+        }
+
+        const response = await fetch(`{{ url('/locations/districts') }}/${districtId}/thanas`);
+        const thanas = await response.json();
+
+        fillSelect(thanaSelect, thanas, 'Select thana', selectedThanaId);
+    }
+
+    async function loadAreas(thanaId, selectedAreaId = '') {
+        fillSelect(areaSelect, [], 'Select area', '');
+
+        if (!thanaId) {
+            return;
+        }
+
+        const response = await fetch(`{{ url('/locations/thanas') }}/${thanaId}/areas`);
+        const areas = await response.json();
+
+        fillSelect(areaSelect, areas, 'Select area', selectedAreaId);
+    }
+
+    districtSelect.addEventListener('change', () => loadThanas(districtSelect.value));
+    thanaSelect.addEventListener('change', () => loadAreas(thanaSelect.value));
+
+    const selectedDistrict = districtSelect.dataset.selected;
+    const selectedThana = thanaSelect.dataset.selected;
+    const selectedArea = areaSelect.dataset.selected;
+
+    if (selectedDistrict) {
+        loadThanas(selectedDistrict, selectedThana).then(() => {
+            if (selectedThana) {
+                loadAreas(selectedThana, selectedArea);
+            }
+        });
     }
 
     // Education

@@ -39,4 +39,24 @@
             <strong>Address:</strong> {{ $user->address ?? '-' }}
         </div>
     </div>
+
+    <hr>
+
+    <div>
+        <strong class="d-block mb-2">Reports</strong>
+        @forelse ($user->patientReports->sortByDesc('created_at')->take(5) as $report)
+            <div class="border rounded p-2 mb-2">
+                <div class="fw-semibold">{{ $report->title }}</div>
+                <small class="text-muted d-block">
+                    {{ $report->report_type ?: 'General report' }}
+                    @if ($report->report_date)
+                        | {{ $report->report_date->format('d M Y') }}
+                    @endif
+                </small>
+                <a href="{{ $report->file_url }}" target="_blank" class="small">Open file</a>
+            </div>
+        @empty
+            <div class="text-muted">No reports uploaded yet.</div>
+        @endforelse
+    </div>
 </div>

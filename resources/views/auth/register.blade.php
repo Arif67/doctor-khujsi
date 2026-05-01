@@ -117,8 +117,32 @@
                                 <input type="tel" id="phone" name="phone" class="form-control" value="{{ old('phone') }}" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="hospital_location" class="form-label">Location <span class="text-danger">*</span></label>
-                                <input type="text" id="hospital_location" name="hospital_location" class="form-control" value="{{ old('hospital_location') }}" required>
+                                <label for="hospital_location" class="form-label">Full Location <span class="text-danger">*</span></label>
+                                <input type="text" id="hospital_location" name="hospital_location" class="form-control" value="{{ old('hospital_location') }}" placeholder="e.g. House 12, Road 3, Uttara, Dhaka" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4">
+                                <label for="district_id" class="form-label">Jila <span class="text-danger">*</span></label>
+                                <select id="district_id" name="district_id" class="form-select" data-selected="{{ old('district_id') }}" required>
+                                    <option value="">Select jila</option>
+                                    @foreach($districts as $district)
+                                        <option value="{{ $district->id }}" @selected(old('district_id') == $district->id)>{{ $district->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="thana_id" class="form-label">Thana <span class="text-danger">*</span></label>
+                                <select id="thana_id" name="thana_id" class="form-select" data-selected="{{ old('thana_id') }}" required disabled>
+                                    <option value="">Select thana</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="area_id" class="form-label">Area</label>
+                                <select id="area_id" name="area_id" class="form-select" data-selected="{{ old('area_id') }}" disabled>
+                                    <option value="">Select area</option>
+                                </select>
                             </div>
                         </div>
 
@@ -153,4 +177,74 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    (function () {
+        const districtSelect = document.getElementById('district_id');
+        const thanaSelect = document.getElementById('thana_id');
+        const areaSelect = document.getElementById('area_id');
+
+        function fillSelect(select, items, placeholder, selectedValue) {
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+
+            items.forEach((item) => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = item.name;
+
+                if (String(selectedValue || '') === String(item.id)) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            });
+
+            select.disabled = items.length === 0;
+        }
+
+        async function loadThanas(districtId, selectedThanaId = '') {
+            fillSelect(thanaSelect, [], 'Select thana', '');
+            fillSelect(areaSelect, [], 'Select area', '');
+
+            if (!districtId) {
+                return;
+            }
+
+            const response = await fetch(`{{ url('/locations/districts') }}/${districtId}/thanas`);
+            const thanas = await response.json();
+
+            fillSelect(thanaSelect, thanas, 'Select thana', selectedThanaId);
+        }
+
+        async function loadAreas(thanaId, selectedAreaId = '') {
+            fillSelect(areaSelect, [], 'Select area', '');
+
+            if (!thanaId) {
+                return;
+            }
+
+            const response = await fetch(`{{ url('/locations/thanas') }}/${thanaId}/areas`);
+            const areas = await response.json();
+
+            fillSelect(areaSelect, areas, 'Select area', selectedAreaId);
+        }
+
+        districtSelect.addEventListener('change', () => loadThanas(districtSelect.value));
+        thanaSelect.addEventListener('change', () => loadAreas(thanaSelect.value));
+
+        const selectedDistrict = districtSelect.dataset.selected;
+        const selectedThana = thanaSelect.dataset.selected;
+        const selectedArea = areaSelect.dataset.selected;
+
+        if (selectedDistrict) {
+            loadThanas(selectedDistrict, selectedThana).then(() => {
+                if (selectedThana) {
+                    loadAreas(selectedThana, selectedArea);
+                }
+            });
+        }
+    })();
+</script>
 @endsection

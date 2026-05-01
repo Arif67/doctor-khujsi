@@ -13,6 +13,13 @@ class ServiceHistory extends Model
     protected $fillable = ['appointment_id','doctor_id','patient_id','service_id','status', 'service_date',
     'service_time'];
 
+    protected function casts(): array
+    {
+        return [
+            'service_date' => 'date',
+        ];
+    }
+
     public function doctor(){
         return $this->belongsTo(Doctor::class,'doctor_id','id');
     }

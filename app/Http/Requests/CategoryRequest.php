@@ -31,7 +31,9 @@ class CategoryRequest extends FormRequest
                 'max:255',
                 Rule::unique('categories', 'name')->ignore($id),
             ],
+            'name_bn' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'description_bn' => 'nullable|string',
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }

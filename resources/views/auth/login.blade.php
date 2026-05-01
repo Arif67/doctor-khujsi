@@ -25,7 +25,7 @@
         display: flex;
         align-items: flex-start;
         background: transparent;
-        gap: 60px;
+        gap: 0;
         max-width: 1000px;
         width: 100%;
     }
@@ -255,7 +255,7 @@
 <div class="main-wrap">
     <div class="signin-container">
         <div class="signin-image">
-            <img src="https://i.postimg.cc/yN0NFzRH/image.png" alt="signin-image">
+            <img src="{{ asset('assets/img/register.jpg') }}" alt="Hospital reception">
         </div>
         
         <div class="signin-content">

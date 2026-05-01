@@ -24,6 +24,7 @@ class ContactMsgRequest extends FormRequest
         return [
             'name'    => 'required|string|max:100',
             'email'   => 'required|email|max:150',
+            'subject' => 'required|string|max:150',
             'message' => 'required|string|min:5',
         ];
     }
@@ -34,6 +35,7 @@ class ContactMsgRequest extends FormRequest
             'name.required'    => 'Please enter your name.',
             'email.required'   => 'Your email address is required.',
             'email.email'      => 'Please enter a valid email address.',
+            'subject.required' => 'Please enter a subject.',
             'message.required' => 'Please write a message before sending.',
         ];
     }

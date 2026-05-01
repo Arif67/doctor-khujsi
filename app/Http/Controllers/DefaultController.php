@@ -12,7 +12,6 @@ class DefaultController extends Controller
     {
         ContactMessage::create([
             ...$request->validated(),
-            'subject' => 'Website contact',
             'type' => 'public',
             'priority' => 'normal',
             'status' => 'open',

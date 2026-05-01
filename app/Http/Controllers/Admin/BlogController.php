@@ -83,7 +83,10 @@ class BlogController extends Controller
             $data['featured_image'] = $request->file('featured_image')->store('blogs','public');
         }
 
-        $data['content'] = $this->saveSummernoteImages($request->description);
+        $data['content'] = $this->saveSummernoteImages($request->input('description'));
+        $data['content_bn'] = $request->filled('description_bn')
+            ? $this->saveSummernoteImages($request->input('description_bn'))
+            : null;
 
         Blog::create($data);
         return redirect()->route('admin.blogs.index')->with('success','Blog created successfully');
@@ -124,7 +127,19 @@ class BlogController extends Controller
             $data['featured_image'] = $request->file('featured_image')->store('blogs','public');
         }
 
-        $data['content'] = $this->updateSummernoteImages($request->description,$blog->content);
+        $data['content'] = $this->updateSummernoteImages(
+            $request->input('description'),
+            $blog->getRawOriginal('content')
+        );
+        if ($request->filled('description_bn')) {
+            $data['content_bn'] = $this->updateSummernoteImages(
+                $request->input('description_bn'),
+                $blog->getRawOriginal('content_bn')
+            );
+        } else {
+            $this->deleteSummaryImages($blog->getRawOriginal('content_bn'));
+            $data['content_bn'] = null;
+        }
 
         $blog->update($data);
         return redirect()->route('admin.blogs.index')->with('success','Blog updated successfully');
@@ -149,11 +164,18 @@ class BlogController extends Controller
         if (!empty($blog->content)) {
             $this->deleteSummaryImages($blog->content);
         }
+        if (!empty($blog->getRawOriginal('content_bn'))) {
+            $this->deleteSummaryImages($blog->getRawOriginal('content_bn'));
+        }
         $blog->delete();
         return redirect()->back()->with('success', 'Blog deleted successfully.');
     }
     private function saveSummernoteImages($content)
     {
+        if (blank($content)) {
+            return null;
+        }
+
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true); // warning ignore
         $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -183,6 +205,10 @@ class BlogController extends Controller
     }
     private function updateSummernoteImages($content, $oldContent = null)
     {
+        if (blank($content)) {
+            return null;
+        }
+
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true);
         $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);

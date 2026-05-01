@@ -1,155 +1,177 @@
 @extends('layouts.app')
 
-@section('title', 'Doctor Profile - Hospital Management')
+@section('title', 'Doctor Profile')
 
 @push('styles')
     <style>
-        body{
-            font-family: "Inter", sans-serif;
+        .doctor-profile-shell {
+            padding: 64px 0;
         }
-        .doctore_profile_section {
-            background-color: #e0f7fa; 
-            padding: 40px 0;
+
+        .doctor-hero-card,
+        .doctor-sidebar-card,
+        .doctor-detail-card {
+            border-radius: 28px;
+            background: #fff;
+            border: 1px solid rgba(21, 58, 63, 0.08);
+            box-shadow: 0 18px 42px rgba(15, 55, 60, 0.08);
         }
-        .doctor-info h2 {
-            font-weight: bold;
-            margin-bottom: 20px;
+
+        .doctor-hero-card {
+            padding: 28px;
         }
-        .doctor-info p {
-            margin-bottom: 5px;
-            color: #555;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 10px;
-        }
-        .social-icons a {
-            color: #00796b;
-            margin-right: 15px;
-            font-size: 1.2rem;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .social-icons a:hover {
-            color: #004d40;
-        }
-        .doctor-img-container {
+
+        .doctor-profile-media {
             position: relative;
-            text-align: center;
         }
-        .doctor-img {
-            max-width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            background: #3BAFBF80;
+
+        .doctor-profile-media img {
+            width: 100%;
+            height: 440px;
+            object-fit: cover;
+            border-radius: 24px;
+            background: #edf6f7;
         }
+
+        .doctor-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(244, 162, 97, 0.14);
+            color: #9a5b1e;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .doctor-meta-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .doctor-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #f8fbfb;
+        }
+
+        .doctor-meta-item i {
+            color: var(--brand-primary);
+            font-size: 1.1rem;
+        }
+
+        .doctor-sidebar-card,
+        .doctor-detail-card {
+            padding: 28px;
+        }
+
+        .doctor-detail-card + .doctor-detail-card,
+        .doctor-sidebar-card + .doctor-sidebar-card {
+            margin-top: 24px;
+        }
+
+        .social-icons a {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(18, 124, 138, 0.1);
+            color: var(--brand-primary);
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
         .fav-icon {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            top: 18px;
+            right: 18px;
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.94);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .consultation-form {
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid #eee;
+
+        .detail-title {
+            font-family: "Sora", sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 18px;
         }
-        .consultation-form h4 {
-            font-weight: bold;
-            color: #00796b;
-            margin-bottom: 25px;
+
+        .doctor-list-stack {
+            display: grid;
+            gap: 14px;
         }
-        .form-control, .form-select {
-            border-radius: 10px;
-            padding: 12px;
-            border: 1px solid #ddd;
+
+        .doctor-list-item {
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: #f8fbfb;
         }
-        .form-control:focus, .form-select:focus {
-            box-shadow: none;
-            border-color: #00796b;
+
+        .doctor-list-item strong {
+            display: block;
+            margin-bottom: 4px;
         }
-        .btn-book {
-            background-color: #009688;
-            color: white;
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .btn-book:hover {
-            background-color: #00796b;
-            color: white;
-        }
-        .biography-section h3, .experience-section h3, .shifts-section h3 {
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-size: 40px;
-            color: #333333;
-            line-height: 100%;
-        }
-        .biography-section p{
-            font-weight: 400;
-            color: #333333;
-            font-size: 18px;
-            line-height: 100%;
-        }
-        .experience-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .experience-item .title {
-            font-weight: 400;
-            color: #333333;
-        }
-        .experience-item .value {
-            color: #666;
-        }
+
         @media only screen and (max-width: 600px){
-            .biography-section h3, .experience-section h3, .shifts-section h3{
-                font-size: 30px;
+            .doctor-profile-media img {
+                height: 320px;
             }
         }
-        @media (min-width: 600px) and (max-width: 767px) {
-            .biography-section h3, .experience-section h3, .shifts-section h3{
-                font-size: 30px;
-            }
-        }
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .biography-section h3, .experience-section h3, .shifts-section h3{
-                font-size: 30px;
-            }
-        }
-        .doctore_profile_img {
-            background: #3BAFBF80;
-            border-radius: 24px;
-        }
-
-        .doctore_profile_img img {
-            width: 100%;
-        }
-
     </style>
 @endpush
 
 @section('content')
-<section id="doctor_profile_section">
-    <div class="doctore_profile_section">
-        <div class="container px-4 px-md-0">
-            <div class="row row-gap-2 align-items-center">
-                <div class="col-md-6 col-lg-4 doctor-info">
-                    <h2>{{ $doctor->name }}</h2>
-                    <p><strong>Phone:</strong> {{ $doctor->phone }}</p>
-                    <p><strong>Office:</strong> {{ $doctor->office_phone ?? 'None' }}</p>
-                    <p><strong>Email:</strong> {{ $doctor->email }}</p>
-                   <div class="social-icons mt-4">
+@php
+    $doctorLocation = collect([
+        $doctor->area ?: $doctor->owner?->area,
+        $doctor->thana ?: $doctor->owner?->thana,
+        $doctor->district ?: $doctor->owner?->district,
+    ])->filter()->implode(', ');
+@endphp
+<section class="doctor-profile-shell" id="doctor_profile_section">
+    <div class="container">
+        <div class="doctor-hero-card mb-4">
+            <div class="row align-items-center row-gap-4">
+                <div class="col-lg-7">
+                    <span class="section-eyebrow mb-3">{{ __('Doctor profile') }}</span>
+                    <span class="doctor-pill mb-3">{{ $doctor->department?->name ?? __('Specialist Department') }}</span>
+                    <h1 class="section-title mb-3">{{ $doctor->name }}</h1>
+                    <p class="muted-copy fs-5 mb-0">{{ $doctor->speciality ?: __('Specialist Doctor') }}</p>
+                    <div class="doctor-meta-list">
+                        <div class="doctor-meta-item">
+                            <i class="fas fa-hospital"></i>
+                            <div>
+                                <strong>{{ $doctor->owner?->hospital_name ?? __('Hospital not assigned') }}</strong>
+                                <div class="muted-copy">{{ __('Current hospital or clinic') }}</div>
+                            </div>
+                        </div>
+                        <div class="doctor-meta-item">
+                            <i class="fas fa-location-dot"></i>
+                            <div>
+                                <strong>{{ $doctorLocation ?: ($doctor->owner?->hospital_location ?? __('Location not added yet')) }}</strong>
+                                <div class="muted-copy">{{ __('Practice location') }}</div>
+                            </div>
+                        </div>
+                        <div class="doctor-meta-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>{{ $doctor->phone ?: __('Phone not available') }}</strong>
+                                <div class="muted-copy">{{ __('Primary contact number') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-icons mt-4">
                         @if($doctor->social_links && is_array($doctor->social_links))
                             @foreach($doctor->social_links as $social)
                                 <a href="{{ $social['url'] }}" target="_blank">{!! $social['platform'] !!}</a>
@@ -157,89 +179,114 @@
                         @endif
                     </div>
                 </div>
-                <div class="d-none d-lg-block col-lg-2"></div>
-                 
-                <div class="col-md-6 col-lg-6 mt-4 mt-lg-0">
-                    <div class="doctore_profile_img position-relative">
-                        <img src="{{ $doctor->photo ? asset('storage/' . $doctor->photo) : asset('assets/img/default.png') }}" alt="Dr. Emily Brown" class="">
+                <div class="col-lg-5">
+                    <div class="doctor-profile-media">
+                        <img src="{{ $doctor->photo ? asset('storage/' . $doctor->photo) : asset('assets/img/default.png') }}" alt="{{ $doctor->name }}">
                         <div class="fav-icon">
-                            <button type="button" 
-                                    class="btn btn-link p-0 border-0 bg-transparent fav-btn" 
+                            <button type="button"
+                                    class="btn btn-link p-0 border-0 bg-transparent fav-btn"
                                     data-doctor="{{ $doctor->id }}"
                                     data-auth="{{ auth()->check() ? '1' : '0' }}"
-                                     data-roles="{{ auth()->check() ? auth()->user()->getRoleNames()->first() : '' }}">
-                                    <i class="fas fa-heart 
-                                        {{ auth()->check() && auth()->user()->favorites && auth()->user()->favorites->contains($doctor->id) ? 'text-danger' : '' }}">
-                                    </i>
+                                    data-roles="{{ auth()->check() ? auth()->user()->getRoleNames()->first() : '' }}">
+                                <i class="fas fa-heart {{ auth()->check() && auth()->user()->favorites && auth()->user()->favorites->contains($doctor->id) ? 'text-danger' : '' }}"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="py-5">
-        <div class="container px-4 px-md-0">
-            <div class="row row-gap-4">
-                <!-- Left Side: Booking Form -->
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    <div class="consultation-form">
-                        <h4>Book a Consultation:</h4>
-                        <p class="text-muted">Submit a simple booking request without creating a patient account.</p>
-                        <div class="mb-3">
-                            <strong>Hospital:</strong> {{ $doctor->owner?->hospital_name ?? 'Hospital not assigned' }}
+
+        <div class="row row-gap-4">
+            <div class="col-lg-4">
+                <div class="doctor-sidebar-card">
+                    <div class="detail-title">{{ __('Quick booking') }}</div>
+                    <p class="muted-copy">{{ __('Send a request directly for this doctor without creating a patient account.') }}</p>
+                    <div class="doctor-list-stack">
+                        <div class="doctor-list-item">
+                            <strong>{{ __('Hospital') }}</strong>
+                            <span class="muted-copy">{{ $doctor->owner?->hospital_name ?? __('Hospital not assigned') }}</span>
                         </div>
-                        <div class="mb-4">
-                            <strong>Speciality:</strong> {{ $doctor->speciality ?: ($doctor->department?->name ?? 'Specialist') }}
+                        <div class="doctor-list-item">
+                            <strong>{{ __('Department') }}</strong>
+                            <span class="muted-copy">{{ $doctor->department?->name ?? __('Department not assigned') }}</span>
                         </div>
-                        <a href="{{ route('app.booking', ['doctor' => $doctor->id]) }}" class="btn btn-book">
-                            Book This Doctor <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div class="doctor-list-item">
+                            <strong>{{ __('Speciality') }}</strong>
+                            <span class="muted-copy">{{ $doctor->speciality ?: ($doctor->department?->name ?? __('Specialist')) }}</span>
+                        </div>
+                        <div class="doctor-list-item">
+                            <strong>{{ __('Email') }}</strong>
+                            <span class="muted-copy">{{ $doctor->email ?: __('Email not available') }}</span>
+                        </div>
+                        <div class="doctor-list-item">
+                            <strong>{{ __('Office Phone') }}</strong>
+                            <span class="muted-copy">{{ $doctor->office_phone ?? __('Not provided') }}</span>
+                        </div>
+                    </div>
+                    <a href="{{ route('app.booking', ['doctor' => $doctor->id, 'department' => $doctor->department_id]) }}" class="btn-brand-primary w-100 mt-4">
+                        {{ __('Book This Doctor') }} <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="doctor-sidebar-card">
+                    <div class="detail-title">{{ __('Working shifts') }}</div>
+                    <div class="doctor-list-stack">
+                        @forelse($doctor->shifts ?? [] as $shift)
+                            <div class="doctor-list-item">
+                                <strong>{!! $shift['day'] !!}</strong>
+                              <span class="muted-copy">
+    {{ isset($shift['start_time']) 
+        ? \Carbon\Carbon::parse($shift['start_time'])->format('h:i A') 
+        : '' 
+    }}
+    -
+    {{ isset($shift['end_time']) 
+        ? \Carbon\Carbon::parse($shift['end_time'])->format('h:i A') 
+        : '' 
+    }}
+</span>
+                            </div>
+                        @empty
+                            <div class="doctor-list-item">
+                                <strong>{{ __('Shift schedule pending') }}</strong>
+                                <span class="muted-copy">{{ __('Working hour details will be updated soon.') }}</span>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="doctor-detail-card">
+                    <div class="detail-title">{{ __('Short biography') }}</div>
+                    <div class="muted-copy">
+                        {!! html_entity_decode($doctor->description ?: __('Doctor biography will be updated soon.')) !!}
                     </div>
                 </div>
 
-                <!-- Right Side: Details -->
-                <div class="col-lg-7 ps-lg-5">
-                    <div class="biography-section">
-                        <h3>Short Biography</h3>
-                        <p class="text-muted">
-                             {!! 
-                                html_entity_decode($doctor->description)
-                            !!}
-                        </p>
-                    </div>
-                    
-                    <div class="experience-section mt-5">
-                        <h3>Education & Experience</h3>
-                        @if($doctor->educations && is_array($doctor->educations))
-                            @foreach($doctor->educations as $education)
-                                <div class="experience-item row align-items-center">
-                                    <div class="col-lg-4">
-                                        <span class="title">{!! $education['title'] !!}</span>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <span class="value">{!! $education['details'] !!}</span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
-
-                    <div class="shifts-section mt-5">
-                        <h3>Working Shifts</h3>
-                        @if($doctor->shifts && is_array($doctor->shifts))
-                            @foreach($doctor->shifts as $shift)
-                                <p class="text-muted mb-0">
-                                    {!! $shift['day'] !!} :
-                                    {{ \Carbon\Carbon::parse($shift['start_time'])->format('h:i A') }}
-                                    -
-                                    {{ \Carbon\Carbon::parse($shift['end_time'])->format('h:i A') }}
-                                </p>
-                            @endforeach
-                        @endif
-                        
+                <div class="doctor-detail-card">
+                    <div class="detail-title">{{ __('Education and experience') }}</div>
+                    <div class="doctor-list-stack">
+                        @forelse($doctor->educations ?? [] as $education)
+                           <div class="doctor-list-item">
+    <strong>{{ data_get($education, 'title', '') }}</strong>
+    <span class="muted-copy">{{ data_get($education, 'details', '') }}</span>
+</div>
+                        @empty
+                            <div class="doctor-list-item">
+                                <strong>{{ __('Profile details pending') }}</strong>
+                                <span class="muted-copy">{{ __('Education and experience details have not been added yet.') }}</span>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
+
+                @if($doctor->experience)
+                    <div class="doctor-detail-card">
+                        <div class="detail-title">{{ __('Experience summary') }}</div>
+                        <p class="muted-copy mb-0">{{ $doctor->experience }}</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -257,13 +304,13 @@
             let $btn = $(this);
 
             if (!isAuth) {
-                toastr.error("You must login first to favorite a doctor.");
+                toastr.error(@json(__('You must login first to favorite a doctor.')));
                 playSound();
                 return;
             }
 
             if (!roles.includes("patient")) {
-                toastr.error("Only patients can add favorite doctors!");
+                toastr.error(@json(__('Only patients can add favorite doctors!')));
                 playSound();
                 return;
             }
@@ -279,7 +326,7 @@
                         let $icon = $btn.find("i");
 
                         if (data.status === "added") {
-                            toastr.success("Doctor added to favorites!");
+                            toastr.success(@json(__('Doctor added to favorites!')));
                             $icon.addClass("text-danger");
                             playSound();
                         } else if (data.status === "removed") {

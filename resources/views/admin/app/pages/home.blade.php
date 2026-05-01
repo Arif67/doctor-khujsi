@@ -5,10 +5,10 @@
     <div class="border-b border-gray-200 mb-4">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabs">
             <li class="mr-2">
-                <a href="?section=hero" 
-                   data-section="hero"
+                <a href="?section=slider" 
+                   data-section="slider"
                    class="tab-link inline-block p-4 rounded-t-lg border-b-2">
-                   Hero
+                   Slider
                 </a>
             </li>
             <li class="mr-2">
@@ -25,15 +25,29 @@
                    About Us
                 </a>
             </li>
+            <li class="mr-2">
+                <a href="?section=featured_hospitals" 
+                   data-section="featured_hospitals"
+                   class="tab-link inline-block p-4 rounded-t-lg border-b-2">
+                   Featured Hospitals
+                </a>
+            </li>
+            <li class="mr-2">
+                <a href="?section=services"
+                   data-section="services"
+                   class="tab-link inline-block p-4 rounded-t-lg border-b-2">
+                   Services
+                </a>
+            </li>
            
         </ul>
     </div>
 
     {{-- Tab Content --}}
     <div id="tab-contents">
-    {{-- Hero --}}
-    <div id="hero" class="tab-content hidden">
-        @includeIf('components.admin.pages.home.hero', ['heroData' => $heroData])
+    {{-- Slider --}}
+    <div id="slider" class="tab-content hidden">
+        @includeIf('components.admin.pages.home.hero', ['heroData' => $heroData, 'heroSliderData' => $heroSliderData])
     </div>
 
     {{-- Feature --}}
@@ -43,7 +57,15 @@
 
     {{-- About Us --}}
     <div id="about_us" class="tab-content hidden">
-        @includeIf('components.admin.pages.home.about_us', ['featureSection' => $featureData])
+        @includeIf('components.admin.pages.home.about_us', ['aboutUsData' => $aboutUsData])
+    </div>
+
+    <div id="featured_hospitals" class="tab-content hidden">
+        @includeIf('components.admin.pages.home.featured_hospitals', ['featuredHospitalsData' => $featuredHospitalsData, 'hospitalOwners' => $hospitalOwners])
+    </div>
+
+    <div id="services" class="tab-content hidden">
+        @includeIf('components.admin.pages.home.services', ['homeServicesData' => $homeServicesData, 'services' => $services])
     </div>
 </div>
 </div>
@@ -53,7 +75,7 @@
 <script>
     $(document).ready(function(){
         let urlParams = new URLSearchParams(window.location.search);
-        let section = urlParams.get('section') || 'hero'; // default hero
+        let section = urlParams.get('section') || 'slider';
 
         function activateTab(section) {
             $(".tab-link").removeClass("border-blue-500 text-blue-600");

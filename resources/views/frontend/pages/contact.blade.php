@@ -1,125 +1,307 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us - Hospital Management')
+@section('title', __('Contact Us'))
+
+@push('styles')
+<style>
+    .contact-page {
+        padding: 40px 0 72px;
+    }
+
+    .contact-hero {
+        padding: 36px;
+        overflow: hidden;
+        position: relative;
+        background:
+            radial-gradient(circle at top right, rgba(244, 162, 97, 0.2), transparent 24%),
+            radial-gradient(circle at bottom left, rgba(18, 124, 138, 0.12), transparent 30%),
+            linear-gradient(135deg, #eef9fa 0%, #ffffff 58%, #f8fcfc 100%);
+    }
+
+    .contact-hero::after {
+        content: "";
+        position: absolute;
+        inset: auto -70px -90px auto;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: rgba(18, 124, 138, 0.08);
+    }
+
+    .contact-hero-copy,
+    .contact-highlight-grid,
+    .contact-form-card,
+    .contact-info-card {
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-hero-copy .section-title {
+        max-width: 14ch;
+    }
+
+    .contact-hero-copy .muted-copy {
+        max-width: 58ch;
+        line-height: 1.8;
+    }
+
+    .contact-highlight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 28px;
+    }
+
+    .contact-highlight {
+        padding: 18px 20px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(21, 58, 63, 0.08);
+    }
+
+    .contact-highlight strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 1rem;
+        color: var(--brand-ink);
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        gap: 24px;
+        margin-top: 28px;
+    }
+
+    .contact-form-card,
+    .contact-info-card {
+        padding: 30px;
+    }
+
+    .contact-form-card .form-control,
+    .contact-form-card .form-select {
+        border-radius: 16px;
+        padding: 13px 15px;
+        border: 1px solid #d9e8e8;
+        box-shadow: none;
+    }
+
+    .contact-info-stack {
+        display: grid;
+        gap: 16px;
+    }
+
+    .contact-info-item {
+        padding: 18px 20px;
+        border-radius: 22px;
+        background: #f8fcfc;
+        border: 1px solid rgba(21, 58, 63, 0.08);
+    }
+
+    .contact-info-item .small {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+    }
+
+    .contact-info-item strong,
+    .contact-info-item a {
+        color: var(--brand-ink);
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    .contact-path-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+        margin-top: 26px;
+    }
+
+    .contact-path-card {
+        padding: 24px;
+        border-radius: 24px;
+        background: #fff;
+        border: 1px solid rgba(21, 58, 63, 0.08);
+        box-shadow: 0 18px 40px rgba(15, 55, 60, 0.06);
+    }
+
+    .contact-path-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(18, 124, 138, 0.1);
+        color: var(--brand-primary);
+        font-size: 1.25rem;
+        margin-bottom: 16px;
+    }
+
+    .contact-alert {
+        border-radius: 18px;
+    }
+
+    @media (max-width: 991.98px) {
+        .contact-highlight-grid,
+        .contact-path-grid,
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .contact-page {
+            padding: 26px 0 56px;
+        }
+
+        .contact-hero,
+        .contact-form-card,
+        .contact-info-card,
+        .contact-path-card {
+            padding: 22px;
+        }
+
+        .contact-hero-copy .section-title {
+            max-width: none;
+        }
+    }
+</style>
+@endpush
 
 @section('content')
+<section class="contact-page">
+    <div class="container">
+        <div class="surface-card contact-hero">
+            <div class="contact-hero-copy">
+                <span class="section-eyebrow mb-3">Contact and support</span>
+                <h1 class="section-title mb-3">{{ __('Need help before booking, after booking, or with a hospital issue?') }}</h1>
+                <p class="muted-copy fs-5 mb-0">{{ __('Use this page for general questions, support requests, hospital complaints, or partnership contact. If you already know which doctor you want, booking is still the fastest route.') }}</p>
 
-<section class="contact_banner_section">
-    <div class="container px-4 px-md-0">
-        <div class="row row-gap-5 align-items-center">
-            <div class="col-md-6">
-                <div class="">
-                    <span class="section-pill">Contact Us</span>
-                    <h1 class="heading_title mb-5">Contact Us Easily Online,<br>by Phone or by Dropping In</h1>
-                    <div class="about-btn-row">
-                        <a href="#" class="about-btn about-btn-main">
-                            Book An Appointment <i class="fa fa-arrow-right"></i>
-                        </a>
-                        <a href="tel:+8801857445897" class="about-btn about-btn-call">
-                            +88018574-45897 <i class="fa fa-phone"></i>
-                        </a>
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a href="{{ route('app.booking') }}" class="btn-brand-primary">{{ __('Book an Appointment') }}</a>
+                    <a href="{{ route('app.hospitals') }}" class="btn-brand-secondary">{{ __('Browse Hospitals') }}</a>
+                </div>
+            </div>
+
+            <div class="contact-highlight-grid">
+                <div class="contact-highlight">
+                    <strong>{{ __('General Support') }}</strong>
+                    <span class="muted-copy">{{ __('Platform, doctor listing, hospital browsing, or booking guidance.') }}</span>
+                </div>
+                <div class="contact-highlight">
+                    <strong>{{ __('Complaint or Issue') }}</strong>
+                    <span class="muted-copy">{{ __('Share a bad service experience or workflow issue clearly.') }}</span>
+                </div>
+                <div class="contact-highlight">
+                    <strong>{{ __('Fastest Path') }}</strong>
+                    <span class="muted-copy">{{ __('For doctor request, direct booking usually gets the fastest response.') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-grid">
+            <div class="surface-card contact-form-card">
+                <div class="mb-4">
+                    <h2 class="h3 mb-2">{{ __('Send a Message') }}</h2>
+                    <p class="muted-copy mb-0">{{ __('Write clearly so the support team can understand the issue fast and respond properly.') }}</p>
+                </div>
+
+                @if (session('success'))
+                    <div class="alert alert-success contact-alert" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger contact-alert" role="alert">
+                        <strong>{{ __('Message send hoyni.') }}</strong>
+                        <ul class="mb-0 mt-2 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('app.contact.msg.store') }}" method="POST" class="row g-3">
+                    @csrf
+                    <div class="col-md-6">
+                        <label for="contact-name" class="form-label">{{ __('Your Name') }}</label>
+                        <input id="contact-name" name="name" type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="{{ __('Enter your name') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="contact-email" class="form-label">{{ __('Your Email') }}</label>
+                        <input id="contact-email" name="email" type="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="{{ __('Enter your email') }}">
+                    </div>
+                    <div class="col-12">
+                        <label for="contact-subject" class="form-label">{{ __('Subject') }}</label>
+                        <input id="contact-subject" name="subject" type="text" value="{{ old('subject') }}" class="form-control @error('subject') is-invalid @enderror" placeholder="{{ __('e.g. Booking issue, hospital complaint, general help') }}">
+                    </div>
+                    <div class="col-12">
+                        <label for="contact-message" class="form-label">{{ __('Message') }}</label>
+                        <textarea id="contact-message" name="message" rows="6" class="form-control @error('message') is-invalid @enderror" placeholder="{{ __('Explain the issue or question in detail...') }}">{{ old('message') }}</textarea>
+                    </div>
+                    <div class="col-12 d-flex flex-wrap gap-3 align-items-center">
+                        <button type="submit" class="btn-brand-primary">{{ __('Send Message') }}</button>
+                        <span class="small muted-copy">{{ __('For emergency medical need, contact the hospital directly instead of waiting for email support.') }}</span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="surface-card contact-info-card">
+                <div class="mb-4">
+                    <h2 class="h3 mb-2">{{ __('Support Information') }}</h2>
+                    <p class="muted-copy mb-0">{{ __('Use the right path based on what you need.') }}</p>
+                </div>
+
+                <div class="contact-info-stack">
+                    <div class="contact-info-item">
+                        <div class="small muted-copy mb-2">{{ __('Booking route') }}</div>
+                        <strong>{{ __('Doctor appointment request') }}</strong>
+                        <p class="muted-copy mb-3">{{ __('If your goal is to see a doctor, use the booking flow first.') }}</p>
+                        <a href="{{ route('app.booking') }}" class="btn-brand-secondary">{{ __('Go to Booking') }}</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="small muted-copy mb-2">{{ __('Hospital directory') }}</div>
+                        <strong>{{ __('Compare hospitals first') }}</strong>
+                        <p class="muted-copy mb-3">{{ __('Browse approved hospitals and check their profile before messaging support.') }}</p>
+                        <a href="{{ route('app.hospitals') }}" class="btn-brand-secondary">{{ __('View Hospitals') }}</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="small muted-copy mb-2">{{ __('Email') }}</div>
+                        <strong><a href="mailto:support@doctorfinder.test">support@doctorfinder.test</a></strong>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="small muted-copy mb-2">{{ __('Phone') }}</div>
+                        <strong><a href="tel:+8801700000000">+880 1700-000000</a></strong>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="small muted-copy mb-2">{{ __('Support window') }}</div>
+                        <strong>{{ __('Every day, 9:00 AM - 8:00 PM') }}</strong>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="contact_banner_img">
-                    <img src="{{asset('blogs/blog_1.png')}}" alt="Contact Hero">
-                </div>
+        </div>
+
+        <div class="contact-path-grid">
+            <div class="contact-path-card">
+                <div class="contact-path-icon"><i class="fas fa-circle-question"></i></div>
+                <h3 class="h5">{{ __('General Question') }}</h3>
+                <p class="muted-copy mb-0">{{ __('Use contact form if you need platform help, browsing support, or process explanation.') }}</p>
+            </div>
+            <div class="contact-path-card">
+                <div class="contact-path-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                <h3 class="h5">{{ __('Hospital Complaint') }}</h3>
+                <p class="muted-copy mb-0">{{ __('If a hospital gave poor service, mention hospital name, date, and exact issue clearly.') }}</p>
+            </div>
+            <div class="contact-path-card">
+                <div class="contact-path-icon"><i class="fas fa-handshake"></i></div>
+                <h3 class="h5">{{ __('Business or Listing') }}</h3>
+                <p class="muted-copy mb-0">{{ __('Hospitals or partners can use this same page for listing or coordination related contact.') }}</p>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Contact Info + Map Section -->
- <section class="contact-map-section">
-    <div class="container px-4 px-md-0">
-        <div class="row row-gap-5 align-items-center">
-            <div class="col-md-6">
-                <div class="contact-info-col">
-                    <h2 class="heading_title">Contact Information</h2>
-                    <p class="contact-map-desc">Learn more about our clinic and doctors and why they are trusted by so many
-                        families in our community.</p>
-                    <div class="contact-map-details">
-                        <div>
-                            <strong>Address:</strong><br>
-                            Dhaka, Bangladesh<br>
-                            Apple Valley, MN 55124
-                        </div>
-                        <div>
-                            <strong>Open:</strong><br>
-                            Monday – Sunday,<br>
-                            9am – 7pm EST
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="contact-map-embed">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.9021397204415!2d90.39109741498116!3d23.750885984589207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b896b3b4a63b%3A0x123456789abcdef!2sDhaka%2C%20Bangladesh!5e0!3m2!1sen!2sbd!4v1594274197294!5m2!1sen!2sbd"
-                        width="100%" height="320" style="border:0; border-radius:18px;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact Form + Image Section -->
-<section class="contact-form-section">
-    <div class="container px-4 px-md-0">
-        <div class="row row-gap-5 align-items-center">
-            <div class="col-lg-6 order-2 order-lg-1">
-                 <div class="contact-form-img">
-                    <img src="https://i.postimg.cc/yN0NFzRH/image.png" alt="Contact Physiotherapy">
-                </div>
-            </div>
-            <div class="col-lg-6 order-1 order-lg-2">
-                 <div class="contact-form-block">
-                    <h2 class="heading_title">Contact Information</h2>
-                    <p class="contact-form-desc">If you have any questions, you can contact us. Please, fill out the form
-                        below.</p>
-                    <form class="contact-form" action="{{ route('app.contact.msg.store') }}" method="POST">
-                        @csrf
-                        <div class="row row-gap-4">
-                            <div class="col-lg-6">
-                                <label for="contact-name" class="form-label">Your Name</label>
-                                <input id="contact-name" name="name" type="text"
-                                    value="{{ old('name') }}"
-                                    class="form-input form-control @error('name') is-invalid @enderror"
-                                    placeholder="Your Name">
-                                @error('name')
-                                    <div class="text-danger small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="contact-email" class="form-label">Your Email</label>
-                                <input id="contact-email" name="email" type="email"
-                                    value="{{ old('email') }}"
-                                    class="form-input form-control @error('email') is-invalid @enderror"
-                                    placeholder="Your Email">
-                                @error('email')
-                                    <div class="text-danger small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-12">
-                                <label for="contact-message" class="form-label">Your Message</label>
-                                <textarea id="contact-message" name="message"
-                                        class="form-textarea form-control @error('message') is-invalid @enderror"
-                                        rows="4" placeholder="Your Message">{{ old('message') }}</textarea>
-                                @error('message')
-                                    <div class="text-danger small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <button type="submit" class="form-submit">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-       
-       
-    </div>
-</section>
-
 @endsection

@@ -21,9 +21,14 @@
     @csrf
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-            <label class="block font-semibold mb-1">Title</label>
-            <input type="text" name="title" class="w-full border px-3 py-2 rounded" placeholder="Enter blog title" required>
+            <label class="block font-semibold mb-1">Title (English)</label>
+            <input type="text" name="title" value="{{ old('title') }}" class="w-full border px-3 py-2 rounded" placeholder="Enter blog title in English" required>
             @error('title') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+        </div>
+        <div>
+            <label class="block font-semibold mb-1">Title (Bangla)</label>
+            <input type="text" name="title_bn" value="{{ old('title_bn') }}" class="w-full border px-3 py-2 rounded" placeholder="Enter blog title in Bangla">
+            @error('title_bn') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
         </div>
         <div>
             <label class="block font-semibold mb-1">Thumbnail Image</label>
@@ -49,42 +54,70 @@
         </div>
     </div>
 
-    <div>
-        <label class="block font-semibold mb-1">Short Description</label>
-        <textarea name="short_description" class="w-full border px-3 py-2 rounded" placeholder="Enter a short description" required>
-
-        </textarea>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+        <label class="block font-semibold mb-1">Short Description (English)</label>
+        <textarea name="short_description" class="w-full border px-3 py-2 rounded" placeholder="Enter a short description in English">{{ old('short_description') }}</textarea>
         @error('short_description') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
     </div>
+        <div>
+        <label class="block font-semibold mb-1">Short Description (Bangla)</label>
+        <textarea name="short_description_bn" class="w-full border px-3 py-2 rounded" placeholder="Enter a short description in Bangla">{{ old('short_description_bn') }}</textarea>
+        @error('short_description_bn') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+    </div>
+    </div>
 
-    <div>
-        <label class="block font-semibold mb-1">Text</label>
-        <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded" placeholder="Enter the blog content" required></textarea>
+    <div class="grid grid-cols-1 gap-4">
+        <div>
+        <label class="block font-semibold mb-1">Text (English)</label>
+        <textarea name="description" id="summernote" class="w-full border px-3 py-2 rounded" placeholder="Enter the blog content in English"></textarea>
         @error('description') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+    </div>
+        <div>
+        <label class="block font-semibold mb-1">Text (Bangla)</label>
+        <textarea name="description_bn" id="summernote_bn" class="w-full border px-3 py-2 rounded" placeholder="Enter the blog content in Bangla"></textarea>
+        @error('description_bn') <p class="text-red-500 font-semibold">{{ $message }}</p> @enderror
+    </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label class="block">Status</label>
             <select name="status" class="w-full border px-3 py-2 rounded" required>
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
+                <option value="draft" @selected(old('status') === 'draft')>Draft</option>
+                <option value="published" @selected(old('status') === 'published')>Published</option>
             </select>
         </div>
         <div>
-            <label class="block">Meta Title</label>
-            <input type="text" name="meta_title" class="w-full border px-3 py-2 rounded" placeholder="Enter meta title">
+            <label class="block">Meta Title (English)</label>
+            <input type="text" name="meta_title" value="{{ old('meta_title') }}" class="w-full border px-3 py-2 rounded" placeholder="Enter meta title in English">
+        </div>
+        <div>
+            <label class="block">Meta Title (Bangla)</label>
+            <input type="text" name="meta_title_bn" value="{{ old('meta_title_bn') }}" class="w-full border px-3 py-2 rounded" placeholder="Enter meta title in Bangla">
         </div>
     </div>
 
-    <div>
-        <label class="block">Meta Description</label>
-        <textarea name="meta_description" class="w-full border px-3 py-2 rounded" placeholder="Enter meta description"></textarea>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+        <label class="block">Meta Description (English)</label>
+        <textarea name="meta_description" class="w-full border px-3 py-2 rounded" placeholder="Enter meta description in English">{{ old('meta_description') }}</textarea>
+    </div>
+        <div>
+        <label class="block">Meta Description (Bangla)</label>
+        <textarea name="meta_description_bn" class="w-full border px-3 py-2 rounded" placeholder="Enter meta description in Bangla">{{ old('meta_description_bn') }}</textarea>
+    </div>
     </div>
 
-    <div>
-        <label class="block">Meta Keywords</label>
-        <input type="text" name="meta_keywords" class="w-full border px-3 py-2 rounded" placeholder="Enter meta keywords separated by commas">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+        <label class="block">Meta Keywords (English)</label>
+        <input type="text" name="meta_keywords" value="{{ old('meta_keywords') }}" class="w-full border px-3 py-2 rounded" placeholder="Enter meta keywords separated by commas">
+    </div>
+        <div>
+        <label class="block">Meta Keywords (Bangla)</label>
+        <input type="text" name="meta_keywords_bn" value="{{ old('meta_keywords_bn') }}" class="w-full border px-3 py-2 rounded" placeholder="Enter Bangla meta keywords separated by commas">
+    </div>
     </div>
 
     <div>
@@ -103,6 +136,19 @@
    $(document).ready(function(){
     $('#summernote').summernote({
         placeholder: 'Write your blog content here...',
+        tabsize: 2,
+        height: 300,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline','clear']],
+            ['fontname', ['fontname']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['codeview']]
+        ]
+    });
+    $('#summernote_bn').summernote({
+        placeholder: 'বাংলা ব্লগ কনটেন্ট এখানে লিখুন...',
         tabsize: 2,
         height: 300,
         toolbar: [

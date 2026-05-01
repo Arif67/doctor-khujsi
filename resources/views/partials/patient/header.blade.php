@@ -6,7 +6,7 @@
         </button>
 
         <!-- Logo -->
-        <a class="navbar-brand" href="">
+        <a class="navbar-brand" href="{{ route('patient.dashboard') }}">
             <img class="app_logo" src="{{ asset('assets/img/logo.jpg') }}" alt="">
         </a>
          <a class="navbar-brand" href="{{route('app.home')}}" target="_blank">
@@ -17,20 +17,26 @@
         <div class="dropdown ms-auto">
             <a class="nav-link dropdown-toggle text-dark d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 @php
-                    $photo = $globalUser->photo 
-                        ? asset('storage/' . $globalUser->photo) 
-                        : asset('assets/img/' . $globalUser->gender . '.jpg');
+                    $photo = $globalUser->photo
+                        ? asset('storage/' . $globalUser->photo)
+                        : asset(match ($globalUser->gender) {
+                            'Female' => 'assets/img/Female.jpg',
+                            'Male' => 'assets/img/Male.jpg',
+                            default => 'assets/img/default.png',
+                        });
                 @endphp
                 <img src="{{$photo}}" class="rounded-circle me-2" width="32" height="32" alt="User">
-                John Doe
+                {{ $globalUser->name ?: $globalUser->email }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item {{Route::is('patient.profile') ? 'active':''}}" href="{{route('patient.profile')}}">Profile</a></li>
+                <li><a class="dropdown-item {{Route::is('patient.profile') ? 'active':''}}" href="{{route('patient.profile')}}">{{ __('Profile') }}</a></li>
+                <li><a class="dropdown-item {{Route::is('patient.reports.*') ? 'active':''}}" href="{{route('patient.reports.index')}}">{{ __('Reports') }}</a></li>
+                <li><a class="dropdown-item {{Route::is('patient.prescriptions.*') ? 'active':''}}" href="{{route('patient.prescriptions.index')}}">{{ __('Prescriptions') }}</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="dropdown-item text-danger">Logout</button>
+                        <button type="submit" class="dropdown-item text-danger">{{ __('Logout') }}</button>
                     </form>
                 </li>
 

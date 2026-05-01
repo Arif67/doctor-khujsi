@@ -16,6 +16,13 @@ class Appointment extends Model
         'appointment_time','serial_no','message'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'appointment_date' => 'date',
+        ];
+    }
+
     public function patient()
     {
         return $this->belongsTo(User::class, 'patient_id', 'id');
