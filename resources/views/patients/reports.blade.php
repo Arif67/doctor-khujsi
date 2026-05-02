@@ -83,61 +83,61 @@
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table align-middle mb-0" id="reportsTable">
-                    <thead class="table-light">
-                        <tr>
-                            <th>{{ __('Title') }}</th>
-                            <th>{{ __('Type') }}</th>
-                            <th>{{ __('Date') }}</th>
-                            <th>{{ __('File') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($reports as $report)
-                            @php
-                                $fileSize = $report->file_size
-                                    ? ($report->file_size >= 1048576
-                                        ? number_format($report->file_size / 1048576, 2) . ' MB'
-                                        : number_format($report->file_size / 1024, 0) . ' KB')
-                                    : 'N/A';
-                            @endphp
+            @if ($reports->isNotEmpty())
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0" id="reportsTable">
+                        <thead class="table-light">
                             <tr>
-                                <td>
-                                    <div class="fw-semibold">{{ $report->title }}</div>
-                                    @if ($report->description)
-                                        <div class="patient-muted small">{{ $report->description }}</div>
-                                    @endif
-                                </td>
-                                <td>{{ $report->report_type ?: __('General report') }}</td>
-                                <td>{{ $report->report_date?->format('d M Y') ?: __('N/A') }}</td>
-                                <td>
-                                    <a href="{{ $report->file_url }}" target="_blank" class="text-decoration-none">
-                                        {{ $report->file_name }}
-                                    </a>
-                                    <div class="patient-muted small">{{ $fileSize }}</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <a href="{{ $report->file_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">{{ __('Open') }}</a>
-                                        <a href="{{ route('patient.reports.download', $report) }}" class="btn btn-sm btn-outline-success">{{ __('Download') }}</a>
-                                        <form action="{{ route('patient.reports.destroy', $report) }}" method="POST" onsubmit="return confirm('{{ __('Delete this report?') }}');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
-                                        </form>
-                                    </div>
-                                </td>
+                                <th>{{ __('Title') }}</th>
+                                <th>{{ __('Type') }}</th>
+                                <th>{{ __('Date') }}</th>
+                                <th>{{ __('File') }}</th>
+                                <th>{{ __('Actions') }}</th>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center py-5 patient-muted">{{ __('No reports uploaded yet.') }}</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @foreach ($reports as $report)
+                                @php
+                                    $fileSize = $report->file_size
+                                        ? ($report->file_size >= 1048576
+                                            ? number_format($report->file_size / 1048576, 2) . ' MB'
+                                            : number_format($report->file_size / 1024, 0) . ' KB')
+                                        : 'N/A';
+                                @endphp
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">{{ $report->title }}</div>
+                                        @if ($report->description)
+                                            <div class="patient-muted small">{{ $report->description }}</div>
+                                        @endif
+                                    </td>
+                                    <td>{{ $report->report_type ?: __('General report') }}</td>
+                                    <td>{{ $report->report_date?->format('d M Y') ?: __('N/A') }}</td>
+                                    <td>
+                                        <a href="{{ $report->file_url }}" target="_blank" class="text-decoration-none">
+                                            {{ $report->file_name }}
+                                        </a>
+                                        <div class="patient-muted small">{{ $fileSize }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a href="{{ $report->file_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">{{ __('Open') }}</a>
+                                            <a href="{{ route('patient.reports.download', $report) }}" class="btn btn-sm btn-outline-success">{{ __('Download') }}</a>
+                                            <form action="{{ route('patient.reports.destroy', $report) }}" method="POST" onsubmit="return confirm('{{ __('Delete this report?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="text-center py-5 patient-muted">{{ __('No reports uploaded yet.') }}</div>
+            @endif
         </div>
     </div>
 </div>
@@ -146,7 +146,13 @@
 @push('scripts')
 <script>
     $(function () {
-        $('#reportsTable').DataTable({
+        const reportsTable = $('#reportsTable');
+
+        if (!reportsTable.length) {
+            return;
+        }
+
+        reportsTable.DataTable({
             order: [[2, 'desc']],
             pageLength: 10,
             language: {

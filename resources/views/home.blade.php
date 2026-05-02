@@ -816,7 +816,7 @@
 @includeIf('components.app.services', ['services' => $services, 'homeServicesSection' => $homeServicesSection ?? null])
 @endif
 
-@includeIf('components.app.doctors', ['doctores' => $doctores])
+@includeIf('components.app.doctors', ['doctores' => $doctores, 'featuredDoctorsSection' => $featuredDoctorsSection])
 
 @includeIf('components.app.testimonials')
 

@@ -8,12 +8,15 @@
                     $doctor->district ?: $doctor->owner?->district,
                 ])->filter()->implode(', ');
             };
+            $sectionData = isset($featuredDoctorsSection) ? ($featuredDoctorsSection->data ?? []) : [];
+            $sectionTitle = $sectionData['title'] ?? __('Open a profile, compare details, then book.');
+            $sectionDescription = $sectionData['description'] ?? __('These are active doctor listings available for public browsing and direct request submission.');
         @endphp
         <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-end justify-content-between gap-3 mb-4">
             <div>
                 <span class="section-eyebrow mb-3">{{ __('Featured doctors') }}</span>
-                <h2 class="section-title mb-2">{{ __('Open a profile, compare details, then book.') }}</h2>
-                <p class="muted-copy mb-0">{{ __('These are active doctor listings available for public browsing and direct request submission.') }}</p>
+                <h2 class="section-title mb-2">{{ $sectionTitle }}</h2>
+                <p class="muted-copy mb-0">{{ $sectionDescription }}</p>
             </div>
             <a href="{{ route('app.specialists') }}" class="btn-brand-secondary">{{ __('See All Doctors') }}</a>
         </div>

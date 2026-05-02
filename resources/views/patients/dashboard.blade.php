@@ -274,9 +274,10 @@
                                     default => 'text-bg-secondary',
                                 };
                                 $statusLabel = match ($normalizedStatus) {
-                                    'panding' => 'Pending',
-                                    'cencel' => 'Cancelled',
-                                    default => ucfirst($normalizedStatus),
+                                    'done' => __('Completed'),
+                                    'pending', 'panding' => __('Pending'),
+                                    'cencel', 'cancelled', 'canceled' => __('Cancelled'),
+                                    default => __(\Illuminate\Support\Str::headline($normalizedStatus)),
                                 };
                             @endphp
                             <tr>

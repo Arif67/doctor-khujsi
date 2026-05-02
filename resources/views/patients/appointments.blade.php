@@ -40,49 +40,62 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0" id="appointmentsTable">
-            <thead class="table-light">
-                <tr>
-                    <th>{{ __('Appointment ID') }}</th>
-                    <th>{{ __('Department') }}</th>
-                    <th>{{ __('Schedule') }}</th>
-                    <th>{{ __('Assigned Doctors') }}</th>
-                    <th>{{ __('Services') }}</th>
-                    <th>{{ __('Status') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($appointments as $appointment)
-                    @php
-                        $statusClass = $appointment->status === 'confirm' ? 'text-bg-success' : 'text-bg-warning';
-                    @endphp
+    @if ($appointments->isNotEmpty())
+        <div class="table-responsive">
+            <table class="table align-middle mb-0" id="appointmentsTable">
+                <thead class="table-light">
                     <tr>
-                        <td class="fw-semibold">{{ $appointment->appointment_id }}</td>
-                        <td>{{ $appointment->department?->name ?? __('N/A') }}</td>
-                        <td>
-                            <div>{{ $appointment->appointment_date?->format('d M Y') ?? __('N/A') }}</div>
-                            <small class="patient-muted">{{ $appointment->appointment_time }}</small>
-                        </td>
-                        <td>{{ $appointment->serviceHistory->pluck('doctor.name')->filter()->join(', ') ?: __('Not assigned yet') }}</td>
-                        <td>{{ $appointment->serviceHistory->pluck('service.title')->filter()->join(', ') ?: __('Not assigned yet') }}</td>
-                        <td><span class="badge {{ $statusClass }}">{{ ucfirst($appointment->status) }}</span></td>
+                        <th>{{ __('Appointment ID') }}</th>
+                        <th>{{ __('Department') }}</th>
+                        <th>{{ __('Schedule') }}</th>
+                        <th>{{ __('Assigned Doctors') }}</th>
+                        <th>{{ __('Services') }}</th>
+                        <th>{{ __('Status') }}</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center py-5 patient-muted">{{ __('No appointments found yet.') }}</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach ($appointments as $appointment)
+                        @php
+                            $normalizedStatus = strtolower((string) $appointment->status);
+                            $statusClass = $normalizedStatus === 'confirm' ? 'text-bg-success' : 'text-bg-warning';
+                            $statusLabel = match ($normalizedStatus) {
+                                'confirm', 'confirmed' => __('Confirmed'),
+                                'pending', 'panding' => __('Pending'),
+                                'cancelled', 'canceled', 'cencel' => __('Cancelled'),
+                                default => __(\Illuminate\Support\Str::headline($normalizedStatus)),
+                            };
+                        @endphp
+                        <tr>
+                            <td class="fw-semibold">{{ $appointment->appointment_id }}</td>
+                            <td>{{ $appointment->department?->name ?? __('N/A') }}</td>
+                            <td>
+                                <div>{{ $appointment->appointment_date?->format('d M Y') ?? __('N/A') }}</div>
+                                <small class="patient-muted">{{ $appointment->appointment_time }}</small>
+                            </td>
+                            <td>{{ $appointment->serviceHistory->pluck('doctor.name')->filter()->join(', ') ?: __('Not assigned yet') }}</td>
+                            <td>{{ $appointment->serviceHistory->pluck('service.title')->filter()->join(', ') ?: __('Not assigned yet') }}</td>
+                            <td><span class="badge {{ $statusClass }}">{{ $statusLabel }}</span></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="text-center py-5 patient-muted">{{ __('No appointments found yet.') }}</div>
+    @endif
 </div>
 @endsection
 
 @push('scripts')
 <script>
     $(function () {
-        $('#appointmentsTable').DataTable({
+        const appointmentsTable = $('#appointmentsTable');
+
+        if (!appointmentsTable.length) {
+            return;
+        }
+
+        appointmentsTable.DataTable({
             order: [[2, 'desc']],
             pageLength: 10,
             language: {

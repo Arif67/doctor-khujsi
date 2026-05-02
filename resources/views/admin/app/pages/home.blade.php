@@ -39,6 +39,13 @@
                    Services
                 </a>
             </li>
+            <li class="mr-2">
+                <a href="?section=featured_doctors"
+                   data-section="featured_doctors"
+                   class="tab-link inline-block p-4 rounded-t-lg border-b-2">
+                   Featured Doctors
+                </a>
+            </li>
            
         </ul>
     </div>
@@ -66,6 +73,10 @@
 
     <div id="services" class="tab-content hidden">
         @includeIf('components.admin.pages.home.services', ['homeServicesData' => $homeServicesData, 'services' => $services])
+    </div>
+
+    <div id="featured_doctors" class="tab-content hidden">
+        @includeIf('components.admin.pages.home.featured_doctors', ['featuredDoctorsData' => $featuredDoctorsData, 'doctors' => $doctors])
     </div>
 </div>
 </div>

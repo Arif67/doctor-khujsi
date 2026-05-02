@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
 use App\Models\Service;
 use App\Models\Section;
 use App\Models\User;
@@ -321,6 +322,48 @@ class PagesSectionUpdateController extends Controller
         );
 
         return redirect()->back()->with('success', 'Homepage services updated successfully!');
+    }
+
+    public function home_featured_doctors(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'display_count' => 'nullable|integer|min:1|max:24',
+            'doctor_ids' => 'nullable|array|max:24',
+            'doctor_ids.*' => 'integer|distinct|exists:doctors,id',
+        ]);
+
+        $selectedIds = collect($validated['doctor_ids'] ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->values();
+
+        if ($selectedIds->isNotEmpty()) {
+            $approvedDoctorIds = Doctor::query()
+                ->whereIn('id', $selectedIds)
+                ->where('status', 'active')
+                ->whereHas('owner', fn ($query) => $query->role('hospital_owner')->where('approval_status', 'approved'))
+                ->pluck('id')
+                ->map(fn ($id) => (int) $id);
+
+            if ($approvedDoctorIds->count() !== $selectedIds->count()) {
+                return redirect()->back()->with('error', 'Selected doctors must be active and belong to approved hospital accounts.');
+            }
+        }
+
+        $displayCount = (int) ($validated['display_count'] ?? 6);
+
+        Section::updateOrCreate(
+            ['key' => 'home_featured_doctors'],
+            ['data' => [
+                'title' => $validated['title'] ?? null,
+                'description' => $validated['description'] ?? null,
+                'display_count' => $displayCount,
+                'doctor_ids' => $selectedIds->all(),
+            ]]
+        );
+
+        return redirect()->back()->with('success', 'Homepage featured doctors updated successfully!');
     }
 
 

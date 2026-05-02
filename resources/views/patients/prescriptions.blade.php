@@ -91,19 +91,20 @@
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table align-middle mb-0" id="prescriptionsTable">
-                    <thead class="table-light">
-                        <tr>
-                            <th>{{ __('Title') }}</th>
-                            <th>{{ __('Doctor') }}</th>
-                            <th>{{ __('Date') }}</th>
-                            <th>{{ __('File') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($prescriptions as $prescription)
+            @if ($prescriptions->isNotEmpty())
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0" id="prescriptionsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>{{ __('Title') }}</th>
+                                <th>{{ __('Doctor') }}</th>
+                                <th>{{ __('Date') }}</th>
+                                <th>{{ __('File') }}</th>
+                                <th>{{ __('Actions') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($prescriptions as $prescription)
                             @php
                                 $fileSize = $prescription->file_size
                                     ? ($prescription->file_size >= 1048576
@@ -111,57 +112,56 @@
                                         : number_format($prescription->file_size / 1024, 0) . ' KB')
                                     : 'N/A';
                             @endphp
-                            <tr>
-                                <td>
-                                    <div class="fw-semibold">{{ $prescription->title }}</div>
-                                    @if ($prescription->medicines)
-                                        <div class="patient-muted small">{{ $prescription->medicines }}</div>
-                                    @endif
-                                    @if ($prescription->notes)
-                                        <div class="small mt-1">{{ $prescription->notes }}</div>
-                                    @endif
-                                </td>
-                                <td>{{ $prescription->doctor_name ?: __('Doctor not added') }}</td>
-                                <td>{{ $prescription->prescription_date?->format('d M Y') ?: __('N/A') }}</td>
-                                <td>
-                                    <a href="{{ $prescription->file_url }}" target="_blank" class="text-decoration-none">
-                                        {{ $prescription->file_name }}
-                                    </a>
-                                    <div class="patient-muted small">{{ $fileSize }}</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-secondary preview-prescription"
-                                            data-title="{{ $prescription->title }}"
-                                            data-doctor="{{ $prescription->doctor_name ?: __('Doctor not added') }}"
-                                            data-date="{{ $prescription->prescription_date?->format('d M Y') ?: __('N/A') }}"
-                                            data-medicines="{{ $prescription->medicines }}"
-                                            data-notes="{{ $prescription->notes }}"
-                                            data-file-url="{{ $prescription->file_url }}"
-                                            data-mime-type="{{ $prescription->mime_type }}"
-                                        >
-                                            {{ __('Preview') }}
-                                        </button>
-                                        <a href="{{ $prescription->file_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">{{ __('Open') }}</a>
-                                        <a href="{{ route('patient.prescriptions.download', $prescription) }}" class="btn btn-sm btn-outline-success">{{ __('Download') }}</a>
-                                        <form action="{{ route('patient.prescriptions.destroy', $prescription) }}" method="POST" onsubmit="return confirm('{{ __('Delete this prescription?') }}');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center py-5 patient-muted">{{ __('No prescriptions uploaded yet.') }}</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">{{ $prescription->title }}</div>
+                                        @if ($prescription->medicines)
+                                            <div class="patient-muted small">{{ $prescription->medicines }}</div>
+                                        @endif
+                                        @if ($prescription->notes)
+                                            <div class="small mt-1">{{ $prescription->notes }}</div>
+                                        @endif
+                                    </td>
+                                    <td>{{ $prescription->doctor_name ?: __('Doctor not added') }}</td>
+                                    <td>{{ $prescription->prescription_date?->format('d M Y') ?: __('N/A') }}</td>
+                                    <td>
+                                        <a href="{{ $prescription->file_url }}" target="_blank" class="text-decoration-none">
+                                            {{ $prescription->file_name }}
+                                        </a>
+                                        <div class="patient-muted small">{{ $fileSize }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-outline-secondary preview-prescription"
+                                                data-title="{{ $prescription->title }}"
+                                                data-doctor="{{ $prescription->doctor_name ?: __('Doctor not added') }}"
+                                                data-date="{{ $prescription->prescription_date?->format('d M Y') ?: __('N/A') }}"
+                                                data-medicines="{{ $prescription->medicines }}"
+                                                data-notes="{{ $prescription->notes }}"
+                                                data-file-url="{{ $prescription->file_url }}"
+                                                data-mime-type="{{ $prescription->mime_type }}"
+                                            >
+                                                {{ __('Preview') }}
+                                            </button>
+                                            <a href="{{ $prescription->file_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">{{ __('Open') }}</a>
+                                            <a href="{{ route('patient.prescriptions.download', $prescription) }}" class="btn btn-sm btn-outline-success">{{ __('Download') }}</a>
+                                            <form action="{{ route('patient.prescriptions.destroy', $prescription) }}" method="POST" onsubmit="return confirm('{{ __('Delete this prescription?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="text-center py-5 patient-muted">{{ __('No prescriptions uploaded yet.') }}</div>
+            @endif
         </div>
     </div>
 </div>
@@ -223,7 +223,10 @@
         const previewImage = $('#previewImage');
         const previewFallback = $('#previewFallback');
 
-        $('#prescriptionsTable').DataTable({
+        const prescriptionsTable = $('#prescriptionsTable');
+
+        if (prescriptionsTable.length) {
+            prescriptionsTable.DataTable({
             order: [[2, 'desc']],
             pageLength: 10,
             language: {
@@ -231,7 +234,8 @@
                 lengthMenu: "{{ __('Show _MENU_ files') }}",
                 zeroRecords: "{{ __('No matching prescriptions found') }}"
             }
-        });
+            });
+        }
 
         $('.preview-prescription').on('click', function () {
             const button = $(this);

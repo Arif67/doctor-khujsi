@@ -28,6 +28,7 @@ class FrontendController extends Controller
     {
         $heroSliderSection = Section::where('key', 'home_hero_slider')->first();
         $featuredHospitalsSection = Section::where('key', 'home_featured_hospitals')->first();
+        $featuredDoctorsSection = Section::where('key', 'home_featured_doctors')->first();
         $homeServicesSection = Section::where('key', 'home_services')->first();
         $serviceIds = collect($homeServicesSection->data['service_ids'] ?? [])
             ->map(fn ($id) => (int) $id)
@@ -52,21 +53,37 @@ class FrontendController extends Controller
                 ->get();
         }
         $attentions = Attention::latest()->get();
-        $featuredDoctors = Doctor::query()
+        $doctorIds = collect($featuredDoctorsSection->data['doctor_ids'] ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->filter()
+            ->values();
+        $doctorDisplayCount = max(1, min(24, (int) ($featuredDoctorsSection->data['display_count'] ?? 6)));
+        $doctorsQuery = Doctor::query()
             ->with(['department', 'owner'])
             ->where('status', 'active')
-            ->where('show_on_homepage', true)
-            ->latest()
-            ->take(10)
-            ->get();
-        $doctores = $featuredDoctors->isNotEmpty()
-            ? $featuredDoctors
-            : Doctor::query()
-                ->with(['department', 'owner'])
-                ->where('status', 'active')
+            ->whereHas('owner', fn ($query) => $query->role('hospital_owner')->where('approval_status', 'approved'));
+
+        if ($doctorIds->isNotEmpty()) {
+            $doctores = $doctorsQuery
+                ->whereIn('id', $doctorIds)
+                ->get()
+                ->sortBy(fn ($doctor) => $doctorIds->search((int) $doctor->id))
+                ->take($doctorDisplayCount)
+                ->values();
+        } else {
+            $featuredDoctors = (clone $doctorsQuery)
+                ->where('show_on_homepage', true)
                 ->latest()
-                ->take(10)
+                ->take($doctorDisplayCount)
                 ->get();
+
+            $doctores = $featuredDoctors->isNotEmpty()
+                ? $featuredDoctors
+                : $doctorsQuery
+                    ->latest()
+                    ->take($doctorDisplayCount)
+                    ->get();
+        }
         $blogs = Blog::latest()->get();
         $heroSlides = collect($heroSliderSection->data['slides'] ?? [])
             ->filter(fn ($slide) => filled($slide['title'] ?? null) || filled($slide['heading'] ?? null) || filled($slide['photo'] ?? null))
@@ -99,7 +116,7 @@ class FrontendController extends Controller
                 });
         }
 
-        return view('home',compact('services','attentions','doctores','blogs', 'heroSlides', 'featuredHospitalsSection', 'featuredHospitals', 'homeServicesSection'));
+        return view('home',compact('services','attentions','doctores','blogs', 'heroSlides', 'featuredHospitalsSection', 'featuredDoctorsSection', 'featuredHospitals', 'homeServicesSection'));
     }
 
     public function about()

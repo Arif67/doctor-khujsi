@@ -67,77 +67,77 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0" id="timelineTable">
-            <thead class="table-light">
-                <tr>
-                    <th>{{ __('Date') }}</th>
-                    <th>{{ __('Event Type') }}</th>
-                    <th>{{ __('Summary') }}</th>
-                    <th>{{ __('Details') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($timelineItems as $item)
-                    <tr data-type="{{ $item['type'] }}" data-date="{{ optional($item['date'])->format('Y-m-d') }}">
-                        <td>
-                            <div class="fw-semibold">{{ optional($item['date'])->format('d M Y') ?: __('N/A') }}</div>
-                            <small class="patient-muted">{{ optional($item['date'])->format('h:i A') ?: '' }}</small>
-                        </td>
-                        <td>
-                            @php
-                                $typeClass = match ($item['type']) {
-                                    'appointment' => 'text-bg-primary',
-                                    'report' => 'text-bg-success',
-                                    'service' => 'text-bg-warning',
-                                    default => 'text-bg-secondary',
-                                };
-                            @endphp
-                            <span class="badge {{ $typeClass }}">{{ __(\Illuminate\Support\Str::headline($item['type'])) }}</span>
-                        </td>
-                        <td>
-                            <div class="fw-semibold">{{ $item['title'] }}</div>
-                            <div class="patient-muted small">{{ $item['subtitle'] }}</div>
-                        </td>
-                        <td>
-                            <div class="d-grid gap-1">
-                                @foreach ($item['meta'] as $label => $value)
-                                    @php
-                                        $statusValue = strtolower((string) $value);
-                                        $isStatus = $label === __('Status');
-                                        $statusBadgeClass = match ($statusValue) {
-                                            'confirm', 'confirmed', 'done' => 'text-bg-success',
-                                            'pending', 'panding' => 'text-bg-warning',
-                                            'cancelled', 'canceled', 'cencel' => 'text-bg-danger',
-                                            default => 'text-bg-secondary',
-                                        };
-                                        $statusLabel = match ($statusValue) {
-                                            'confirm' => __('Confirmed'),
-                                            'panding' => __('Pending'),
-                                            'cencel' => __('Cancelled'),
-                                            default => is_string($value) ? ucfirst($value) : $value,
-                                        };
-                                    @endphp
-                                    <div class="small">
-                                        <span class="patient-muted">{{ $label }}:</span>
-                                        @if ($isStatus)
-                                            <span class="badge {{ $statusBadgeClass }}">{{ $statusLabel }}</span>
-                                        @else
-                                            <span>{{ $value }}</span>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </td>
-                    </tr>
-                @empty
+    @if ($timelineItems->isNotEmpty())
+        <div class="table-responsive">
+            <table class="table align-middle mb-0" id="timelineTable">
+                <thead class="table-light">
                     <tr>
-                        <td colspan="4" class="text-center py-5 patient-muted">{{ __('No medical timeline events found yet.') }}</td>
+                        <th>{{ __('Date') }}</th>
+                        <th>{{ __('Event Type') }}</th>
+                        <th>{{ __('Summary') }}</th>
+                        <th>{{ __('Details') }}</th>
                     </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach ($timelineItems as $item)
+                        <tr data-type="{{ $item['type'] }}" data-date="{{ optional($item['date'])->format('Y-m-d') }}">
+                            <td>
+                                <div class="fw-semibold">{{ optional($item['date'])->format('d M Y') ?: __('N/A') }}</div>
+                                <small class="patient-muted">{{ optional($item['date'])->format('h:i A') ?: '' }}</small>
+                            </td>
+                            <td>
+                                @php
+                                    $typeClass = match ($item['type']) {
+                                        'appointment' => 'text-bg-primary',
+                                        'report' => 'text-bg-success',
+                                        'service' => 'text-bg-warning',
+                                        default => 'text-bg-secondary',
+                                    };
+                                @endphp
+                                <span class="badge {{ $typeClass }}">{{ __(\Illuminate\Support\Str::headline($item['type'])) }}</span>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">{{ $item['title'] }}</div>
+                                <div class="patient-muted small">{{ $item['subtitle'] }}</div>
+                            </td>
+                            <td>
+                                <div class="d-grid gap-1">
+                                    @foreach ($item['meta'] as $label => $value)
+                                        @php
+                                            $statusValue = strtolower((string) $value);
+                                            $isStatus = $label === __('Status');
+                                            $statusBadgeClass = match ($statusValue) {
+                                                'confirm', 'confirmed', 'done' => 'text-bg-success',
+                                                'pending', 'panding' => 'text-bg-warning',
+                                                'cancelled', 'canceled', 'cencel' => 'text-bg-danger',
+                                                default => 'text-bg-secondary',
+                                            };
+                                            $statusLabel = match ($statusValue) {
+                                                'confirm' => __('Confirmed'),
+                                                'panding' => __('Pending'),
+                                                'cencel' => __('Cancelled'),
+                                                default => is_string($value) ? ucfirst($value) : $value,
+                                            };
+                                        @endphp
+                                        <div class="small">
+                                            <span class="patient-muted">{{ $label }}:</span>
+                                            @if ($isStatus)
+                                                <span class="badge {{ $statusBadgeClass }}">{{ $statusLabel }}</span>
+                                            @else
+                                                <span>{{ $value }}</span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="text-center py-5 patient-muted">{{ __('No medical timeline events found yet.') }}</div>
+    @endif
 </div>
 @endsection
 
@@ -145,6 +145,10 @@
 <script>
     $(function () {
         const tableElement = $('#timelineTable');
+
+        if (!tableElement.length) {
+            return;
+        }
         const typeFilter = $('#timelineTypeFilter');
         const dateFromFilter = $('#timelineDateFrom');
         const dateToFilter = $('#timelineDateTo');

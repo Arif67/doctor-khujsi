@@ -89,15 +89,15 @@ class DefaultController extends Controller
         $user = Auth::user();
 
         $profileItems = collect([
-            'Photo' => $user->photo,
-            'First name' => $user->first_name,
-            'Last name' => $user->last_name,
-            'Email' => $user->email,
-            'Phone or mobile' => $user->phone ?: $user->mobile,
-            'Blood group' => $user->blood,
-            'Gender' => $user->gender,
-            'Date of birth' => $user->date_of_birth,
-            'Address' => $user->address,
+            __('Photo') => $user->photo,
+            __('First name') => $user->first_name,
+            __('Last name') => $user->last_name,
+            __('Email') => $user->email,
+            __('Phone or mobile') => $user->phone ?: $user->mobile,
+            __('Blood group') => $user->blood,
+            __('Gender') => $user->gender,
+            __('Date of birth') => $user->date_of_birth,
+            __('Address') => $user->address,
         ]);
 
         $profileStats = [

@@ -191,6 +191,7 @@ Route::prefix('admin')
                 Route::put('home_about_us',[PagesSectionUpdateController::class,'home_about_us'])->name('home.about_us.update');
                 Route::put('home_featured_hospitals',[PagesSectionUpdateController::class,'home_featured_hospitals'])->name('home.featured_hospitals.update');
                 Route::put('home_services',[PagesSectionUpdateController::class,'home_services'])->name('home.services.update');
+                Route::put('home_featured_doctors',[PagesSectionUpdateController::class,'home_featured_doctors'])->name('home.featured_doctors.update');
             });
 
             Route::resource('patients', PatientController::class);

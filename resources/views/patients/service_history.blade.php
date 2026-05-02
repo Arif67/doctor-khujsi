@@ -39,55 +39,62 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0" id="serviceHistoryTable">
-            <thead class="table-light">
-                <tr>
-                    <th>{{ __('Doctor') }}</th>
-                    <th>{{ __('Service') }}</th>
-                    <th>{{ __('Date') }}</th>
-                    <th>{{ __('Time') }}</th>
-                    <th>{{ __('Status') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($items as $item)
-                    @php
-                        $normalizedStatus = strtolower($item->status);
-                        $statusClass = match ($normalizedStatus) {
-                            'done' => 'text-bg-success',
-                            'pending', 'panding' => 'text-bg-warning',
-                            'cencel', 'cancelled', 'canceled' => 'text-bg-danger',
-                            default => 'text-bg-secondary',
-                        };
-                        $statusLabel = match ($normalizedStatus) {
-                            'panding' => 'Pending',
-                            'cencel' => 'Cancelled',
-                            default => ucfirst($normalizedStatus),
-                        };
-                    @endphp
+    @if ($items->isNotEmpty())
+        <div class="table-responsive">
+            <table class="table align-middle mb-0" id="serviceHistoryTable">
+                <thead class="table-light">
                     <tr>
-                        <td>{{ $item->doctor?->name ?? __('N/A') }}</td>
-                        <td>{{ $item->service?->title ?? __('N/A') }}</td>
-                        <td>{{ $item->service_date?->format('d M Y') ?? $item->created_at->format('d M Y') }}</td>
-                        <td>{{ $item->service_time ?: $item->created_at->format('h:i A') }}</td>
-                        <td><span class="badge {{ $statusClass }}">{{ $statusLabel }}</span></td>
+                        <th>{{ __('Doctor') }}</th>
+                        <th>{{ __('Service') }}</th>
+                        <th>{{ __('Date') }}</th>
+                        <th>{{ __('Time') }}</th>
+                        <th>{{ __('Status') }}</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center py-5 patient-muted">{{ __('No service history found yet.') }}</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach ($items as $item)
+                        @php
+                            $normalizedStatus = strtolower($item->status);
+                            $statusClass = match ($normalizedStatus) {
+                                'done' => 'text-bg-success',
+                                'pending', 'panding' => 'text-bg-warning',
+                                'cencel', 'cancelled', 'canceled' => 'text-bg-danger',
+                                default => 'text-bg-secondary',
+                            };
+                            $statusLabel = match ($normalizedStatus) {
+                                'done' => __('Completed'),
+                                'pending', 'panding' => __('Pending'),
+                                'cencel', 'cancelled', 'canceled' => __('Cancelled'),
+                                default => __(\Illuminate\Support\Str::headline($normalizedStatus)),
+                            };
+                        @endphp
+                        <tr>
+                            <td>{{ $item->doctor?->name ?? __('N/A') }}</td>
+                            <td>{{ $item->service?->title ?? __('N/A') }}</td>
+                            <td>{{ $item->service_date?->format('d M Y') ?? $item->created_at->format('d M Y') }}</td>
+                            <td>{{ $item->service_time ?: $item->created_at->format('h:i A') }}</td>
+                            <td><span class="badge {{ $statusClass }}">{{ $statusLabel }}</span></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="text-center py-5 patient-muted">{{ __('No service history found yet.') }}</div>
+    @endif
 </div>
 @endsection
 
 @push('scripts')
 <script>
     $(function () {
-        $('#serviceHistoryTable').DataTable({
+        const serviceHistoryTable = $('#serviceHistoryTable');
+
+        if (!serviceHistoryTable.length) {
+            return;
+        }
+
+        serviceHistoryTable.DataTable({
             order: [[2, 'desc']],
             pageLength: 10,
             language: {
