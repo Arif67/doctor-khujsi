@@ -7,24 +7,38 @@ use App\Http\Requests\PatientPrescriptionRequest;
 use App\Models\PatientPrescription;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PrescriptionController extends Controller
 {
+    protected function hasPatientPrescriptionsTable(): bool
+    {
+        return Schema::hasTable('patient_prescriptions');
+    }
+
     public function index(): View
     {
-        $prescriptions = Auth::user()
-            ->patientPrescriptions()
-            ->latest('prescription_date')
-            ->latest()
-            ->get();
+        $prescriptions = $this->hasPatientPrescriptionsTable()
+            ? Auth::user()
+                ->patientPrescriptions()
+                ->latest('prescription_date')
+                ->latest()
+                ->get()
+            : collect();
 
         return view('patients.prescriptions', compact('prescriptions'));
     }
 
     public function store(PatientPrescriptionRequest $request): RedirectResponse
     {
+        if (! $this->hasPatientPrescriptionsTable()) {
+            return redirect()
+                ->route('patient.prescriptions.index')
+                ->with('error', __('Prescriptions feature is not ready yet. Please run the latest database migrations.'));
+        }
+
         $patient = Auth::user();
         $file = $request->file('prescription_file');
         $path = $file->store("patient-prescriptions/{$patient->id}", 'public');

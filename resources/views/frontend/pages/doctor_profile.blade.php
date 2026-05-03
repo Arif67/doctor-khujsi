@@ -138,6 +138,9 @@
         $doctor->thana ?: $doctor->owner?->thana,
         $doctor->district ?: $doctor->owner?->district,
     ])->filter()->implode(', ');
+    $socialLinks = collect($doctor->social_links)->filter(fn ($social) => filled(data_get($social, 'url')));
+    $shifts = collect($doctor->shifts)->filter(fn ($shift) => filled(data_get($shift, 'day')) || filled(data_get($shift, 'start_time')) || filled(data_get($shift, 'end_time')));
+    $educations = collect($doctor->educations)->filter(fn ($education) => filled(data_get($education, 'title')) || filled(data_get($education, 'details')));
 @endphp
 <section class="doctor-profile-shell" id="doctor_profile_section">
     <div class="container">
@@ -172,11 +175,11 @@
                         </div>
                     </div>
                     <div class="social-icons mt-4">
-                        @if($doctor->social_links && is_array($doctor->social_links))
-                            @foreach($doctor->social_links as $social)
-                                <a href="{{ $social['url'] }}" target="_blank">{!! $social['platform'] !!}</a>
-                            @endforeach
-                        @endif
+                        @foreach($socialLinks as $social)
+                            <a href="{{ data_get($social, 'url') }}" target="_blank" rel="noopener noreferrer">
+                                {!! data_get($social, 'platform', '<i class="fas fa-link"></i>') !!}
+                            </a>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-lg-5">
@@ -231,20 +234,18 @@
                 <div class="doctor-sidebar-card">
                     <div class="detail-title">{{ __('Working shifts') }}</div>
                     <div class="doctor-list-stack">
-                        @forelse($doctor->shifts ?? [] as $shift)
+                        @forelse($shifts as $shift)
+                            @php
+                                $startTime = data_get($shift, 'start_time');
+                                $endTime = data_get($shift, 'end_time');
+                                $timeLabel = collect([
+                                    filled($startTime) ? \Carbon\Carbon::parse($startTime)->format('h:i A') : null,
+                                    filled($endTime) ? \Carbon\Carbon::parse($endTime)->format('h:i A') : null,
+                                ])->filter()->join(' - ');
+                            @endphp
                             <div class="doctor-list-item">
-                                <strong>{!! $shift['day'] !!}</strong>
-                              <span class="muted-copy">
-    {{ isset($shift['start_time']) 
-        ? \Carbon\Carbon::parse($shift['start_time'])->format('h:i A') 
-        : '' 
-    }}
-    -
-    {{ isset($shift['end_time']) 
-        ? \Carbon\Carbon::parse($shift['end_time'])->format('h:i A') 
-        : '' 
-    }}
-</span>
+                                <strong>{{ data_get($shift, 'day', __('Day not set')) }}</strong>
+                                <span class="muted-copy">{{ $timeLabel ?: __('Time not set') }}</span>
                             </div>
                         @empty
                             <div class="doctor-list-item">
@@ -267,11 +268,11 @@
                 <div class="doctor-detail-card">
                     <div class="detail-title">{{ __('Education and experience') }}</div>
                     <div class="doctor-list-stack">
-                        @forelse($doctor->educations ?? [] as $education)
-                           <div class="doctor-list-item">
-    <strong>{{ data_get($education, 'title', '') }}</strong>
-    <span class="muted-copy">{{ data_get($education, 'details', '') }}</span>
-</div>
+                        @forelse($educations as $education)
+                            <div class="doctor-list-item">
+                                <strong>{{ data_get($education, 'title', __('Title not added')) }}</strong>
+                                <span class="muted-copy">{{ data_get($education, 'details', __('Details not added')) }}</span>
+                            </div>
                         @empty
                             <div class="doctor-list-item">
                                 <strong>{{ __('Profile details pending') }}</strong>

@@ -6,12 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Models\HospitalReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class HospitalReviewController extends Controller
 {
+    protected function hospitalReviewsReady(): bool
+    {
+        return Schema::hasTable('hospital_reviews') && Schema::hasColumn('hospital_reviews', 'status');
+    }
+
     public function index(Request $request)
     {
         $status = $request->string('status')->toString() ?: 'all';
+
+        if (! $this->hospitalReviewsReady()) {
+            return view('admin.hospital_reviews.index', [
+                'reviews' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15),
+                'counts' => ['all' => 0, 'pending' => 0, 'approved' => 0, 'rejected' => 0],
+                'status' => $status,
+                'schemaWarning' => 'Hospital reviews migrations are not fully applied yet.',
+            ]);
+        }
 
         $query = HospitalReview::query()
             ->with(['hospital:id,hospital_name,first_name,last_name', 'moderator:id,first_name,last_name'])
@@ -35,6 +50,8 @@ class HospitalReviewController extends Controller
 
     public function update(Request $request, HospitalReview $hospitalReview)
     {
+        abort_unless($this->hospitalReviewsReady(), 404);
+
         $data = $request->validate([
             'status' => ['required', 'in:approved,rejected'],
             'admin_note' => ['nullable', 'string', 'max:1000'],
@@ -52,6 +69,8 @@ class HospitalReviewController extends Controller
 
     public function destroy(HospitalReview $hospitalReview)
     {
+        abort_unless($this->hospitalReviewsReady(), 404);
+
         $hospitalReview->delete();
 
         return back()->with('success', 'Review deleted successfully.');

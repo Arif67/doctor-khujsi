@@ -19,11 +19,17 @@ use App\Models\Service;
 use App\Models\Section;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class FrontendController extends Controller
 {
+    protected function hospitalReviewsReady(): bool
+    {
+        return Schema::hasTable('hospital_reviews') && Schema::hasColumn('hospital_reviews', 'status');
+    }
+
     public function home()
     {
         $heroSliderSection = Section::where('key', 'home_hero_slider')->first();
@@ -294,13 +300,22 @@ class FrontendController extends Controller
             'hospitalGalleries' => fn ($query) => $query->latest(),
             'services' => fn ($query) => $query->latest(),
             'doctors' => fn ($query) => $query->with('department')->where('status', 'active')->latest(),
-            'hospitalReviews' => fn ($query) => $query->where('status', 'approved')->latest(),
         ])->loadCount([
             'services',
             'hospitalGalleries',
-            'hospitalReviews as approved_hospital_reviews_count' => fn ($query) => $query->where('status', 'approved'),
             'doctors as active_doctors_count' => fn ($query) => $query->where('status', 'active'),
         ]);
+
+        if ($this->hospitalReviewsReady()) {
+            $hospital->load([
+                'hospitalReviews' => fn ($query) => $query->where('status', 'approved')->latest(),
+            ])->loadCount([
+                'hospitalReviews as approved_hospital_reviews_count' => fn ($query) => $query->where('status', 'approved'),
+            ]);
+        } else {
+            $hospital->setRelation('hospitalReviews', collect());
+            $hospital->approved_hospital_reviews_count = 0;
+        }
 
         $departmentGroups = $hospital->doctors
             ->groupBy(fn ($doctor) => $doctor->department?->name ?: 'General')
@@ -318,6 +333,13 @@ class FrontendController extends Controller
     public function storeHospitalReview(Request $request, User $hospital, string $slug)
     {
         abort_unless($hospital->hasRole('hospital_owner') && $hospital->approval_status === 'approved', 404);
+
+        if (! $this->hospitalReviewsReady()) {
+            return redirect()
+                ->route('app.hospitals.show', ['hospital' => $hospital->id, 'slug' => $slug])
+                ->with('error', 'Review feature is not ready yet. Please run the latest database migrations.')
+                ->withFragment('hospital-reviews');
+        }
 
         $validated = $request->validate([
             'reviewer_name' => 'required|string|max:120',

@@ -10,11 +10,11 @@
 <div class="space-y-6">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
         <div>
-            <h4 class="text-xl font-semibold text-gray-800 mb-1">Homepage Featured Doctors</h4>
-            <p class="text-sm text-gray-500 mb-0">Homepage-e kon kon doctor dekhabe, koyta dekhabe, ar kon order-e dekhabe ekhane theke control korte parben.</p>
+            <h4 class="text-xl font-semibold text-gray-800 mb-1">{{ __('Homepage Featured Doctors') }}</h4>
+            <p class="text-sm text-gray-500 mb-0">{{ __('Select which doctors appear on the homepage, how many appear, and in what order.') }}</p>
         </div>
         <div class="text-sm text-gray-500">
-            Selected: <span class="font-semibold text-gray-700" data-selected-doctor-count>{{ $selectedIds->count() }}</span>
+            {{ __('Selected') }}: <span class="font-semibold text-gray-700" data-selected-doctor-count>{{ $selectedIds->count() }}</span>
         </div>
     </div>
 
@@ -24,17 +24,17 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-                <label class="block font-semibold mb-1">Section Title</label>
+                <label class="block font-semibold mb-1">{{ __('Section Title') }}</label>
                 <input type="text" name="title" value="{{ old('title', $sectionData['title'] ?? 'Open a profile, compare details, then book.') }}"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
             <div>
-                <label class="block font-semibold mb-1">Section Description</label>
+                <label class="block font-semibold mb-1">{{ __('Section Description') }}</label>
                 <input type="text" name="description" value="{{ old('description', $sectionData['description'] ?? 'These are active doctor listings available for public browsing and direct request submission.') }}"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
             <div>
-                <label class="block font-semibold mb-1">How Many Show</label>
+                <label class="block font-semibold mb-1">{{ __('How Many Show') }}</label>
                 <input type="number" min="1" max="24" name="display_count" value="{{ $displayCount }}"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
@@ -42,12 +42,12 @@
 
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
             <div>
-                <label class="block font-semibold mb-2">Available Doctors</label>
-                <p class="text-sm text-gray-500 mb-3">`Add` click kore doctor selected list-e nin.</p>
+                <label class="block font-semibold mb-2">{{ __('Available Doctors') }}</label>
+                <p class="text-sm text-gray-500 mb-3">{{ __('Click Add to move a doctor into the selected list.') }}</p>
                 <div class="grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 max-h-[520px] overflow-y-auto">
                     @foreach ($doctors as $doctor)
                         @php
-                            $ownerName = $doctor->owner?->hospital_name ?: trim(($doctor->owner?->first_name ?? '') . ' ' . ($doctor->owner?->last_name ?? '')) ?: 'Hospital not found';
+                            $ownerName = $doctor->owner?->hospital_name ?: trim(($doctor->owner?->first_name ?? '') . ' ' . ($doctor->owner?->last_name ?? '')) ?: __('Hospital not found');
                             $doctorPhoto = $doctor->photo ? asset('storage/' . $doctor->photo) : asset('assets/img/default.png');
                         @endphp
                         <div
@@ -57,7 +57,7 @@
                             data-selected="{{ $selectedIds->contains((int) $doctor->id) ? 'true' : 'false' }}"
                             data-name="{{ e($doctor->name) }}"
                             data-owner="{{ e($ownerName) }}"
-                            data-speciality="{{ e($doctor->speciality ?: ($doctor->department?->name ?? 'Speciality not added')) }}"
+                            data-speciality="{{ e($doctor->speciality ?: ($doctor->department?->name ?? __('Speciality not added'))) }}"
                             data-image="{{ $doctorPhoto }}"
                         >
                             <img
@@ -67,7 +67,7 @@
                             >
                             <div class="min-w-0 flex-1">
                                 <span class="block font-semibold text-slate-800">{{ $doctor->name }}</span>
-                                <span class="block text-sm text-slate-500">{{ $doctor->speciality ?: ($doctor->department?->name ?? 'Speciality not added') }}</span>
+                                <span class="block text-sm text-slate-500">{{ $doctor->speciality ?: ($doctor->department?->name ?? __('Speciality not added')) }}</span>
                                 <span class="block text-xs text-slate-400 mt-1">{{ $ownerName }}</span>
                             </div>
                             <button
@@ -77,22 +77,22 @@
                                 style="{{ $selectedIds->contains((int) $doctor->id) ? 'background:#94a3b8;' : 'background:#059669;' }}"
                                 {{ $selectedIds->contains((int) $doctor->id) ? 'disabled' : '' }}
                             >
-                                {{ $selectedIds->contains((int) $doctor->id) ? 'Added' : 'Add' }}
+                                {{ $selectedIds->contains((int) $doctor->id) ? __('Added') : __('Add') }}
                             </button>
                         </div>
                     @endforeach
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Sudhu approved hospital-er active doctor list ekhane dekhano hocche.</p>
+                <p class="text-xs text-gray-500 mt-2">{{ __('Only active doctors from approved hospital accounts are shown here.') }}</p>
             </div>
 
             <div>
-                <label class="block font-semibold mb-2">Selected Doctors Order</label>
-                <p class="text-sm text-gray-500 mb-3">`Up` / `Down` diye homepage-e doctor order control korun. Uporer gula age dekhabe.</p>
+                <label class="block font-semibold mb-2">{{ __('Selected Doctors Order') }}</label>
+                <p class="text-sm text-gray-500 mb-3">{{ __('Use Up and Down to control the homepage order. Higher items appear first.') }}</p>
                 <div class="rounded-2xl border border-slate-200 bg-white p-4 min-h-[220px]">
                     <div class="space-y-3" id="selected-doctors-list">
                         @foreach ($selectedDoctors as $doctor)
-                            @php
-                                $ownerName = $doctor->owner?->hospital_name ?: trim(($doctor->owner?->first_name ?? '') . ' ' . ($doctor->owner?->last_name ?? '')) ?: 'Hospital not found';
+                        @php
+                                $ownerName = $doctor->owner?->hospital_name ?: trim(($doctor->owner?->first_name ?? '') . ' ' . ($doctor->owner?->last_name ?? '')) ?: __('Hospital not found');
                                 $doctorPhoto = $doctor->photo ? asset('storage/' . $doctor->photo) : asset('assets/img/default.png');
                             @endphp
                             <div class="selected-doctor-item flex items-start gap-3 rounded-xl border border-slate-200 p-3" data-selected-doctor data-doctor-id="{{ $doctor->id }}">
@@ -104,19 +104,19 @@
                                 >
                                 <div class="min-w-0 flex-1">
                                     <span class="block font-semibold text-slate-800">{{ $doctor->name }}</span>
-                                    <span class="block text-sm text-slate-500">{{ $doctor->speciality ?: ($doctor->department?->name ?? 'Speciality not added') }}</span>
+                                    <span class="block text-sm text-slate-500">{{ $doctor->speciality ?: ($doctor->department?->name ?? __('Speciality not added')) }}</span>
                                     <span class="block text-xs text-slate-400 mt-1">{{ $ownerName }}</span>
                                 </div>
                                 <div class="flex flex-col gap-2">
-                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>Up</button>
-                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>Down</button>
-                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-doctor style="background:#dc2626;">Remove</button>
+                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>{{ __('Up') }}</button>
+                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>{{ __('Down') }}</button>
+                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-doctor style="background:#dc2626;">{{ __('Remove') }}</button>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                     <div id="selected-doctors-empty" class="px-2 py-10 text-center text-gray-500 {{ $selectedDoctors->isNotEmpty() ? 'hidden' : '' }}">
-                        Ekhono homepage-er jonno kono featured doctor select kora hoyni.
+                        {{ __('No featured doctors have been selected for the homepage yet.') }}
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                 class="inline-flex items-center font-semibold"
                 style="background:#059669;color:#fff;padding:12px 20px;border-radius:12px;border:0;box-shadow:0 10px 24px rgba(5,150,105,.22);"
             >
-                <i class="fas fa-save mr-2"></i>Save Featured Doctors
+                <i class="fas fa-save mr-2"></i>{{ __('Save Featured Doctors') }}
             </button>
         </div>
     </form>
@@ -144,9 +144,9 @@
             <span class="block text-xs text-slate-400 mt-1" data-doctor-owner></span>
         </div>
         <div class="flex flex-col gap-2">
-            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>Up</button>
-            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>Down</button>
-            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-doctor style="background:#dc2626;">Remove</button>
+            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>{{ __('Up') }}</button>
+            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>{{ __('Down') }}</button>
+            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-doctor style="background:#dc2626;">{{ __('Remove') }}</button>
         </div>
     </div>
 </template>
@@ -185,7 +185,7 @@
 
             option.dataset.selected = selected ? 'true' : 'false';
             button.disabled = selected;
-            button.textContent = selected ? 'Added' : 'Add';
+            button.textContent = selected ? @json(__('Added')) : @json(__('Add'));
             button.style.background = selected ? '#94a3b8' : '#059669';
         };
 

@@ -10,11 +10,11 @@
 <div class="space-y-6">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
         <div>
-            <h4 class="text-xl font-semibold text-gray-800 mb-1">Homepage Services</h4>
-            <p class="text-sm text-gray-500 mb-0">Homepage-e kon kon service dekhabe, koyta dekhabe, ar kon order-e dekhabe ekhane theke control korte parben.</p>
+            <h4 class="text-xl font-semibold text-gray-800 mb-1">{{ __('Homepage Services') }}</h4>
+            <p class="text-sm text-gray-500 mb-0">{{ __('Select which services appear on the homepage, how many appear, and in what order.') }}</p>
         </div>
         <div class="text-sm text-gray-500">
-            Selected: <span class="font-semibold text-gray-700" data-selected-count>{{ $selectedIds->count() }}</span>
+            {{ __('Selected') }}: <span class="font-semibold text-gray-700" data-selected-count>{{ $selectedIds->count() }}</span>
         </div>
     </div>
 
@@ -24,17 +24,17 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-                <label class="block font-semibold mb-1">Section Title</label>
+                <label class="block font-semibold mb-1">{{ __('Section Title') }}</label>
                 <input type="text" name="title" value="{{ old('title', $sectionData['title'] ?? 'Explore care areas before choosing a doctor.') }}"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
             <div>
-                <label class="block font-semibold mb-1">Section Description</label>
+                <label class="block font-semibold mb-1">{{ __('Section Description') }}</label>
                 <input type="text" name="description" value="{{ old('description', $sectionData['description'] ?? 'Each category helps patients narrow down which doctor profile to open first.') }}"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
             <div>
-                <label class="block font-semibold mb-1">How Many Show</label>
+                <label class="block font-semibold mb-1">{{ __('How Many Show') }}</label>
                 <input type="number" min="1" max="24" name="display_count" value="{{ $displayCount }}"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
@@ -42,12 +42,12 @@
 
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
             <div>
-                <label class="block font-semibold mb-2">Available Services</label>
-                <p class="text-sm text-gray-500 mb-3">`Add` click kore service selected list-e nin.</p>
+                <label class="block font-semibold mb-2">{{ __('Available Services') }}</label>
+                <p class="text-sm text-gray-500 mb-3">{{ __('Click Add to move a service into the selected list.') }}</p>
                 <div class="grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 max-h-[520px] overflow-y-auto">
                     @foreach ($services as $service)
                         @php
-                            $ownerName = $service->owner?->hospital_name ?: trim(($service->owner?->first_name ?? '') . ' ' . ($service->owner?->last_name ?? '')) ?: 'Hospital not found';
+                            $ownerName = $service->owner?->hospital_name ?: trim(($service->owner?->first_name ?? '') . ' ' . ($service->owner?->last_name ?? '')) ?: __('Hospital not found');
                         @endphp
                         <div
                             class="flex items-start gap-3 rounded-xl border border-slate-200 p-3"
@@ -74,22 +74,22 @@
                                 style="{{ $selectedIds->contains((int) $service->id) ? 'background:#94a3b8;' : 'background:#059669;' }}"
                                 {{ $selectedIds->contains((int) $service->id) ? 'disabled' : '' }}
                             >
-                                {{ $selectedIds->contains((int) $service->id) ? 'Added' : 'Add' }}
+                                {{ $selectedIds->contains((int) $service->id) ? __('Added') : __('Add') }}
                             </button>
                         </div>
                     @endforeach
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Sudhu approved hospital-er service list ekhane dekhano hocche.</p>
+                <p class="text-xs text-gray-500 mt-2">{{ __('Only services from approved hospital accounts are shown here.') }}</p>
             </div>
 
             <div>
-                <label class="block font-semibold mb-2">Selected Services Order</label>
-                <p class="text-sm text-gray-500 mb-3">`Up` / `Down` diye homepage-e service order control korun. Uporer gula age dekhabe.</p>
+                <label class="block font-semibold mb-2">{{ __('Selected Services Order') }}</label>
+                <p class="text-sm text-gray-500 mb-3">{{ __('Use Up and Down to control the homepage order. Higher items appear first.') }}</p>
                 <div class="rounded-2xl border border-slate-200 bg-white p-4 min-h-[220px]">
                     <div class="space-y-3" id="selected-services-list">
                         @foreach ($selectedServices as $service)
                             @php
-                                $ownerName = $service->owner?->hospital_name ?: trim(($service->owner?->first_name ?? '') . ' ' . ($service->owner?->last_name ?? '')) ?: 'Hospital not found';
+                                $ownerName = $service->owner?->hospital_name ?: trim(($service->owner?->first_name ?? '') . ' ' . ($service->owner?->last_name ?? '')) ?: __('Hospital not found');
                             @endphp
                             <div class="selected-service-item flex items-start gap-3 rounded-xl border border-slate-200 p-3" data-selected-service data-service-id="{{ $service->id }}">
                                 <input type="hidden" name="service_ids[]" value="{{ $service->id }}">
@@ -103,15 +103,15 @@
                                     <span class="block text-sm text-slate-500">{{ $ownerName }}</span>
                                 </div>
                                 <div class="flex flex-col gap-2">
-                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>Up</button>
-                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>Down</button>
-                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-service style="background:#dc2626;">Remove</button>
+                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>{{ __('Up') }}</button>
+                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>{{ __('Down') }}</button>
+                                    <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-service style="background:#dc2626;">{{ __('Remove') }}</button>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                     <div id="selected-services-empty" class="px-2 py-10 text-center text-gray-500 {{ $selectedServices->isNotEmpty() ? 'hidden' : '' }}">
-                        Ekhono homepage-er jonno kono service select kora hoyni.
+                        {{ __('No services have been selected for the homepage yet.') }}
                     </div>
                 </div>
             </div>
@@ -123,15 +123,15 @@
                 class="inline-flex items-center font-semibold"
                 style="background:#059669;color:#fff;padding:12px 20px;border-radius:12px;border:0;box-shadow:0 10px 24px rgba(5,150,105,.22);"
             >
-                <i class="fas fa-save mr-2"></i>Save Homepage Services
+                <i class="fas fa-save mr-2"></i>{{ __('Save Homepage Services') }}
             </button>
         </div>
     </form>
 
     <div class="border rounded-2xl overflow-hidden bg-white shadow-sm">
         <div class="px-5 py-4 border-b bg-slate-50">
-            <h5 class="text-lg font-semibold text-gray-800 mb-1">Current Homepage Services</h5>
-            <p class="text-sm text-gray-500 mb-0">Homepage section-e maximum {{ $displayCount }} ta service dekhabe.</p>
+            <h5 class="text-lg font-semibold text-gray-800 mb-1">{{ __('Current Homepage Services') }}</h5>
+            <p class="text-sm text-gray-500 mb-0">{{ __('The homepage section will show up to :count services.', ['count' => $displayCount]) }}</p>
         </div>
 
         @if ($selectedServices->isNotEmpty())
@@ -147,7 +147,7 @@
                             <div>
                                 <div class="font-semibold text-slate-800">{{ $service->title }}</div>
                                 <div class="text-sm text-slate-500">
-                                    {{ $service->owner?->hospital_name ?: trim(($service->owner?->first_name ?? '') . ' ' . ($service->owner?->last_name ?? '')) ?: 'Hospital not found' }}
+                                    {{ $service->owner?->hospital_name ?: trim(($service->owner?->first_name ?? '') . ' ' . ($service->owner?->last_name ?? '')) ?: __('Hospital not found') }}
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
             </div>
         @else
             <div class="px-5 py-10 text-center text-gray-500">
-                Ekhono homepage-er jonno kono service select kora hoyni.
+                {{ __('No services have been selected for the homepage yet.') }}
             </div>
         @endif
     </div>
@@ -171,9 +171,9 @@
             <span class="block text-sm text-slate-500" data-service-owner></span>
         </div>
         <div class="flex flex-col gap-2">
-            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>Up</button>
-            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>Down</button>
-            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-service style="background:#dc2626;">Remove</button>
+            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-up>{{ __('Up') }}</button>
+            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-300" data-move-down>{{ __('Down') }}</button>
+            <button type="button" class="rounded-lg px-3 py-2 text-xs font-semibold text-white" data-remove-service style="background:#dc2626;">{{ __('Remove') }}</button>
         </div>
     </div>
 </template>
@@ -212,7 +212,7 @@
 
             option.dataset.selected = selected ? 'true' : 'false';
             button.disabled = selected;
-            button.textContent = selected ? 'Added' : 'Add';
+            button.textContent = selected ? @json(__('Added')) : @json(__('Add'));
             button.style.background = selected ? '#94a3b8' : '#059669';
         };
 

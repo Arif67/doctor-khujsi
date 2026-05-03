@@ -43,7 +43,7 @@
                 <a href="?section=featured_doctors"
                    data-section="featured_doctors"
                    class="tab-link inline-block p-4 rounded-t-lg border-b-2">
-                   Featured Doctors
+                   {{ __('Featured Doctors') }}
                 </a>
             </li>
            

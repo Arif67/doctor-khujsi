@@ -8,13 +8,26 @@ use App\Models\Favorite;
 use App\Models\ServiceHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class DefaultController extends Controller
 {
+    protected function hasPatientReportsTable(): bool
+    {
+        return Schema::hasTable('patient_reports');
+    }
+
+    protected function hasPatientPrescriptionsTable(): bool
+    {
+        return Schema::hasTable('patient_prescriptions');
+    }
+
     public function dashboard()
     {
         $user = Auth::user();
+        $hasReportsTable = $this->hasPatientReportsTable();
+        $hasPrescriptionsTable = $this->hasPatientPrescriptionsTable();
 
         $upcomingAppointmentsCount = $user->appointments()
             ->whereDate('appointment_date', '>=', now()->toDateString())
@@ -47,8 +60,8 @@ class DefaultController extends Controller
             'appointments' => $user->appointments()->count(),
             'favorites'    => $user->favorites()->count(),
             'serviceHistoryCount' => $user->serviceHistoryCount(),
-            'reports' => $user->patientReports()->count(),
-            'prescriptions' => $user->patientPrescriptions()->count(),
+            'reports' => $hasReportsTable ? $user->patientReports()->count() : 0,
+            'prescriptions' => $hasPrescriptionsTable ? $user->patientPrescriptions()->count() : 0,
             'upcomingAppointments' => $upcomingAppointmentsCount,
             'completedServices' => $completedServicesCount,
             'pendingServices' => $pendingServicesCount,
@@ -62,17 +75,21 @@ class DefaultController extends Controller
             ->take(5)
             ->get();
 
-        $recentReports = $user->patientReports()
-            ->latest('report_date')
-            ->latest()
-            ->take(5)
-            ->get();
+        $recentReports = $hasReportsTable
+            ? $user->patientReports()
+                ->latest('report_date')
+                ->latest()
+                ->take(5)
+                ->get()
+            : collect();
 
-        $recentPrescriptions = $user->patientPrescriptions()
-            ->latest('prescription_date')
-            ->latest()
-            ->take(5)
-            ->get();
+        $recentPrescriptions = $hasPrescriptionsTable
+            ? $user->patientPrescriptions()
+                ->latest('prescription_date')
+                ->latest()
+                ->take(5)
+                ->get()
+            : collect();
 
         $appointments = $user->appointments()
             ->with(['department', 'serviceHistory.service', 'serviceHistory.doctor'])
@@ -87,6 +104,8 @@ class DefaultController extends Controller
     public function profile()
     {
         $user = Auth::user();
+        $hasReportsTable = $this->hasPatientReportsTable();
+        $hasPrescriptionsTable = $this->hasPatientPrescriptionsTable();
 
         $profileItems = collect([
             __('Photo') => $user->photo,
@@ -102,16 +121,18 @@ class DefaultController extends Controller
 
         $profileStats = [
             'appointments' => $user->appointments()->count(),
-            'reports' => $user->patientReports()->count(),
-            'prescriptions' => $user->patientPrescriptions()->count(),
+            'reports' => $hasReportsTable ? $user->patientReports()->count() : 0,
+            'prescriptions' => $hasPrescriptionsTable ? $user->patientPrescriptions()->count() : 0,
             'favorites' => $user->favorites()->count(),
             'completion' => (int) round($profileItems->filter(fn ($value) => filled($value))->count() / $profileItems->count() * 100),
         ];
-        $recentReports = $user->patientReports()
-            ->latest('report_date')
-            ->latest()
-            ->take(3)
-            ->get();
+        $recentReports = $hasReportsTable
+            ? $user->patientReports()
+                ->latest('report_date')
+                ->latest()
+                ->take(3)
+                ->get()
+            : collect();
 
         $missingProfileItems = $profileItems
             ->filter(fn ($value) => blank($value))
@@ -159,6 +180,7 @@ class DefaultController extends Controller
     public function timeline()
     {
         $user = Auth::user();
+        $hasReportsTable = $this->hasPatientReportsTable();
 
         $appointments = $user->appointments()
             ->with(['department', 'serviceHistory.service', 'serviceHistory.doctor'])
@@ -180,20 +202,22 @@ class DefaultController extends Controller
                 ];
             });
 
-        $reports = $user->patientReports()
-            ->get()
-            ->map(function ($report) {
-                return [
-                    'type' => 'report',
-                    'date' => $report->report_date ?? $report->created_at,
-                    'title' => __('Report uploaded'),
-                    'subtitle' => $report->title,
-                    'meta' => [
-                        __('Report Type') => $report->report_type ?: __('General report'),
-                        __('File') => $report->file_name,
-                    ],
-                ];
-            });
+        $reports = $hasReportsTable
+            ? $user->patientReports()
+                ->get()
+                ->map(function ($report) {
+                    return [
+                        'type' => 'report',
+                        'date' => $report->report_date ?? $report->created_at,
+                        'title' => __('Report uploaded'),
+                        'subtitle' => $report->title,
+                        'meta' => [
+                            __('Report Type') => $report->report_type ?: __('General report'),
+                            __('File') => $report->file_name,
+                        ],
+                    ];
+                })
+            : collect();
 
         $services = $user->serviceHistory()
             ->with(['service', 'doctor'])

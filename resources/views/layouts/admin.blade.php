@@ -16,7 +16,10 @@
       name="keywords"
       content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"
     />
-     <link href="{{ asset('admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!--end::Primary Meta Tags-->
      <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.tailwindcss.css">
      <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
@@ -59,6 +62,26 @@
       }
       .pending{
         background: #ffc107;
+      }
+      body,
+      .app-wrapper,
+      .app-main,
+      .app-content,
+      .container-fluid,
+      .card,
+      .btn,
+      .form-control,
+      .form-select,
+      .table,
+      .modal,
+      .dropdown-menu,
+      .sidebar-wrapper,
+      .nav-sidebar,
+      .content-header,
+      .breadcrumb,
+      .tab-link,
+      .tab-content {
+        font-family: "Hind Siliguri", sans-serif;
       }
     </style>
   </head>

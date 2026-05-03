@@ -53,6 +53,12 @@
         </div>
     </section>
 
+    @if (!empty($schemaWarning))
+        <section class="rounded-3xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800 shadow-sm">
+            {{ $schemaWarning }}
+        </section>
+    @endif
+
     <section class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <div class="border-b border-slate-200 px-6 py-5">
             <h2 class="text-lg font-semibold text-slate-900">Review Queue</h2>

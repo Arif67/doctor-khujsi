@@ -7,24 +7,38 @@ use App\Http\Requests\PatientReportRequest;
 use App\Models\PatientReport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ReportController extends Controller
 {
+    protected function hasPatientReportsTable(): bool
+    {
+        return Schema::hasTable('patient_reports');
+    }
+
     public function index(): View
     {
-        $reports = Auth::user()
-            ->patientReports()
-            ->latest('report_date')
-            ->latest()
-            ->get();
+        $reports = $this->hasPatientReportsTable()
+            ? Auth::user()
+                ->patientReports()
+                ->latest('report_date')
+                ->latest()
+                ->get()
+            : collect();
 
         return view('patients.reports', compact('reports'));
     }
 
     public function store(PatientReportRequest $request): RedirectResponse
     {
+        if (! $this->hasPatientReportsTable()) {
+            return redirect()
+                ->route('patient.reports.index')
+                ->with('error', __('Reports feature is not ready yet. Please run the latest database migrations.'));
+        }
+
         $patient = Auth::user();
         $file = $request->file('report_file');
         $path = $file->store("patient-reports/{$patient->id}", 'public');

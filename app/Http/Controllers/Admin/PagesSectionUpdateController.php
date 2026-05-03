@@ -305,7 +305,7 @@ class PagesSectionUpdateController extends Controller
                 ->map(fn ($id) => (int) $id);
 
             if ($approvedServiceIds->count() !== $selectedIds->count()) {
-                return redirect()->back()->with('error', 'Selected services must belong to approved hospital accounts.');
+                return redirect()->back()->with('error', __('Selected services must belong to approved hospital accounts.'));
             }
         }
 
@@ -321,7 +321,7 @@ class PagesSectionUpdateController extends Controller
             ]]
         );
 
-        return redirect()->back()->with('success', 'Homepage services updated successfully!');
+        return redirect()->back()->with('success', __('Homepage services updated successfully!'));
     }
 
     public function home_featured_doctors(Request $request)
@@ -347,7 +347,7 @@ class PagesSectionUpdateController extends Controller
                 ->map(fn ($id) => (int) $id);
 
             if ($approvedDoctorIds->count() !== $selectedIds->count()) {
-                return redirect()->back()->with('error', 'Selected doctors must be active and belong to approved hospital accounts.');
+                return redirect()->back()->with('error', __('Selected doctors must be active and belong to approved hospital accounts.'));
             }
         }
 
@@ -363,7 +363,7 @@ class PagesSectionUpdateController extends Controller
             ]]
         );
 
-        return redirect()->back()->with('success', 'Homepage featured doctors updated successfully!');
+        return redirect()->back()->with('success', __('Homepage featured doctors updated successfully!'));
     }
 
 
